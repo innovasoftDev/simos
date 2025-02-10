@@ -21,7 +21,7 @@ export const LoginForm = () => {
     if ( state === 'Success' ) {
       // redireccionar
       // router.replace('/');
-      window.location.replace('/');
+      window.location.replace('/dashboard/overview');
     }
 
   },[state]);
@@ -32,14 +32,14 @@ export const LoginForm = () => {
     <form action={dispatch} className="flex flex-col">
       <label htmlFor="email">Correo electrónico</label>
       <input
-        className="px-5 py-2 border bg-gray-200 rounded mb-5"
+        className="px-5 py-2 border bg-gray-800 rounded mb-5"
         type="email"
         name="email"
       />
 
       <label htmlFor="email">Contraseña</label>
       <input
-        className="px-5 py-2 border bg-gray-200 rounded mb-5"
+        className="px-5 py-2 border bg-gray-800 rounded mb-5"
         type="password"
         name="password"
       />
@@ -71,8 +71,8 @@ export const LoginForm = () => {
         <div className="flex-1 border-t border-gray-500"></div>
       </div>
 
-      <Link href="/auth/new-account" className="btn-secondary text-center">
-        Crear una nueva cuenta
+      <Link href="/auth/new-account" className="bg-gray-600 px-5 py-2 border rounded mb-5 text-center">
+        Crear nueva cuenta
       </Link>
     </form>
   );
@@ -86,7 +86,8 @@ function LoginButton() {
       type="submit" 
       className={ clsx({
         "btn-primary": !pending,
-        "btn-disabled": pending
+        "btn-disabled": !pending,
+        "bg-sky-800 px-5 py-2 border rounded mb-5": true
       })}
       disabled={ pending }
       >

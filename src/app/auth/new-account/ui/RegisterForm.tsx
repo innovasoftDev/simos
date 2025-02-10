@@ -54,7 +54,7 @@ export const RegisterForm = () => {
       <input
         className={
           clsx(
-            "px-5 py-2 border bg-gray-200 rounded mb-5",
+            "px-5 py-2 border bg-gray-800 rounded mb-5",
             {
               'border-red-500': errors.name
             }
@@ -69,7 +69,7 @@ export const RegisterForm = () => {
       <input
         className={
           clsx(
-            "px-5 py-2 border bg-gray-200 rounded mb-5",
+            "px-5 py-2 border bg-gray-800 rounded mb-5",
             {
               'border-red-500': errors.email
             }
@@ -83,7 +83,7 @@ export const RegisterForm = () => {
       <input
         className={
           clsx(
-            "px-5 py-2 border bg-gray-200 rounded mb-5",
+            "px-5 py-2 border bg-gray-800 rounded mb-5",
             {
               'border-red-500': errors.password
             }
@@ -98,7 +98,7 @@ export const RegisterForm = () => {
         
       
 
-      <button className="btn-primary">Crear cuenta</button>
+      <button className="bg-sky-800 px-5 py-2 border rounded mb-5">Registrarte</button>
 
       {/* divisor l ine */}
       <div className="flex items-center my-5">
@@ -107,7 +107,7 @@ export const RegisterForm = () => {
         <div className="flex-1 border-t border-gray-500"></div>
       </div>
 
-      <Link href="/auth/login" className="btn-secondary text-center">
+      <Link href="/auth/login" className="bg-slate-600 px-5 py-2 border rounded mb-5 text-center">
         Ingresar
       </Link>
     </form>

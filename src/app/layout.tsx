@@ -1,27 +1,48 @@
 import type { Metadata } from "next";
-import { inter } from "@/config/fonts";
-
+import { lato } from "@/config/fonts";
+import { ThemeProvider } from "@/components/provider/theme-provider";
 import "./globals.css";
-import { Provider } from "@/components";
+import Providers from "@/components/layout/providers";
+import NextTopLoader from 'nextjs-toploader';
+import { Toaster } from '@/components/ui/sonner';
+import { auth } from "@/auth.config";
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: {
-    template: "%s - Teslo | Shop",
-    default: "Home - Teslo | Shop",
+    template: "%s - SIMOS | Grupo Farinter",
+    default: "Home - SIMOS | Grupo Farinter",
   },
-  description: "Una tienda virtual de productos",
+  description: "Sistema Monitereo De Servicios",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Provider>{children}</Provider>
-      </body>
+    <html
+      lang="es"
+      className={`${lato.className}`}
+      suppressHydrationWarning={true}
+    >
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <body className={'overflow-hidden'}>
+          <NextTopLoader showSpinner={false} />
+          <Providers session={session}>
+            <Toaster />
+            {children}
+          </Providers>
+        </body>
+      </ThemeProvider>
     </html>
   );
 }

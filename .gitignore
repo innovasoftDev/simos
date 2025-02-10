@@ -5,6 +5,8 @@
 .env
 
 /postgres/
+/db_shadow/
+/simos/
 
 # dependencies
 /node_modules
