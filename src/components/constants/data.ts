@@ -153,27 +153,6 @@ export const navItems: NavItem[] = [
     items: [] // No child items
   },
   {
-    title: 'Cuenta',
-    url: '#', // Placeholder as there is no direct link for the parent
-    icon: 'user',
-    isActive: true,
-
-    items: [
-      {
-        title: 'Mi Perfil',
-        url: '/dashboard/profile',
-        icon: 'userPen',
-        shortcut: ['m', 'm']
-      },
-      {
-        title: 'Cerrar Sesión',
-        shortcut: ['l', 'l'],
-        url: '/',
-        icon: 'login'
-      }
-    ]
-  },
-  {
     title: 'Acerca de',
     url: '/dashboard/about',
     icon: 'kanban',
@@ -181,4 +160,40 @@ export const navItems: NavItem[] = [
     isActive: false,
     items: [] // No child items
   }
+];
+
+export const navAdminItems: NavItem[] = [
+  {
+    title: 'Seguridad',
+    url: '#', // Placeholder as there is no direct link for the parent
+    icon: 'segurity',
+    isActive: false,
+
+    items: [
+      {
+        title: 'Usuarios',
+        url: '/dashboard/admin/users',
+        icon: 'pizza',
+        shortcut: ['m', 'm']
+      },
+      {
+        title: 'Pantallas',
+        url: '/dashboard/admin/pantallas',
+        icon: 'moon',
+        shortcut: ['m', 'm']
+      },
+      {
+        title: 'Roles',
+        url: '/dashboard/admin/roles',
+        icon: 'laptop',
+        shortcut: ['m', 'm']
+      },
+      {
+        title: 'Permisos',
+        shortcut: ['l', 'l'],
+        url: '/dashboard/admin/permisos',
+        icon: 'logout'
+      }
+    ]
+  },
 ];

@@ -1,13 +1,13 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
-import UserAuthForm from './user-auth-form';
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import Image from 'next/image';
+import { Metadata } from "next";
+import Link from "next/link";
+import UserAuthForm from "./ui/user-auth-form";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: 'Authentication',
-  description: 'Authentication forms built using the components.'
+  title: "Authentication",
+  description: "Authentication forms built using the components.",
 };
 
 export default function SignInViewPage() {
@@ -16,8 +16,8 @@ export default function SignInViewPage() {
       <Link
         href="/examples/authentication"
         className={cn(
-          buttonVariants({ variant: 'ghost' }),
-          'absolute right-4 top-4 hidden md:right-8 md:top-8'
+          buttonVariants({ variant: "ghost" }),
+          "absolute right-4 top-4 hidden md:right-8 md:top-8"
         )}
       >
         Login
@@ -59,14 +59,12 @@ export default function SignInViewPage() {
             </p>
           </div>
           <UserAuthForm />
-          <p className="px-8 text-center text-sm text-muted-foreground">
-            <Link
-              href="/restore-password"
-              className="underline underline-offset-4 hover:text-primary"
-            >
-              ¿Olvidaste tu contraseña?
-            </Link>{' '}
-          </p>
+          <Link
+            href={"/auth/new-account"}
+            className={buttonVariants({ variant: "secondary", size: "lg" })}
+          >
+            Crear nueva cuenta
+          </Link>          
         </div>
       </div>
     </div>

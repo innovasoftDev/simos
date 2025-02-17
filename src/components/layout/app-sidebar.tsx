@@ -1,19 +1,9 @@
-'use client';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+"use client";
 import {
   Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger
-} from '@/components/ui/collapsible';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -27,29 +17,20 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-  SidebarRail
-} from '@/components/ui/sidebar';
-import { navItems } from '@/components/constants/data';
-import {
-  BadgeCheck,
-  Bell,
-  ChevronRight,
-  ChevronsUpDown,
-  CreditCard,
-  GalleryVerticalEnd,
-  LogOut,
-  Bolt 
-} from 'lucide-react';
-import { useSession } from 'next-auth/react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import * as React from 'react';
-import { Icons } from '../icons';
+  SidebarRail,
+} from "@/components/ui/sidebar";
+import { navItems, navAdminItems } from "@/components/constants/data";
+import { ChevronRight, GalleryVerticalEnd, Users } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import * as React from "react";
+import { Icons } from "../icons";
 
 export const company = {
-  name: 'SIMOS',
+  name: "SIMOS",
   logo: GalleryVerticalEnd,
-  plan: 'Farinter'
+  plan: "Farinter",
 };
 
 export default function AppSidebar() {
@@ -95,22 +76,6 @@ export default function AppSidebar() {
                         <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <SidebarMenuSub>
-                        {item.items?.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={pathname === subItem.url}
-                            >
-                              <Link href={subItem.url}>
-                                <span>{subItem.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </CollapsibleContent>
                   </SidebarMenuItem>
                 </Collapsible>
               ) : (
@@ -129,9 +94,71 @@ export default function AppSidebar() {
               );
             })}
           </SidebarMenu>
+
+          {isAdmin && (
+            <SidebarMenu>
+              <SidebarGroup>
+                <SidebarGroupLabel>Administración</SidebarGroupLabel>
+                {navAdminItems.map((item) => {
+                  const Icon = item.icon ? Icons[item.icon] : Icons.logo;
+                  return item?.items && item?.items?.length > 0 ? (
+                    <Collapsible
+                      key={item.title}
+                      asChild
+                      defaultOpen={item.isActive}
+                      className="group/collapsible"
+                    >
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton
+                            tooltip={item.title}
+                            isActive={pathname === item.url}
+                          >
+                            {item.icon && <Icon />}
+                            <span>{item.title}</span>
+                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+
+                        <CollapsibleContent className="CollapsibleContent">
+                          <SidebarMenuSub>
+                            {item.items?.map((subItem) => (
+                              <SidebarMenuSubItem key={subItem.title}>
+                                <SidebarMenuSubButton
+                                  asChild
+                                  isActive={pathname === subItem.url}
+                                >
+                                  <Link href={subItem.url}>
+                                    <span>{subItem.title}</span>
+                                  </Link>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      </SidebarMenuItem>
+                    </Collapsible>
+                  ) : (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        tooltip={item.title}
+                        isActive={pathname === item.url}
+                      >
+                        <Link href={item.url}>
+                          <Icon />
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarGroup>
+            </SidebarMenu>
+          )}
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
+      {/* <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
@@ -215,7 +242,7 @@ export default function AppSidebar() {
             </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarFooter>
+      </SidebarFooter> */}
       <SidebarRail />
     </Sidebar>
   );
