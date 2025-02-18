@@ -20,7 +20,7 @@ export default function DashboardLayout({
   const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true';
   return (
     <KBar>
-      <SidebarProvider defaultOpen={defaultOpen}>
+      <SidebarProvider defaultOpen={true}>
         <AppSidebar />
         <SidebarInset>
           <Header />
