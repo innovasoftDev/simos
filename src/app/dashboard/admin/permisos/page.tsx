@@ -9,15 +9,15 @@ export default function UsersPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedPermission, setSelectedPermission] = useState<any>(null);
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const userRole = "admin"; // Ejemplo de rol del usuario
+  const [permissionType, setPermissionType] = useState("INSERTAR");
+  const userRole = "admin";
 
   useEffect(() => {
     setPermissions([
-      { id: 1, name: "Luis Cruz", description: "Permiso para Insertar" },
-      { id: 2, name: "Samuel Godoy", description: "Permiso para Consultar" },
-      { id: 3, name: "Diego Espinal", description: "Permiso para Actualizarr" },
-      { id: 4, name: "Gabriela Santos", description: "Permiso para Eliminar" },
+      { id: 1, name: "Luis Cruz", description: "INSERTAR" },
+      { id: 2, name: "Samuel Godoy", description: "CONSULTAR" },
+      { id: 3, name: "Diego Espinal", description: "ACTUALIZAR" },
+      { id: 4, name: "Gabriela Santos", description: "ELIMINAR" },
     ]);
   }, []);
 
@@ -25,7 +25,7 @@ export default function UsersPage() {
     const permission = permissions.find((perm) => perm.id === id);
     setSelectedPermission(permission);
     setName(permission.name);
-    setDescription(permission.description);
+    setPermissionType(permission.description);
     setIsEditing(true);
     setShowForm(true);
   };
@@ -39,16 +39,16 @@ export default function UsersPage() {
     if (isEditing) {
       const updatedPermissions = permissions.map((perm) =>
         perm.id === selectedPermission.id
-          ? { ...perm, name, description }
+          ? { ...perm, name, description: permissionType }
           : perm
       );
       setPermissions(updatedPermissions);
     } else {
-      const newPermission = { id: permissions.length + 1, name, description };
+      const newPermission = { id: permissions.length + 1, name, description: permissionType };
       setPermissions([...permissions, newPermission]);
     }
     setName("");
-    setDescription("");
+    setPermissionType("INSERTAR");
     setShowForm(false);
     setIsEditing(false);
   };
@@ -124,15 +124,20 @@ export default function UsersPage() {
                 />
               </div>
               <div>
-                <label htmlFor="description" className="block text-sm font-medium text-white">Permiso</label>
-                <textarea
-                  id="description"
-                  name="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                <label htmlFor="permission" className="block text-sm font-medium text-white">Permiso</label>
+                <select
+                  id="permission"
+                  name="permission"
+                  value={permissionType}
+                  onChange={(e) => setPermissionType(e.target.value)}
                   className="mt-1 block w-full px-3 py-2 border border-gray-500 bg-[#06040B] text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   required
-                />
+                >
+                  <option value="INSERTAR">INSERTAR</option>
+                  <option value="CONSULTAR">CONSULTAR</option>
+                  <option value="ACTUALIZAR">ACTUALIZAR</option>
+                  <option value="ELIMINAR">ELIMINAR</option>
+                </select>
               </div>
               <button type="submit" className="bg-[#5D32F5] text-white px-4 py-2 rounded-md">
                 {isEditing ? "Actualizar Permiso" : "Guardar Permiso"}
