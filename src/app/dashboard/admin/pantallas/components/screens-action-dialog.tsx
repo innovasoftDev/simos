@@ -30,8 +30,8 @@ import { Screens } from '../data/schema'
 
 const formSchema = z
   .object({
-    firstName: z.string().min(1, { message: 'Name is required.' }),
-    lastName: z.string().min(1, { message: 'Last Name is required.' }),
+    firstName: z.string().min(1, { message: 'El campo es obligatorio..' }),
+    lastName: z.string().min(1, { message: 'Descripcion requerida.' }),
     username: z.string().min(1, { message: 'Username is required.' }),
     phoneNumber: z.string().min(1, { message: 'Phone number is required.' }),
     email: z
@@ -140,8 +140,8 @@ export function ScreenssActionDialog({ open, onOpenChange }: Props) {
           <DialogTitle>{'Agregar Nueva pantalla'}</DialogTitle>
           <DialogDescription>
             {/* {isEdit ? 'Actualiza al usuario aquí. ' : 'Crea un nuevo usuario aquí. '} */}
-            {'Actualiza al pantalla aquí. ' }
-            Haga clic en guardar cuando haya terminado.
+            {'' }
+            Editar y agregar pantalla. Haga clic en guardar cuando haya terminado.
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className='h-[26.25rem] w-full pr-4 -mr-4 py-1'>
@@ -169,6 +169,31 @@ export function ScreenssActionDialog({ open, onOpenChange }: Props) {
                     </FormControl>
                     <FormMessage className='col-span-4 col-start-3' />
                   </FormItem>
+
+                                   
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='lastName'
+                render={({ field }) => (
+                  <FormItem className='grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0'>
+                    <FormLabel className='col-span-2 text-right'>
+                      Descripción de la pantalla
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder='Ingrese descripción de la pantalla'
+                        className='col-span-4'
+                        autoComplete='off'
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className='col-span-4 col-start-3' />
+                  </FormItem>
+
+                                   
                 )}
               />
               
