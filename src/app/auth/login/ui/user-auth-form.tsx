@@ -18,7 +18,6 @@ import { useFormState, useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
-import { IoInformationOutline } from "react-icons/io5";
 import clsx from "clsx";
 import { PasswordInput } from "../../../../components/password-input";
 import Link from "next/link";

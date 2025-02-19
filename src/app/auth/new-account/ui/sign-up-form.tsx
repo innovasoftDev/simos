@@ -16,6 +16,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { PasswordInput } from "../../../../components/password-input";
+import { login, registerUser } from '@/actions';
+import async from '../../../dashboard/admin/pantallas/components/pantallas';
 
 type SignUpFormProps = HTMLAttributes<HTMLDivElement>
 
@@ -23,43 +25,57 @@ const formSchema = z
   .object({
     email: z
       .string()
-      .min(1, { message: 'Please enter your email' })
-      .email({ message: 'Invalid email address' }),
+      .min(1, { message: 'Por favor ingrese su correo electrónico.' })
+      .email({ message: 'Dirección de correo electrónico no válida.' }),      
     password: z
       .string()
       .min(1, {
-        message: 'Please enter your password',
+        message: 'Por favor ingrese su contraseña.',
       })
       .min(7, {
-        message: 'Password must be at least 7 characters long',
+        message: 'La contraseña debe tener al menos 7 caracteres',
       }),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match.",
+    message: "Las contraseñas no coinciden.",
     path: ['confirmPassword'],
   })
 
 export function SignUpForm({ className, ...props }: SignUpFormProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading ] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    /* defaultValues: {
       email: '',
       password: '',
       confirmPassword: '',
-    },
+    }, */
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
     // eslint-disable-next-line no-console
-    console.log(data)
+    const { email, password, confirmPassword } = data;
+
+    // Server action
+    const resp = await registerUser( email, password, confirmPassword );
+    
+    if ( !resp.ok ) {
+      setErrorMessage( resp.message );
+      return;
+    }
+
+    await login( email.toLowerCase(), password );
 
     setTimeout(() => {
       setIsLoading(false)
-    }, 3000)
+    }, 1000)
+
+    window.location.replace('/');
+
   }
 
   return (
