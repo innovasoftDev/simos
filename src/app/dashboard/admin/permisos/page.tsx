@@ -9,15 +9,15 @@ export default function UsersPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedPermission, setSelectedPermission] = useState<any>(null);
   const [name, setName] = useState("");
-  const [permissionType, setPermissionType] = useState("INSERTAR");
+  const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
   const userRole = "admin";
 
   useEffect(() => {
     setPermissions([
-      { id: 1, name: "Luis Cruz", description: "INSERTAR" },
-      { id: 2, name: "Samuel Godoy", description: "CONSULTAR" },
-      { id: 3, name: "Diego Espinal", description: "ACTUALIZAR" },
-      { id: 4, name: "Gabriela Santos", description: "ELIMINAR" },
+      { id: 1, name: "Luis Cruz", permissions: ["INSERTAR"] },
+      { id: 2, name: "Samuel Godoy", permissions: ["CONSULTAR"] },
+      { id: 3, name: "Diego Espinal", permissions: ["ACTUALIZAR"] },
+      { id: 4, name: "Gabriela Santos", permissions: ["ELIMINAR"] },
     ]);
   }, []);
 
@@ -25,7 +25,7 @@ export default function UsersPage() {
     const permission = permissions.find((perm) => perm.id === id);
     setSelectedPermission(permission);
     setName(permission.name);
-    setPermissionType(permission.description);
+    setSelectedPermissions(permission.permissions);
     setIsEditing(true);
     setShowForm(true);
   };
@@ -34,21 +34,27 @@ export default function UsersPage() {
     setPermissions(permissions.filter((permission) => permission.id !== id));
   };
 
+  const handlePermissionChange = (perm: string) => {
+    setSelectedPermissions((prev) =>
+      prev.includes(perm) ? prev.filter((p) => p !== perm) : [...prev, perm]
+    );
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isEditing) {
       const updatedPermissions = permissions.map((perm) =>
         perm.id === selectedPermission.id
-          ? { ...perm, name, description: permissionType }
+          ? { ...perm, name, permissions: selectedPermissions }
           : perm
       );
       setPermissions(updatedPermissions);
     } else {
-      const newPermission = { id: permissions.length + 1, name, description: permissionType };
+      const newPermission = { id: permissions.length + 1, name, permissions: selectedPermissions };
       setPermissions([...permissions, newPermission]);
     }
     setName("");
-    setPermissionType("INSERTAR");
+    setSelectedPermissions([]);
     setShowForm(false);
     setIsEditing(false);
   };
@@ -74,7 +80,7 @@ export default function UsersPage() {
               <thead>
                 <tr>
                   <th className="px-6 py-3 text-left text-sm font-medium text-white">Usuario</th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-white">Permiso</th>
+                  <th className="px-6 py-3 text-left text-sm font-medium text-white">Permisos</th>
                   <th className="px-6 py-3 text-left text-sm font-medium text-white">Acciones</th>
                 </tr>
               </thead>
@@ -82,7 +88,7 @@ export default function UsersPage() {
                 {permissions.map((permission) => (
                   <tr key={permission.id}>
                     <td className="px-6 py-4 text-sm text-white">{permission.name}</td>
-                    <td className="px-6 py-4 text-sm text-gray-400">{permission.description}</td>
+                    <td className="px-6 py-4 text-sm text-gray-400">{permission.permissions.join(", ")}</td>
                     <td className="px-6 py-4 text-sm text-gray-400">
                       {userRole === "admin" && (
                         <>
@@ -112,11 +118,9 @@ export default function UsersPage() {
           <div className="mt-4">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-white">Usuario</label>
+                <label className="block text-sm font-medium text-white">Usuario</label>
                 <input
                   type="text"
-                  id="name"
-                  name="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="mt-1 block w-full px-3 py-2 border border-gray-500 bg-[#06040B] text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -124,24 +128,19 @@ export default function UsersPage() {
                 />
               </div>
               <div>
-                <label htmlFor="permission" className="block text-sm font-medium text-white">Permiso</label>
-                <select
-                  id="permission"
-                  name="permission"
-                  value={permissionType}
-                  onChange={(e) => setPermissionType(e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-500 bg-[#06040B] text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  required
-                >
-                  <option value="INSERTAR">INSERTAR</option>
-                  <option value="CONSULTAR">CONSULTAR</option>
-                  <option value="ACTUALIZAR">ACTUALIZAR</option>
-                  <option value="ELIMINAR">ELIMINAR</option>
-                </select>
+                <label className="block text-sm font-medium text-white">Permisos</label>
+                {['INSERTAR', 'CONSULTAR', 'ACTUALIZAR', 'ELIMINAR'].map((perm) => (
+                  <div key={perm}>
+                    <input
+                      type="checkbox"
+                      checked={selectedPermissions.includes(perm)}
+                      onChange={() => handlePermissionChange(perm)}
+                    />
+                    <span className="ml-2 text-white">{perm}</span>
+                  </div>
+                ))}
               </div>
-              <button type="submit" className="bg-[#5D32F5] text-white px-4 py-2 rounded-md">
-                {isEditing ? "Actualizar Permiso" : "Guardar Permiso"}
-              </button>
+              <button type="submit" className="bg-[#5D32F5] text-white px-4 py-2 rounded-md">Guardar Permisos</button>
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
