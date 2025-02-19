@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { UserPlus, MailPlus, ShieldCheck } from "lucide-react";
+import { UserPlus, MailPlus } from "lucide-react";
 import useDialogState from "@/hooks/use-dialog-state";
 import { Button } from "@/components/ui/button";
 import { Main } from "@/components/layout/main";
@@ -8,7 +8,6 @@ import { UsersActionDialog } from "./components/users-action-dialog";
 import { columns } from "./components/users-columns";
 import { UsersDeleteDialog } from "./components/users-delete-dialog";
 import { UsersInviteDialog } from "./components/users-invite-dialog";
-import { UsersPermissionsDialog } from "./components/users-permissions-dialog";
 import { UsersTable } from "./components/users-table";
 import UsersContextProvider, {
   type UsersDialogType,
@@ -34,10 +33,10 @@ export default function UsersPage() {
           <div className="mb-2 flex items-center justify-between space-y-2 flex-wrap">
             <div>
               <h2 className="text-2xl font-bold tracking-tight">
-                Lista de permisos
+                Lista de usuarios
               </h2>
               <p className="text-muted-foreground">
-                Administra aquí los permisos de los usuarios.
+                Administra aquí a tus usuarios y sus roles.
               </p>
             </div>
             <div className="flex gap-2">
@@ -46,7 +45,7 @@ export default function UsersPage() {
                 className="space-x-1"
                 onClick={() => setOpen("invite")}
               >
-                <span>Invitar Usuario</span> <MailPlus size={18} />
+                <span>Invite User</span> <MailPlus size={18} />
               </Button>
               <Button className="space-x-1" onClick={() => setOpen("add")}>
                 <span>Agregar Usuario</span> <UserPlus size={18} />
@@ -89,18 +88,6 @@ export default function UsersPage() {
               open={open === "delete"}
               onOpenChange={() => {
                 setOpen("delete");
-                setTimeout(() => {
-                  setCurrentRow(null);
-                }, 500);
-              }}
-              currentRow={currentRow}
-            />
-
-            <UsersPermissionsDialog
-              key={`user-permissions-${currentRow.id}`}
-              open={open === "permissions"}
-              onOpenChange={() => {
-                setOpen("permissions");
                 setTimeout(() => {
                   setCurrentRow(null);
                 }, 500);
