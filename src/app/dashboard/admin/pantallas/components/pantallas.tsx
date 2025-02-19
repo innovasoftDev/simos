@@ -38,10 +38,10 @@ export default function PantallasPage() {
                 <div className="mb-2 flex items-center justify-between space-y-2 flex-wrap">
             <div>
               <h2 className="text-2xl font-bold tracking-tight">
-                Accesos a las Pantallas
+                Gestión de las Pantallas
               </h2>
               <p className="text-muted-foreground">
-                Administra aquí el acceso a las pantallas.
+                Administra las pantallas.
               </p>
             </div>
             <div className="flex gap-2">
@@ -59,70 +59,71 @@ export default function PantallasPage() {
           <Table>
            <TableCaption>
              {" "}
-             <Button>Guardar</Button>
+          
            </TableCaption>
            <TableHeader>
              <TableRow>
              <TableHead>Pantalla</TableHead>
-               <TableHead>Administrador</TableHead>
-               <TableHead>Usuarios</TableHead>
-               <TableHead>Auditor</TableHead>
+             <TableHead>Descripción</TableHead>
                <TableHead>Acciones</TableHead>
               
              </TableRow>
+
+             
            </TableHeader>
            <TableBody>
              <TableRow>
                <TableCell className="font-medium">Dashboard</TableCell>
 
-               <TableCell className="font-medium"><Switch /></TableCell>
-               <TableCell className="font-medium"><Switch /></TableCell>
-               <TableCell className="font-medium"><Switch /></TableCell>
+               <TableCell className="font-medium">Es la pantalla principal del sistema de monitoreo, 
+                proporcionando una visión general del estado de los servicios,
+                 servidores y alertas.</TableCell>
+               
                <TableCell className="font-medium"><DataTableRowActions/></TableCell>
              </TableRow>
              
              <TableRow>
                <TableCell className="font-medium">Servicios</TableCell>
 
-               <TableCell className="font-medium"><Switch /></TableCell>
-               <TableCell className="font-medium"><Switch /></TableCell>
-               <TableCell className="font-medium"><Switch /></TableCell>
+               <TableCell className="font-medium">Indica métricas como tiempo de respuesta, latencia, uso de recursos y número de peticiones procesadas.</TableCell>
+              
+        
                <TableCell className="font-medium"><DataTableRowActions/></TableCell>
              </TableRow>
 
              <TableRow>
                <TableCell className="font-medium">Servidores</TableCell>
 
-               <TableCell className="font-medium"><Switch /></TableCell>
-               <TableCell className="font-medium"><Switch /></TableCell>
-               <TableCell className="font-medium"><Switch /></TableCell>
+               <TableCell className="font-medium">Presenta información detallada sobre los servidores que ejecutan los servicios.</TableCell>
+             
+               
                <TableCell className="font-medium"><DataTableRowActions/></TableCell>
              </TableRow>
 
              <TableRow>
                <TableCell className="font-medium">Alertas</TableCell>
 
-               <TableCell className="font-medium"><Switch /></TableCell>
-               <TableCell className="font-medium"><Switch /></TableCell>
-               <TableCell className="font-medium"><Switch /></TableCell>
+               <TableCell className="font-medium">Lista las alertas generadas por el sistema cuando se detectan problemas o anomalías.</TableCell>
+              
+               
                <TableCell className="font-medium"><DataTableRowActions/></TableCell>
              </TableRow>
 
              <TableRow>
                <TableCell className="font-medium">Errores</TableCell>
 
-               <TableCell className="font-medium"><Switch /></TableCell>
-               <TableCell className="font-medium"><Switch /></TableCell>
-               <TableCell className="font-medium"><Switch /></TableCell>
+               <TableCell className="font-medium">Muestra registros de errores detectados en los servicios y servidores.</TableCell>
+               
+               
                <TableCell className="font-medium"><DataTableRowActions/></TableCell>
              </TableRow>
 
              <TableRow>
                <TableCell className="font-medium">Usuarios</TableCell>
 
-               <TableCell className="font-medium"><Switch /></TableCell>
-               <TableCell className="font-medium"><Switch /></TableCell>
-               <TableCell className="font-medium"><Switch /></TableCell>
+               <TableCell className="font-medium">Permite la gestión de los usuarios del sistema de monitoreo.</TableCell>
+              
+              
 
                <TableCell className="font-medium"><DataTableRowActions/></TableCell>
             
