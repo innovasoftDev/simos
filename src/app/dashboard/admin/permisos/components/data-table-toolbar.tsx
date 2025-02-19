@@ -34,10 +34,10 @@ export function DataTableToolbar<TData>({
               column={table.getColumn('status')}
               title='Estado'
               options={[
-                { label: 'Active', value: 'active' },
-                { label: 'Inactive', value: 'inactive' },
-                { label: 'Invited', value: 'invited' },
-                { label: 'Suspended', value: 'suspended' },
+                { label: 'Insertar', value: 'Insertar' },
+                { label: 'Consultar', value: 'Consultar' },
+                { label: 'Actualizar', value: 'Actualizar' },
+                { label: 'Eliminar', value: 'Eliminar' },
               ]}
             />
           )}
