@@ -14,9 +14,10 @@ export default function UsersPage() {
 
   useEffect(() => {
     setPermissions([
-      { id: 1, name: "Crear Usuario", description: "Permiso para crear usuarios" },
-      { id: 2, name: "Editar Usuario", description: "Permiso para editar usuarios" },
-      { id: 3, name: "Eliminar Usuario", description: "Permiso para eliminar usuarios" },
+      { id: 1, name: "Luis Cruz", description: "Permiso para Insertar" },
+      { id: 2, name: "Samuel Godoy", description: "Permiso para Consultar" },
+      { id: 3, name: "Diego Espinal", description: "Permiso para Actualizarr" },
+      { id: 4, name: "Gabriela Santos", description: "Permiso para Eliminar" },
     ]);
   }, []);
 
