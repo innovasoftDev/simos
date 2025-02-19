@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { UserPlus, MailPlus } from "lucide-react";
+import { UserPlus, MailPlus, ShieldCheck } from "lucide-react";
 import useDialogState from "@/hooks/use-dialog-state";
 import { Button } from "@/components/ui/button";
 import { Main } from "@/components/layout/main";
@@ -33,10 +33,10 @@ export default function UsersPage() {
           <div className="mb-2 flex items-center justify-between space-y-2 flex-wrap">
             <div>
               <h2 className="text-2xl font-bold tracking-tight">
-                Lista de usuarios
+                Lista de permisos
               </h2>
               <p className="text-muted-foreground">
-                Administra aquí a tus usuarios y sus roles.
+                Administra aquí los permisos de los usuarios.
               </p>
             </div>
             <div className="flex gap-2">
@@ -45,7 +45,7 @@ export default function UsersPage() {
                 className="space-x-1"
                 onClick={() => setOpen("invite")}
               >
-                <span>Invite User</span> <MailPlus size={18} />
+                <span>Invitar Usuario</span> <MailPlus size={18} />
               </Button>
               <Button className="space-x-1" onClick={() => setOpen("add")}>
                 <span>Agregar Usuario</span> <UserPlus size={18} />
