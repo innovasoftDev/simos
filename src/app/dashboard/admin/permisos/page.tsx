@@ -2,153 +2,205 @@
 import { useState, useEffect } from "react";
 import { Main } from "@/components/layout/main";
 import PageContainer from "@/components/layout/page-container";
+import { Switch } from "@/components/ui/switch";
+import { useTheme } from "next-themes";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { MoreVertical } from "lucide-react";
+
+// Tipo de permiso
+interface Permission {
+  id: number;
+  role: string;
+  screen: string;
+  permissions: string[];
+}
 
 export default function UsersPage() {
-  const [permissions, setPermissions] = useState<any[]>([]);
-  const [showForm, setShowForm] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [selectedPermission, setSelectedPermission] = useState<any>(null);
-  const [name, setName] = useState("");
-  const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
-  const userRole = "admin";
+  const [permissions, setPermissions] = useState<Permission[]>([]);
+  const [newPermission, setNewPermission] = useState<Permission>({
+    id: 0,
+    role: "",
+    screen: "",
+    permissions: ["INSERTAR"],
+  });
+  const [showNewPermissionForm, setShowNewPermissionForm] = useState(false);
+  const [editingPermission, setEditingPermission] = useState<Permission | null>(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     setPermissions([
-      { id: 1, name: "Luis Cruz", permissions: ["INSERTAR"] },
-      { id: 2, name: "Samuel Godoy", permissions: ["CONSULTAR"] },
-      { id: 3, name: "Diego Espinal", permissions: ["ACTUALIZAR"] },
-      { id: 4, name: "Gabriela Santos", permissions: ["ELIMINAR"] },
+      { id: 1, role: "Administrador", screen: "Dashboard", permissions: ["INSERTAR"] },
+      { id: 2, role: "Usuario", screen: "Servicio", permissions: ["CONSULTAR"] },
     ]);
   }, []);
 
-  const handleEdit = (id: number) => {
-    const permission = permissions.find((perm) => perm.id === id);
-    setSelectedPermission(permission);
-    setName(permission.name);
-    setSelectedPermissions(permission.permissions);
-    setIsEditing(true);
-    setShowForm(true);
-  };
-
-  const handleDelete = (id: number) => {
-    setPermissions(permissions.filter((permission) => permission.id !== id));
-  };
-
-  const handlePermissionChange = (perm: string) => {
-    setSelectedPermissions((prev) =>
-      prev.includes(perm) ? prev.filter((p) => p !== perm) : [...prev, perm]
+  // Agregar o editar permisos
+  const togglePermission = (id: number, perm: string) => {
+    setPermissions((prev) =>
+      prev.map((p) =>
+        p.id === id
+          ? {
+              ...p,
+              permissions: p.permissions.includes(perm)
+                ? p.permissions.filter((item) => item !== perm)
+                : [...p.permissions, perm],
+            }
+          : p
+      )
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isEditing) {
-      const updatedPermissions = permissions.map((perm) =>
-        perm.id === selectedPermission.id
-          ? { ...perm, name, permissions: selectedPermissions }
-          : perm
-      );
-      setPermissions(updatedPermissions);
+  // Eliminar permiso
+  const deletePermission = (id: number) => {
+    setPermissions((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  // Editar permiso
+  const editPermission = (id: number) => {
+    setEditingPermission(permissions.find((p) => p.id === id) || null);
+  };
+
+  // Guardar cambios de edición
+  const saveEdit = () => {
+    if (!editingPermission) return;
+    setPermissions((prev) =>
+      prev.map((p) => (p.id === editingPermission.id ? { ...editingPermission } : p))
+    );
+    setEditingPermission(null);
+  };
+
+  // Agregar nuevo permiso
+  const addNewPermission = () => {
+    setPermissions((prev) => [
+      ...prev,
+      { ...newPermission, id: prev.length ? Math.max(...prev.map((p) => p.id)) + 1 : 1 },
+    ]);
+    setShowNewPermissionForm(false);
+    setNewPermission({ id: 0, role: "", screen: "", permissions: ["INSERTAR"] });
+  };
+
+  // Manejador de cambios
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>,
+    field: keyof Permission
+  ) => {
+    const value = e.target.value;
+    if (editingPermission) {
+      setEditingPermission((prev) => prev ? { ...prev, [field]: value } : prev);
     } else {
-      const newPermission = { id: permissions.length + 1, name, permissions: selectedPermissions };
-      setPermissions([...permissions, newPermission]);
+      setNewPermission((prev) => ({ ...prev, [field]: value }));
     }
-    setName("");
-    setSelectedPermissions([]);
-    setShowForm(false);
-    setIsEditing(false);
+  };
+
+  // Manejador de cambio de permisos
+  const handlePermissionSwitch = (perm: string) => {
+    if (editingPermission) {
+      setEditingPermission((prev) => prev ? {
+        ...prev,
+        permissions: prev.permissions.includes(perm)
+          ? prev.permissions.filter((item) => item !== perm)
+          : [...prev.permissions, perm],
+      } : prev);
+    } else {
+      setNewPermission((prev) => ({
+        ...prev,
+        permissions: prev.permissions.includes(perm)
+          ? prev.permissions.filter((item) => item !== perm)
+          : [...prev.permissions, perm],
+      }));
+    }
   };
 
   return (
     <PageContainer scrollable>
       <Main>
-        <div className="mb-2">
-          <h2 className="text-2xl font-bold tracking-tight text-white">Gestión de Permisos</h2>
-        </div>
-
-        <div className="overflow-hidden bg-[#06040B] shadow sm:rounded-lg">
-          <div className="px-4 py-5 sm:px-6">
-            <button
-              onClick={() => setShowForm(true)}
-              className="bg-[#5D32F5] text-white px-4 py-2 rounded-md"
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Gestión de Permisos</h2>
+        <Button className="bg-[#5D32F5] text-white mt-4" onClick={() => setShowNewPermissionForm(true)}>
+          Nuevo Permiso
+        </Button>
+        <table className="min-w-full divide-y divide-gray-300 mt-4">
+          <thead>
+            <tr>
+              {["Rol", "Pantalla", "Insertar", "Eliminar", "Actualizar", "Consultar", "Acciones"].map((header) => (
+                <th key={header} className="px-6 py-3 text-left text-sm font-medium text-gray-900 dark:text-white">
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {permissions.map((permission) => (
+              <tr key={permission.id}>
+                <td>{permission.role}</td>
+                <td>{permission.screen}</td>
+                {["INSERTAR", "ELIMINAR", "ACTUALIZAR", "CONSULTAR"].map((perm) => (
+                  <td key={perm}>
+                    <Switch checked={permission.permissions.includes(perm)} onCheckedChange={() => togglePermission(permission.id, perm)} />
+                  </td>
+                ))}
+                <td>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost">
+                        <MoreVertical />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={() => editPermission(permission.id)}>Editar</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => deletePermission(permission.id)}>Eliminar</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {(showNewPermissionForm || editingPermission) && (
+          <div className="mt-4 p-6 border rounded-lg shadow-lg bg-white dark:bg-[#06040B]">
+            <h3 className="text-xl font-semibold">{editingPermission ? "Editar Permiso" : "Nuevo Permiso"}</h3>
+            <label>Rol</label>
+            <select
+              className="p-2 border rounded"
+              value={editingPermission?.role || newPermission.role}
+              onChange={(e) => handleInputChange(e, "role")}
             >
-              Nuevo Permiso
-            </button>
-          </div>
-          <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-            <table className="min-w-full divide-y divide-gray-300">
-              <thead>
-                <tr>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-white">Usuario</th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-white">Permisos</th>
-                  <th className="px-6 py-3 text-left text-sm font-medium text-white">Acciones</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 bg-[#06040B]">
-                {permissions.map((permission) => (
-                  <tr key={permission.id}>
-                    <td className="px-6 py-4 text-sm text-white">{permission.name}</td>
-                    <td className="px-6 py-4 text-sm text-gray-400">{permission.permissions.join(", ")}</td>
-                    <td className="px-6 py-4 text-sm text-gray-400">
-                      {userRole === "admin" && (
-                        <>
-                          <button
-                            onClick={() => handleEdit(permission.id)}
-                            className="text-blue-400"
-                          >
-                            Editar
-                          </button>
-                          <button
-                            onClick={() => handleDelete(permission.id)}
-                            className="text-red-400 ml-2"
-                          >
-                            Eliminar
-                          </button>
-                        </>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {showForm && (
-          <div className="mt-4">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-white">Usuario</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-500 bg-[#06040B] text-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  required
+              <option value="">Seleccionar rol</option>
+              <option value="Administrador">Administrador</option>
+              <option value="Usuario">Usuario</option>
+            </select>
+            <label>Pantalla</label>
+            <select
+              className="p-2 border rounded"
+              value={editingPermission?.screen || newPermission.screen}
+              onChange={(e) => handleInputChange(e, "screen")}
+            >
+              {["Dashboard", "Servicios", "Servidores", "Errores", "Alertas", "Usuarios", "Pantallas"].map((screen) => (
+                <option key={screen} value={screen}>
+                  {screen}
+                </option>
+              ))}
+            </select>
+            {["INSERTAR", "ELIMINAR", "ACTUALIZAR", "CONSULTAR"].map((perm) => (
+              <div key={perm} className="flex items-center mt-2">
+                <Switch
+                  checked={(editingPermission || newPermission).permissions.includes(perm)}
+                  onCheckedChange={() => handlePermissionSwitch(perm)}
                 />
+                <label className="ml-2 text-sm">{perm}</label>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-white">Permisos</label>
-                {['INSERTAR', 'CONSULTAR', 'ACTUALIZAR', 'ELIMINAR'].map((perm) => (
-                  <div key={perm}>
-                    <input
-                      type="checkbox"
-                      checked={selectedPermissions.includes(perm)}
-                      onChange={() => handlePermissionChange(perm)}
-                    />
-                    <span className="ml-2 text-white">{perm}</span>
-                  </div>
-                ))}
-              </div>
-              <button type="submit" className="bg-[#5D32F5] text-white px-4 py-2 rounded-md">Guardar Permisos</button>
-              <button
-                type="button"
-                onClick={() => setShowForm(false)}
-                className="bg-gray-500 text-white px-4 py-2 rounded-md ml-2"
-              >
+            ))}
+            <div className="mt-4 flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => { setShowNewPermissionForm(false); setEditingPermission(null); }}>
                 Cancelar
-              </button>
-            </form>
+              </Button>
+              <Button
+                className="bg-[#5D32F5] text-white"
+                onClick={editingPermission ? saveEdit : addNewPermission}
+              >
+                {editingPermission ? "Guardar Cambios" : "Guardar Nuevo Permiso"}
+              </Button>
+            </div>
           </div>
         )}
       </Main>
