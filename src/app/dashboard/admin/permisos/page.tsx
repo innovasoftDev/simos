@@ -26,6 +26,7 @@ export default function UsersPage() {
   });
   const [showNewPermissionForm, setShowNewPermissionForm] = useState(false);
   const [editingPermission, setEditingPermission] = useState<Permission | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Para el mensaje de error
   const { theme } = useTheme();
 
   useEffect(() => {
@@ -59,25 +60,36 @@ export default function UsersPage() {
   // Editar permiso
   const editPermission = (id: number) => {
     setEditingPermission(permissions.find((p) => p.id === id) || null);
+    setShowNewPermissionForm(true); // Mostrar el formulario para editar
   };
 
   // Guardar cambios de edición
   const saveEdit = () => {
-    if (!editingPermission) return;
+    if (!editingPermission || !editingPermission.role || !editingPermission.screen || !editingPermission.permissions.length) {
+      setErrorMessage("Los campos no pueden estar vacíos. Selecciona un rol, pantalla y al menos un permiso.");
+      return;
+    }
     setPermissions((prev) =>
       prev.map((p) => (p.id === editingPermission.id ? { ...editingPermission } : p))
     );
     setEditingPermission(null);
+    setShowNewPermissionForm(false);
+    setErrorMessage(null);
   };
 
   // Agregar nuevo permiso
   const addNewPermission = () => {
+    if (!newPermission.role || !newPermission.screen || !newPermission.permissions.length) {
+      setErrorMessage("Los campos no pueden estar vacíos. Selecciona un rol, pantalla y al menos un permiso.");
+      return;
+    }
     setPermissions((prev) => [
       ...prev,
       { ...newPermission, id: prev.length ? Math.max(...prev.map((p) => p.id)) + 1 : 1 },
     ]);
     setShowNewPermissionForm(false);
     setNewPermission({ id: 0, role: "", screen: "", permissions: ["INSERTAR"] });
+    setErrorMessage(null);
   };
 
   // Manejador de cambios
@@ -115,31 +127,39 @@ export default function UsersPage() {
   return (
     <PageContainer scrollable>
       <Main>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Gestión de Permisos</h2>
+        <h2 className="text-xl font-medium text-gray-900 dark:text-white">GESTIÓN DE PERMISOS</h2>
         <Button className="bg-[#5D32F5] text-white mt-4" onClick={() => setShowNewPermissionForm(true)}>
-          Nuevo Permiso
+          AGREGAR PERMISO
         </Button>
-        <table className="min-w-full divide-y divide-gray-300 mt-4">
+        <table className="min-w-full divide-y divide-gray-300 mt-4 text-sm">
           <thead>
             <tr>
-              {["Rol", "Pantalla", "Insertar", "Eliminar", "Actualizar", "Consultar", "Acciones"].map((header) => (
-                <th key={header} className="px-6 py-3 text-left text-sm font-medium text-gray-900 dark:text-white">
+              <th className="px-4 py-3 text-left font-medium text-gray-900 dark:text-white">ROL</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-900 dark:text-white">PANTALLA</th>
+              {["INSERTAR", "ACTUALIZAR"].map((header) => (
+                <th key={header} className="px-4 py-3 text-center font-medium text-gray-900 dark:text-white">
                   {header}
                 </th>
               ))}
+              {["ELIMINAR", "CONSULTAR"].map((header) => (
+                <th key={header} className="px-4 py-3 text-center font-medium text-gray-900 dark:text-white">
+                  {header}
+                </th>
+              ))}
+              <th className="px-4 py-3 text-center font-medium text-gray-900 dark:text-white">ACCIONES</th>
             </tr>
           </thead>
           <tbody>
             {permissions.map((permission) => (
               <tr key={permission.id}>
-                <td>{permission.role}</td>
-                <td>{permission.screen}</td>
-                {["INSERTAR", "ELIMINAR", "ACTUALIZAR", "CONSULTAR"].map((perm) => (
-                  <td key={perm}>
+                <td className="px-4 py-2">{permission.role}</td>
+                <td className="px-4 py-2">{permission.screen}</td>
+                {["INSERTAR", "ACTUALIZAR", "ELIMINAR", "CONSULTAR"].map((perm) => (
+                  <td key={perm} className="px-4 py-2 text-center">
                     <Switch checked={permission.permissions.includes(perm)} onCheckedChange={() => togglePermission(permission.id, perm)} />
                   </td>
                 ))}
-                <td>
+                <td className="flex justify-center">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost">
@@ -156,50 +176,76 @@ export default function UsersPage() {
             ))}
           </tbody>
         </table>
-        {(showNewPermissionForm || editingPermission) && (
-          <div className="mt-4 p-6 border rounded-lg shadow-lg bg-white dark:bg-[#06040B]">
-            <h3 className="text-xl font-semibold">{editingPermission ? "Editar Permiso" : "Nuevo Permiso"}</h3>
-            <label>Rol</label>
-            <select
-              className="p-2 border rounded"
-              value={editingPermission?.role || newPermission.role}
-              onChange={(e) => handleInputChange(e, "role")}
-            >
-              <option value="">Seleccionar rol</option>
-              <option value="Administrador">Administrador</option>
-              <option value="Usuario">Usuario</option>
-            </select>
-            <label>Pantalla</label>
-            <select
-              className="p-2 border rounded"
-              value={editingPermission?.screen || newPermission.screen}
-              onChange={(e) => handleInputChange(e, "screen")}
-            >
-              {["Dashboard", "Servicios", "Servidores", "Errores", "Alertas", "Usuarios", "Pantallas"].map((screen) => (
-                <option key={screen} value={screen}>
-                  {screen}
-                </option>
-              ))}
-            </select>
-            {["INSERTAR", "ELIMINAR", "ACTUALIZAR", "CONSULTAR"].map((perm) => (
-              <div key={perm} className="flex items-center mt-2">
-                <Switch
-                  checked={(editingPermission || newPermission).permissions.includes(perm)}
-                  onCheckedChange={() => handlePermissionSwitch(perm)}
-                />
-                <label className="ml-2 text-sm">{perm}</label>
+
+        {/* Nuevo Permiso Form debajo de la tabla */}
+        {showNewPermissionForm && (
+          <div className="mt-4 p-4 border rounded-lg shadow-lg bg-white dark:bg-[#06040B] max-w-lg mx-auto">
+            <div className="w-full">
+              <h3 className="text-xl font-semibold text-center mb-4">{editingPermission ? "EDITAR PERMISO" : "AGREGAR PERMISO"}</h3>
+              {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
+              <div className="mb-4">
+                <label>ROL</label>
+                <select
+                  className="p-2 border rounded w-full text-sm"
+                  value={editingPermission ? editingPermission.role : newPermission.role}
+                  onChange={(e) => handleInputChange(e, "role")}
+                >
+                  <option value="">SELECCIONAR ROL</option>
+                  <option value="Administrador">Administrador</option>
+                  <option value="Usuario">Usuario</option>
+                </select>
               </div>
-            ))}
-            <div className="mt-4 flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => { setShowNewPermissionForm(false); setEditingPermission(null); }}>
-                Cancelar
-              </Button>
-              <Button
-                className="bg-[#5D32F5] text-white"
-                onClick={editingPermission ? saveEdit : addNewPermission}
-              >
-                {editingPermission ? "Guardar Cambios" : "Guardar Nuevo Permiso"}
-              </Button>
+              <div className="mb-4">
+                <label>PANTALLA</label>
+                <select
+                  className="p-2 border rounded w-full text-sm"
+                  value={editingPermission ? editingPermission.screen : newPermission.screen}
+                  onChange={(e) => handleInputChange(e, "screen")}
+                >
+                  <option value="">SELECCIONAR PANTALLA</option>
+                  {["Dashboard", "Servicios", "Servidores", "Errores", "Alertas", "Usuarios", "Pantallas"].map((screen) => (
+                    <option key={screen} value={screen}>
+                      {screen}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                {["INSERTAR", "ACTUALIZAR"].map((perm) => (
+                  <div key={perm} className="flex items-center">
+                    <Switch
+                      checked={editingPermission ? editingPermission.permissions.includes(perm) : newPermission.permissions.includes(perm)}
+                      onCheckedChange={() => handlePermissionSwitch(perm)}
+                    />
+                    <label className="ml-2 text-sm">{perm}</label>
+                  </div>
+                ))}
+              </div>
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                {["ELIMINAR", "CONSULTAR"].map((perm) => (
+                  <div key={perm} className="flex items-center">
+                    <Switch
+                      checked={editingPermission ? editingPermission.permissions.includes(perm) : newPermission.permissions.includes(perm)}
+                      onCheckedChange={() => handlePermissionSwitch(perm)}
+                    />
+                    <label className="ml-2 text-sm">{perm}</label>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 flex justify-center space-x-4">
+                <Button variant="outline" onClick={() => setShowNewPermissionForm(false)}>
+                  CANCELAR
+                </Button>
+                <Button
+                  className="bg-blue-500"
+                  onClick={editingPermission ? saveEdit : addNewPermission}
+                  disabled={!newPermission.role || !newPermission.screen || !newPermission.permissions.length}
+                >
+                  {editingPermission ? "GUARDAR CAMBIOS" : "GUARDAR"}
+                </Button>
+              </div>
             </div>
           </div>
         )}
