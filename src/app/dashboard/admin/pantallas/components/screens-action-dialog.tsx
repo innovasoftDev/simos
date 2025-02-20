@@ -27,12 +27,15 @@ import { PasswordInput } from '@/components/password-input'
 import { SelectDropdown } from '@/components/select-dropdown'
 import { userTypes } from '../data/data'
 import { Screens } from '../data/schema'
+import { Switch } from "@/components/ui/switch";
+
+
 
 const formSchema = z
   .object({
     firstName: z.string().min(1, { message: 'El campo es obligatorio..' }),
     lastName: z.string().min(1, { message: 'Descripcion requerida.' }),
-    username: z.string().min(1, { message: 'Username is required.' }),
+    username: z.string().min(1, { message: '' }),
     phoneNumber: z.string().min(1, { message: 'Phone number is required.' }),
     email: z
       .string()
@@ -42,6 +45,7 @@ const formSchema = z
     role: z.string().min(1, { message: 'Role is required.' }),
     confirmPassword: z.string().transform((pwd) => pwd.trim()),
     isEdit: z.boolean(),
+    status: z.boolean(),
   })
   .superRefine(({ isEdit, password, confirmPassword }, ctx) => {
     if (!isEdit || (isEdit && password !== '')) {
@@ -89,12 +93,12 @@ const formSchema = z
 type ScreensForm = z.infer<typeof formSchema>
 
 interface Props {
-  currentRow?: Screens
+  isEdit: boolean 
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-export function ScreenssActionDialog({ open, onOpenChange }: Props) {
+export function ScreenssActionDialog({ open, onOpenChange, isEdit }: Props) {
   // const isEdit = !!currentRow
   const form = useForm<ScreensForm>({
     resolver: zodResolver(formSchema),
@@ -107,7 +111,7 @@ export function ScreenssActionDialog({ open, onOpenChange }: Props) {
           phoneNumber: '',
           password: '',
           confirmPassword: '',
-          
+          status: true,
         },
   })
 
@@ -136,12 +140,12 @@ export function ScreenssActionDialog({ open, onOpenChange }: Props) {
     >
       <DialogContent className='sm:max-w-lg'>
         <DialogHeader className='text-left'>
-          {/* <DialogTitle>{isEdit ? 'Editar Usuario' : 'Agregar Nuevo Usuario'}</DialogTitle> */}
-          <DialogTitle>{'Agregar Nueva pantalla'}</DialogTitle>
+          <DialogTitle>{isEdit ? 'Editar la pantalla aquí' : 'Agregar Nueva Pantalla. '}</DialogTitle>
+          {/* <DialogTitle>{'Agregar pantalla'}</DialogTitle> */}
           <DialogDescription>
-            {/* {isEdit ? 'Actualiza al usuario aquí. ' : 'Crea un nuevo usuario aquí. '} */}
+            {isEdit ? 'Actualiza la pantalla aquí. Haga clic en guardar cuando haya terminado. ' : 'Crea una nueva pantalla. Haga clic en guardar cuando haya terminado. '}
             {'' }
-            Editar y agregar pantalla. Haga clic en guardar cuando haya terminado.
+            {/* Agregar una nueva pantalla. Haga clic en guardar cuando haya terminado. */}
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className='h-[26.25rem] w-full pr-4 -mr-4 py-1'>
@@ -153,7 +157,7 @@ export function ScreenssActionDialog({ open, onOpenChange }: Props) {
             >
               <FormField
                 control={form.control}
-                name='firstName'
+                name='lastName'
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0'>
                     <FormLabel className='col-span-2 text-right'>
@@ -170,6 +174,7 @@ export function ScreenssActionDialog({ open, onOpenChange }: Props) {
                     <FormMessage className='col-span-4 col-start-3' />
                   </FormItem>
 
+                  
                                    
                 )}
               />
@@ -197,7 +202,25 @@ export function ScreenssActionDialog({ open, onOpenChange }: Props) {
                 )}
               />
               
-              
+              <FormField
+                control={form.control}
+                name='username'
+                render={({ field }) => (
+                  <FormItem className='grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0'>
+                    <FormLabel className='col-span-2 text-right'>
+                      Estado
+                    </FormLabel>
+                    <FormControl>
+                    <Switch {...field}/>
+
+                    </FormControl>
+                    <FormMessage className='col-span-4 col-start-3' />
+                  </FormItem>
+
+                                   
+                )}
+              />
+            
             
             </form>
           </Form>

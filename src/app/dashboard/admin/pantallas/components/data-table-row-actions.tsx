@@ -66,6 +66,7 @@ export function DataTableRowActions() {
                       
                       key="user-add"
                        open={open === "edit"}
+                       isEdit={open === "edit"}
                       onOpenChange={() => setOpenModal("edit")}/>
     </>
   )
