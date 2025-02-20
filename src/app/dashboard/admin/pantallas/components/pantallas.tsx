@@ -21,12 +21,14 @@ import { ScreensDialogType } from '../context/screens-context';
 import { Screens } from "../data/schema";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { ScreenssActionDialog } from "./screens-action-dialog";
+import { Badge } from '@/components/ui/badge';
 
 export default function PantallasPage() {
   
   const [currentRow, setCurrentRow] = useState<Screens | null>(null);
   const [open, setOpen] = useDialogState<ScreensDialogType>(null);
   
+
 
   return (
      <PageContainer scrollable>
@@ -50,9 +52,6 @@ export default function PantallasPage() {
                 <span>Agregar Pantalla</span>
               </Button>
               
-              {/* <Button className="space-x-1" onClick={() => setOpen("add")}>
-                <span>Agregar Usuario</span> <UserPlus size={18} />
-              </Button> */}
             </div>
           </div>
           <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0">
@@ -65,8 +64,8 @@ export default function PantallasPage() {
              <TableRow>
              <TableHead>Pantalla</TableHead>
              <TableHead>Descripción</TableHead>
-               <TableHead>Acciones</TableHead>
-              
+             <TableHead>Estado</TableHead>
+            <TableHead>Acciones</TableHead>
              </TableRow>
 
              
@@ -77,8 +76,11 @@ export default function PantallasPage() {
 
                <TableCell className="font-medium">Es la pantalla principal del sistema de monitoreo, 
                 proporcionando una visión general del estado de los servicios,
-                 servidores y alertas.</TableCell>
+                 servidores y alertas</TableCell>
+                
                
+               <TableCell className="font-medium"><Badge variant='outline' className=""> Activo</Badge></TableCell>
+
                <TableCell className="font-medium"><DataTableRowActions/></TableCell>
              </TableRow>
              
@@ -87,7 +89,7 @@ export default function PantallasPage() {
 
                <TableCell className="font-medium">Indica métricas como tiempo de respuesta, latencia, uso de recursos y número de peticiones procesadas.</TableCell>
               
-        
+               <TableCell className="font-medium"><Badge variant='outline' className=""> Activo</Badge></TableCell>
                <TableCell className="font-medium"><DataTableRowActions/></TableCell>
              </TableRow>
 
@@ -96,7 +98,7 @@ export default function PantallasPage() {
 
                <TableCell className="font-medium">Presenta información detallada sobre los servidores que ejecutan los servicios.</TableCell>
              
-               
+               <TableCell className="font-medium"><Badge variant='outline' className=""> Activo</Badge></TableCell>
                <TableCell className="font-medium"><DataTableRowActions/></TableCell>
              </TableRow>
 
@@ -105,7 +107,7 @@ export default function PantallasPage() {
 
                <TableCell className="font-medium">Lista las alertas generadas por el sistema cuando se detectan problemas o anomalías.</TableCell>
               
-               
+               <TableCell className="font-medium"><Badge variant='outline' className=""> Activo</Badge></TableCell>
                <TableCell className="font-medium"><DataTableRowActions/></TableCell>
              </TableRow>
 
@@ -114,7 +116,7 @@ export default function PantallasPage() {
 
                <TableCell className="font-medium">Muestra registros de errores detectados en los servicios y servidores.</TableCell>
                
-               
+               <TableCell className="font-medium"><Badge variant='outline' className=""> Activo</Badge></TableCell>
                <TableCell className="font-medium"><DataTableRowActions/></TableCell>
              </TableRow>
 
@@ -124,7 +126,7 @@ export default function PantallasPage() {
                <TableCell className="font-medium">Permite la gestión de los usuarios del sistema de monitoreo.</TableCell>
               
               
-
+               <TableCell className="font-medium"><Badge variant='outline' className=""> Activo</Badge></TableCell>
                <TableCell className="font-medium"><DataTableRowActions/></TableCell>
             
           
@@ -141,6 +143,7 @@ export default function PantallasPage() {
                 
                 key="user-add"
                  open={open === "add"}
+                 isEdit={open === "edit"}
                 onOpenChange={() => setOpen("add")}/>
               </ScreensContextProvider>
 
