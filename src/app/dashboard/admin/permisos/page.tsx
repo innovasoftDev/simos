@@ -28,6 +28,8 @@ export default function UsersPage() {
     setPermissions([
       { id: 1, role: "Administrador", screen: "Dashboard", permissions: ["INSERTAR"] },
       { id: 2, role: "Usuario", screen: "Servicio", permissions: ["CONSULTAR"] },
+      { id: 3, role: "Administrador", screen: "Dashboard", permissions: ["ELIMINAR"] },
+      { id: 4, role: "Usuario", screen: "Servicio", permissions: ["ACTUALIZAR"] },
     ]);
   }, []);
 
