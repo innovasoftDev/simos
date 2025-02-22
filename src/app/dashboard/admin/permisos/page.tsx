@@ -28,8 +28,10 @@ export default function UsersPage() {
     setPermissions([
       { id: 1, role: "Administrador", screen: "Dashboard", permissions: ["INSERTAR"] },
       { id: 2, role: "Usuario", screen: "Servicio", permissions: ["CONSULTAR"] },
-      { id: 3, role: "Administrador", screen: "Dashboard", permissions: ["ELIMINAR"] },
-      { id: 4, role: "Usuario", screen: "Servicio", permissions: ["ACTUALIZAR"] },
+      { id: 3, role: "Administrador", screen: "Errores", permissions: ["ELIMINAR"] },
+      { id: 4, role: "Usuario", screen: "Alertas", permissions: ["ACTUALIZAR"] },
+      { id: 5, role: "Administrador", screen: "Servidores", permissions: ["ELIMINAR"] },
+      { id: 6, role: "Usuario", screen: "Pantallas", permissions: ["ACTUALIZAR"] },
     ]);
   }, []);
 
@@ -67,7 +69,7 @@ export default function UsersPage() {
     setPermissions((prev) =>
       currentPermission.id
         ? prev.map((p) => (p.id === currentPermission.id ? { ...currentPermission } : p))
-        : [...prev, { ...currentPermission, id: prev.length ? Math.max(...prev.map((p) => p.id)) + 1 : 1 } ]
+        : [...prev, { ...currentPermission, id: prev.length ? Math.max(...prev.map((p) => p.id)) + 1 : 1 }]
     );
 
     setModalOpen(false);
@@ -88,7 +90,7 @@ export default function UsersPage() {
           <Button className="bg-[#5D32F5] text-white mt-4" onClick={() => openModal()}>AGREGAR PERMISO</Button>
         </div>
 
-        <table className="min-w-full divide-y divide-gray-300 mt-4 text-sm">
+        <table className="min-w-full divide-y divide-gray-700 mt-4 text-sm">
           <thead>
             <tr>
               <th className="text-left">ROL</th>
@@ -100,8 +102,8 @@ export default function UsersPage() {
             </tr>
           </thead>
           <tbody>
-            {permissions.map((permission) => (
-              <tr key={permission.id}>
+            {permissions.map((permission, index) => (
+              <tr key={permission.id} className={index !== permissions.length - 1 ? "border-b border-gray-700" : ""}>
                 <td className="text-left">{permission.role}</td>
                 <td className="text-left">{permission.screen}</td>
                 {["INSERTAR", "ACTUALIZAR", "ELIMINAR", "CONSULTAR"].map((perm) => (
@@ -154,7 +156,7 @@ export default function UsersPage() {
                 onChange={(e) => setCurrentPermission((prev) => prev ? { ...prev, screen: e.target.value } : prev)}
               >
                 <option value="">--SELECCIONAR PANTALLA--</option>
-                {["Dashboard", "Servicios", "servidores", "Pantallas", "Alertas", "Errores", "Usuarios"].map((screen) => (
+                {["Dashboard", "Servicios", "Servidores", "Pantallas", "Alertas", "Errores", "Usuarios"].map((screen) => (
                   <option key={screen} value={screen}>{screen}</option>
                 ))}
               </select>

@@ -83,7 +83,7 @@ export default function UsersPage() {
               <tr key={permission.id} className={index === permissions.length - 1 ? "" : "border-b border-gray-600"}>
                 <td className="text-left p-2">{permission.role}</td>
                 <td className="text-left p-2">
-                  <span className="border border-gray-600 px-3 py-1 font-bold text-sm inline-block rounded-md">
+                  <span className="border border-gray-600 px-2 py-0.5 text-xs font-bold inline-block rounded-md">
                     {permission.screen}
                   </span>
                 </td>
