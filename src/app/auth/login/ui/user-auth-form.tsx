@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authenticate } from "@/actions";
-import { signIn } from "next-auth/react";
+/* import { signIn } from "next-auth/react"; */
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useFormState, useFormStatus } from "react-dom";
@@ -80,7 +80,7 @@ export default function UserAuthForm() {
         description: "¡Credenciales no son correctas!",
       });
   }
-  console.log(state);
+  /* console.log(state); */
 
   return (
     <>

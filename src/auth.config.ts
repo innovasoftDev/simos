@@ -2,8 +2,19 @@ import NextAuth, { type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcryptjs from "bcryptjs";
 import { z } from "zod";
-
+import { getRole } from "./actions/admin/get-role";
 import prisma from "./lib/prisma";
+
+async function getRoleById(id: string): Promise<string> {
+  const role = await prisma.tBL_USR_ROLES.findUnique({
+    where: { id_rol: id },
+    select: { rol: true },
+  });
+
+  /* console.log(role?.rol); */
+
+  return role?.rol ?? "";
+}
 
 export const authConfig: NextAuthConfig = {
   pages: {
@@ -34,9 +45,14 @@ export const authConfig: NextAuthConfig = {
       return token;
     },
 
-    session({ session, token, user }) {
+    async session({ session, token, user }) {
       session.user = token.data as any;
-      session.user.role = "admin";
+
+      const role = (await getRoleById(token.data.tbl_usr_roles_id_rol)).toString();
+
+      session.user.role = role;
+
+      /* console.log(role); */
 
       return session;
     },

@@ -6,13 +6,22 @@ import bcryptjs from "bcryptjs";
 
 async function getIdByRole(role: string): Promise<string> {
   const admin = await prisma.tBL_USR_ROLES.findUnique({
-    where: { rol: role },
+    where: { rol: 'admin' },
+    select: { id_rol: true },
+  });
+
+  const user = await prisma.tBL_USR_ROLES.findUnique({
+    where: { rol: 'user' },
     select: { id_rol: true },
   });
 
   /* console.log(admin?.id_rol); */
-
-  return admin?.id_rol ?? "";
+  if (role === "admin") {
+    return admin?.id_rol ?? "";
+  } else {
+    return user?.id_rol ?? "";
+  }
+  
 }
 
 async function CreateUser(name: string, email: string, password: string, role: string) {

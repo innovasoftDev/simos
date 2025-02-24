@@ -10,10 +10,10 @@ datasource db {
    */
 }
 
-/* enum Role {
+enum Role {
   admin
   user
-} */
+}
 
 model User {
   id_user              String                 @id @default(uuid())
@@ -61,7 +61,7 @@ model TBL_PERMISOS {
 
 model TBL_USR_ROLES {
   id_rol      String         @id @default(uuid())
-  rol         String         @unique @default("user")
+  rol         Role           @unique @default(user)
   descripcion String?        @db.VarChar(70)
   permisos    TBL_PERMISOS[]
   user        User[]
