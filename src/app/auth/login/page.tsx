@@ -1,5 +1,5 @@
-import { titleFont } from "@/config/fonts";
-import { LoginForm } from "./ui/LoginForm";
+/* import { titleFont } from "@/config/fonts";
+import { LoginForm } from "./ui/LoginForm"; */
 import SignInViewPage from "./sigin-view";
 
 export default function LoginPage() {

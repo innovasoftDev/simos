@@ -25,8 +25,6 @@ export default function UsersPage() {
     setPermissions([
       { id: 1, role: "Administrador", screen: "Activo" },
       { id: 2, role: "Usuario", screen: "Activo" },
-      { id: 3, role: "Administrador", screen: "Activo" },
-      { id: 4, role: "Usuario", screen: "Inactivo" },
     ]);
   }, []);
 

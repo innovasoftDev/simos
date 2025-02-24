@@ -1,29 +1,58 @@
-import { create } from 'zustand';
-import { initialData } from './seed';
-import prisma from '../lib/prisma';
+import { create } from "zustand";
+import { initialUserData, initialRolesData } from "./seed";
+import { CreateUsers } from "../actions/seed/createUser";
+import prisma from "../lib/prisma";
+import bcryptjs from "bcryptjs";
 
+async function getIdByRole(role: string): Promise<string> {
+  const admin = await prisma.tBL_USR_ROLES.findUnique({
+    where: { rol: role },
+    select: { id_rol: true },
+  });
+
+  /* console.log(admin?.id_rol); */
+
+  return admin?.id_rol ?? "";
+}
+
+async function CreateUser(name: string, email: string, password: string, role: string) {
+  try {
+    await prisma.user.create({
+      data: {
+        email: email,
+        name: name,
+        password: bcryptjs.hashSync(password),
+        status: true,
+        tbl_usr_roles_id_rol: (await getIdByRole(role)).toString(),
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 async function main() {
-
   // 1. Borrar registros previos
   // await Promise.all( [
   await prisma.user.deleteMany();
+  await prisma.tBL_USR_ROLES.deleteMany();
 
-  const { users } = initialData;
+  const { roles } = initialRolesData;
 
-
-  await prisma.user.createMany({
-    data: users
+  await prisma.tBL_USR_ROLES.createMany({
+    data: roles,
   });
 
-  console.log('Seed ejecutado correctamente');
+  //Creando usuario administrador
+  CreateUser("Administrador", "admin@google.com", "12345678", "admin");
+  //Creando usuario normal
+  CreateUser("Usuario", "user@google.com", "12345678", "user");
+
+  console.log("Seed ejecutado correctamente");
 }
 
-
 (() => {
-
-  if (process.env.NODE_ENV === 'production') return;
-
+  if (process.env.NODE_ENV === "production") return;
 
   main();
 })();

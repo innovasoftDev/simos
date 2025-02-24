@@ -36,6 +36,8 @@ export const authConfig: NextAuthConfig = {
 
     session({ session, token, user }) {
       session.user = token.data as any;
+      session.user.role = "admin";
+
       return session;
     },
   },

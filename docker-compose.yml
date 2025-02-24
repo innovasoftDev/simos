@@ -19,12 +19,3 @@ services:
       # Where our data will be persisted
     volumes:
       - ./simos:/var/lib/mysql
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 1500M
-          pids: 1
-        reservations:
-          cpus: '0.25'
-          memory: 512M

@@ -3,22 +3,66 @@ generator client {
 }
 
 datasource db {
-  provider          = "mysql"
-  url               = env("DATABASE_URL")
-  /* shadowDatabaseUrl = env("SHADOW_DATABASE_URL") */
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  /**
+   * shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+   */
 }
 
-enum Role {
+/* enum Role {
   admin
   user
-}
+} */
 
 model User {
-  id            String    @id @default(uuid())
-  name          String
-  email         String    @unique
-  emailVerified DateTime?
-  password      String
-  role          Role      @default(user)
-  image         String?
+  id_user              String                 @id @default(uuid())
+  name                 String                 @unique @db.VarChar(70)
+  email                String                 @unique
+  emailVerified        DateTime?
+  password             String
+  image                String?
+  status               Boolean
+  rol                  TBL_USR_ROLES          @relation(fields: [tbl_usr_roles_id_rol], references: [id_rol])
+  tbl_usr_roles_id_rol String
+  historial_contra     TBL_HIST_CONTRASENIA[]
+}
+
+model TBL_OBJETOS {
+  id_objeto   String         @id @default(uuid())
+  objeto      String         @db.VarChar(70)
+  descripcion String         @db.VarChar(70)
+  tipo_objeto String         @db.VarChar(20)
+  permisos    TBL_PERMISOS[]
+}
+
+model TBL_HIST_CONTRASENIA {
+  id_historial_contra    String  @id @default(uuid())
+  contrasenia            String? @db.VarChar(255)
+  user                   User?   @relation(fields: [tbl_usuario_id_usuario], references: [id_user])
+  tbl_usuario_id_usuario String?
+}
+
+model TBL_PERMISOS {
+  id_permisos           String        @id @default(uuid())
+  permiso_insertar      String        @db.VarChar(50)
+  permiso_consultar     String        @db.VarChar(50)
+  permiso_actualizar    String        @db.VarChar(50)
+  permiso_eliminar      String        @db.VarChar(50)
+  creador               String        @db.VarChar(50)
+  modificado_por        String        @db.VarChar(50)
+  fecha_creacion        DateTime      @db.DateTime(0)
+  fecha_modificacion    DateTime      @updatedAt @db.Timestamp(0)
+  tbl_usr_roles_id_rol  String
+  tbl_objetos_id_objeto String
+  rol                   TBL_USR_ROLES @relation(fields: [tbl_usr_roles_id_rol], references: [id_rol])
+  objeto                TBL_OBJETOS   @relation(fields: [tbl_objetos_id_objeto], references: [id_objeto])
+}
+
+model TBL_USR_ROLES {
+  id_rol      String         @id @default(uuid())
+  rol         String         @unique @default("user")
+  descripcion String?        @db.VarChar(70)
+  permisos    TBL_PERMISOS[]
+  user        User[]
 }

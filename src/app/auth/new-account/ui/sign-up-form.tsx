@@ -17,7 +17,6 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { PasswordInput } from "../../../../components/password-input";
 import { login, registerUser } from '@/actions';
-import async from '../../../dashboard/admin/pantallas/components/pantallas';
 
 type SignUpFormProps = HTMLAttributes<HTMLDivElement>
 
