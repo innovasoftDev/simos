@@ -113,7 +113,23 @@ export function ScreenssActionDialog({ open, onOpenChange, isEdit }: Props) {
           confirmPassword: '',
           status: true,
         },
+        mode: "onChange", // Valida en cada cambio
   })
+
+  const { 
+      setValue, // <-- Add the setValue prop
+      handleSubmit,
+      control,
+  } = form;
+  
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fieldName: keyof z.infer<typeof formSchema>
+  ) => {
+    const { value } = e.target; // <-- Extract the value
+    setValue(fieldName, value, { shouldDirty: true, shouldValidate: true }); // <-- Set the form value
+    console.log(`${fieldName}: `, value); 
+  };
 
   const onSubmit = (values: ScreensForm) => {
     form.reset()
@@ -168,7 +184,9 @@ export function ScreenssActionDialog({ open, onOpenChange, isEdit }: Props) {
                         placeholder='Ingrese el nombre de la pantalla'
                         className='col-span-4'
                         autoComplete='off'
+                        maxLength={20}
                         {...field}
+                        onChange={(e) => handleChange(e, field.name)}
                       />
                     </FormControl>
                     <FormMessage className='col-span-4 col-start-3' />
@@ -181,7 +199,7 @@ export function ScreenssActionDialog({ open, onOpenChange, isEdit }: Props) {
 
               <FormField
                 control={form.control}
-                name='lastName'
+                name='username'
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0'>
                     <FormLabel className='col-span-2 text-right'>
@@ -192,7 +210,9 @@ export function ScreenssActionDialog({ open, onOpenChange, isEdit }: Props) {
                         placeholder='Ingrese descripción de la pantalla'
                         className='col-span-4'
                         autoComplete='off'
+                        maxLength={20}
                         {...field}
+                        onChange={(e) => handleChange(e, field.name)}
                       />
                     </FormControl>
                     <FormMessage className='col-span-4 col-start-3' />
