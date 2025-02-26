@@ -20,6 +20,7 @@ export default function UsersPage() {
   const [currentPermission, setCurrentPermission] = useState<Permission | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [warningMessage, setWarningMessage] = useState<string | null>(null);
 
   useEffect(() => {
     setPermissions([
@@ -33,14 +34,15 @@ export default function UsersPage() {
   };
 
   const openModal = (permission?: Permission) => {
-    setCurrentPermission(permission || { id: 0, role: "", screen: "" });
+    setCurrentPermission(permission || { id: 0, role: "", screen: "Activo" });
     setErrorMessage(null);
+    setWarningMessage(null);
     setModalOpen(true);
   };
 
   const savePermission = () => {
     if (!currentPermission || !currentPermission.role || !currentPermission.screen) {
-      setErrorMessage("Los campos no pueden estar vacíos.");
+      setErrorMessage("No se permiten caracteres especiales ni campos vacíos.");
       return;
     }
 
@@ -56,7 +58,22 @@ export default function UsersPage() {
   const cancelModal = () => {
     setModalOpen(false);
     setErrorMessage(null);
+    setWarningMessage(null);
     setCurrentPermission(null);
+  };
+
+  const handleRoleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (!/^[a-zA-Z0-9 ]*$/.test(value)) {
+      setWarningMessage("No se permiten caracteres especiales.");
+      return;
+    }
+    if (value.length > 30) {
+      setWarningMessage("Máximo 30 caracteres permitidos.");
+      return;
+    }
+    setWarningMessage(null);
+    setCurrentPermission((prev) => prev ? { ...prev, role: value } : prev);
   };
 
   return (
@@ -118,28 +135,26 @@ export default function UsersPage() {
             <DialogHeader>
               <DialogTitle>{currentPermission?.id ? "EDITAR ROL" : "EDITAR ROL"}</DialogTitle>
             </DialogHeader>
-            {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
             <div>
               <label>ROL</label>
-              <select
+              <input
+                type="text"
                 className="p-2 border rounded w-full"
                 value={currentPermission?.role || ""}
-                onChange={(e) => setCurrentPermission((prev) => prev ? { ...prev, role: e.target.value } : prev)}
-              >
-                <option value="">--SELECCIONAR ROL--</option>    
-                <option value="Administrador">Administrador</option>
-                <option value="Usuario">Usuario</option>
-              </select>
+                onChange={handleRoleChange}
+                placeholder="Ingrese el rol"
+              />
+              {warningMessage && <p className="text-[#F31260] text-sm font-bold mt-1">{warningMessage}</p>}
             </div>
+            {errorMessage && <p className="text-[#F31260] text-sm font-bold mt-1">{errorMessage}</p>}
             <div>
               <label>ESTADO</label>
               <select
                 className="p-2 border rounded w-full"
-                value={currentPermission?.screen || ""}
+                value={currentPermission?.screen || "Activo"}
                 onChange={(e) => setCurrentPermission((prev) => prev ? { ...prev, screen: e.target.value } : prev)}
               >
-                <option value="">--SELECCIONAR ESTADO--</option>
-                {["Activo", "Inactivo"].map((screen) => (
+                {"Activo Inactivo".split(" ").map((screen) => (
                   <option key={screen} value={screen}>{screen}</option>
                 ))}
               </select>
