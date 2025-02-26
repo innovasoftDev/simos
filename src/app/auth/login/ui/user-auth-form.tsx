@@ -26,7 +26,8 @@ const formSchema = z.object({
   email: z
     .string()
     .min(1, { message: "Por favor ingresa tu correo electrónico." })
-    .email({ message: "Dirección de correo electrónico no válida" }),
+    .email({ message: "Dirección de correo electrónico no válida" })
+    .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, { message: "Dirección de correo electrónico no valido"}),
   password: z
     .string()
     .min(1, {
@@ -53,7 +54,23 @@ export default function UserAuthForm() {
   const form = useForm<UserFormValue>({
     resolver: zodResolver(formSchema),
     defaultValues,
+    mode: "onChange", // Valida en cada cambio
   });
+
+  const { 
+    setValue, // <-- Add the setValue prop
+    handleSubmit,
+    control,
+} = form;
+
+const handleChange = (
+  e: React.ChangeEvent<HTMLInputElement>,
+  fieldName: keyof z.infer<typeof formSchema>
+) => {
+  const { value } = e.target; // <-- Extract the value
+  setValue(fieldName, value, { shouldDirty: true, shouldValidate: true }); // <-- Set the form value
+  console.log(`${fieldName}: `, value); 
+};
 
   /* const onSubmit = async (data: UserFormValue) => {
     startTransition(() => {
@@ -102,7 +119,10 @@ export default function UserAuthForm() {
                     type="email"
                     placeholder="Ingrese su email..."
                     disabled={loading}
+                    maxLength={20}
+                    
                     {...field}
+                    onChange={(e) => handleChange(e, field.name)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -127,7 +147,9 @@ export default function UserAuthForm() {
                 <FormControl>
                   <PasswordInput
                     placeholder="Ingrese su contraseña..."
+                    maxLength={20}
                     {...field}
+                    onChange={(e) => handleChange(e, field.name)}
                   />
                 </FormControl>
                 <FormMessage />
