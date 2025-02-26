@@ -33,8 +33,8 @@ import { Switch } from "@/components/ui/switch";
 
 const formSchema = z
   .object({
-    firstName: z.string().min(1, { message: 'El campo es obligatorio..' }),
-    lastName: z.string().min(1, { message: 'Descripcion requerida.' }),
+    firstName: z.string().min(1, { message: 'Nombre Requerido.' }),
+    lastName: z.string().min(1, { message: 'Descripción Requerida.' }),
     username: z.string().min(1, { message: '' }),
     phoneNumber: z.string().min(1, { message: 'Phone number is required.' }),
     email: z
@@ -128,8 +128,7 @@ export function ScreenssActionDialog({ open, onOpenChange, isEdit }: Props) {
   ) => {
     const { value } = e.target; // <-- Extract the value
     setValue(fieldName, value, { shouldDirty: true, shouldValidate: true }); // <-- Set the form value
-    console.log(`${fieldName}: `, value); 
-  };
+    console.log(`${fieldName}: `, value);  };
 
   const onSubmit = (values: ScreensForm) => {
     form.reset()
@@ -173,7 +172,7 @@ export function ScreenssActionDialog({ open, onOpenChange, isEdit }: Props) {
             >
               <FormField
                 control={form.control}
-                name='lastName'
+                name='firstName'
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0'>
                     <FormLabel className='col-span-2 text-right'>
@@ -199,7 +198,7 @@ export function ScreenssActionDialog({ open, onOpenChange, isEdit }: Props) {
 
               <FormField
                 control={form.control}
-                name='username'
+                name='lastName'
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0'>
                     <FormLabel className='col-span-2 text-right'>
