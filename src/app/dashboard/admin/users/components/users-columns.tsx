@@ -85,7 +85,7 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => <div>{row.getValue('phoneNumber')}</div>,
     enableSorting: false,
   },
-  {
+  /* {
     accessorKey: 'status',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Estado' />
@@ -104,8 +104,8 @@ export const columns: ColumnDef<User>[] = [
     filterFn: 'weakEquals',
     enableSorting: false,
     enableHiding: false,
-  },
-  {
+  }, */
+ /*  {
     accessorKey: 'role',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Rol' />
@@ -130,7 +130,7 @@ export const columns: ColumnDef<User>[] = [
     filterFn: 'weakEquals',
     enableSorting: false,
     enableHiding: false,
-  },
+  }, */
   {
     id: 'actions',
     cell: DataTableRowActions,

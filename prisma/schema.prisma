@@ -17,12 +17,17 @@ enum Role {
 
 model User {
   id_user              String                 @id @default(uuid())
-  name                 String                 @unique @db.VarChar(70)
+  firstName            String?
+  lastName             String?
+  username             String                 @unique @db.VarChar(70)
   email                String                 @unique
   emailVerified        DateTime?
+  phoneNumber          String?
   password             String
   image                String?
-  status               Boolean
+  status               String
+  created              DateTime?
+  updated              DateTime?
   rol                  TBL_USR_ROLES          @relation(fields: [tbl_usr_roles_id_rol], references: [id_rol])
   tbl_usr_roles_id_rol String
   historial_contra     TBL_HIST_CONTRASENIA[]

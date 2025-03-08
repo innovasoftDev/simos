@@ -29,9 +29,9 @@ async function CreateUser(name: string, email: string, password: string, role: s
     await prisma.user.create({
       data: {
         email: email,
-        name: name,
+        username: name,
         password: bcryptjs.hashSync(password),
-        status: true,
+        status: 'true',
         tbl_usr_roles_id_rol: (await getIdByRole(role)).toString(),
       },
     });

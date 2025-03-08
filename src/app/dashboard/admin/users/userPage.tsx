@@ -7,22 +7,53 @@ import { Main } from "@/components/layout/main";
 import { UsersActionDialog } from "./components/users-action-dialog";
 import { columns } from "./components/users-columns";
 import { UsersDeleteDialog } from "./components/users-delete-dialog";
-import { UsersInviteDialog } from "./components/users-invite-dialog";
+//import { getPaginatedUsers } from "@/actions/admin/users/get-users";
 import { UsersTable } from "./components/users-table";
 import UsersContextProvider, {
   type UsersDialogType,
 } from "./context/users-context";
-import { User, userListSchema } from "./data/schema";
+import { User } from "./data/schema";
 import { users } from "./data/users";
 import PageContainer from "@/components/layout/page-container";
+import prisma from "@/lib/prisma";
+//import { usersData } from './data/usersData';
+
+export const getPaginatedUsers = async () => {
+  const users = await prisma.user.findMany({
+    orderBy: {
+      username: "desc",
+    },
+  });
+
+  return {
+    users: users
+  };
+};
+
+
 
 export default function UsersPage() {
   // Dialog states
   const [currentRow, setCurrentRow] = useState<User | null>(null);
   const [open, setOpen] = useDialogState<UsersDialogType>(null);
 
-  // Parse user list
-  const userList = userListSchema.parse(users);
+  const data: User[] = [
+  {
+    id_user: "string",
+    status: "active",
+    email: "string",
+    image: "string",
+    password: "string",
+    firstName: "string",
+    lastName: "string",
+    username: "string",
+    emailVerified: null,
+    phoneNumber: "99999999",
+    tbl_usr_roles_id_rol: "",
+    created: null,
+    updated: null,
+  },
+];
 
   return (
     <PageContainer scrollable>
@@ -40,20 +71,14 @@ export default function UsersPage() {
               </p>
             </div>
             <div className="flex gap-2">
-              {/* <Button
-                variant="outline"
-                className="space-x-1"
-                onClick={() => setOpen("invite")}
-              >
-                <span>Invite User</span> <MailPlus size={18} />
-              </Button> */}
               <Button className="space-x-1" onClick={() => setOpen("add")}>
                 <span>Agregar Usuario</span> <UserPlus size={18} />
               </Button>
             </div>
           </div>
           <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0">
-            <UsersTable data={userList} columns={columns} />
+            <UsersTable data={data} columns={columns} />
+
           </div>
         </Main>
 
@@ -63,16 +88,10 @@ export default function UsersPage() {
           onOpenChange={() => setOpen("add")}
         />
 
-        <UsersInviteDialog
-          key="user-invite"
-          open={open === "invite"}
-          onOpenChange={() => setOpen("invite")}
-        />
-
         {currentRow && (
           <>
             <UsersActionDialog
-              key={`user-edit-${currentRow.id}`}
+              key={`user-edit-${currentRow.id_user}`}
               open={open === "edit"}
               onOpenChange={() => {
                 setOpen("edit");
@@ -84,7 +103,7 @@ export default function UsersPage() {
             />
 
             <UsersDeleteDialog
-              key={`user-delete-${currentRow.id}`}
+              key={`user-delete-${currentRow.id_user}`}
               open={open === "delete"}
               onOpenChange={() => {
                 setOpen("delete");

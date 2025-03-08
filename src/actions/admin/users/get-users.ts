@@ -15,7 +15,7 @@ export const getPaginatedUsers = async () => {
 
   const users = await prisma.user.findMany({
     orderBy: {
-      name: "desc",
+      username: "desc",
     },
   });
 

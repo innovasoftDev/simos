@@ -10,7 +10,7 @@ interface SeedUser {
   email: string;
   password: string;
   name: string;
-  status: boolean;
+  status: string;
   tbl_usr_roles_id_rol: string;
 }
 
@@ -33,14 +33,14 @@ export const initialUserData: SeedUsers = {
       email: "admin@google.com",
       name: "Administrador",
       password: bcryptjs.hashSync("12345678"),
-      status: true,
+      status: 'true',
       tbl_usr_roles_id_rol: '',
     },
     {
       email: "user@google.com",
       name: "Usuario",
       password: bcryptjs.hashSync("12345678"),
-      status: true,
+      status: 'true',
       tbl_usr_roles_id_rol: '',
     },
   ],

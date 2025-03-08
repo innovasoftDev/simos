@@ -26,7 +26,7 @@ export type UserRole = z.infer<typeof userRoleSchema>
 })
 export type User = z.infer<typeof userSchema> */
 
-/* const userSchema = z.object({
+const userSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   username: z.string(),
@@ -41,22 +41,6 @@ export type User = z.infer<typeof userSchema> */
   updated: z.coerce.date(),
   tbl_usr_roles_id_rol: z.string(),
 })
-export type User = z.infer<typeof userSchema> */
+export type User = z.infer<typeof userSchema>
 
-export type User = {
-  id_user: string;
-  status: string;
-  tbl_usr_roles_id_rol: string;
-  email: string;
-  image: string | null;
-  password: string;
-  firstName: string | null;
-  lastName: string | null;
-  username: string;
-  emailVerified: Date | null;
-  phoneNumber: string | null;
-  created: Date | null;
-  updated: Date | null;
-};
-
-//export const userListSchema = z.array(userSchema)
+export const userListSchema = z.array(userSchema)

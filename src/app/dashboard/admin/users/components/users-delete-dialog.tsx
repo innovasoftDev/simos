@@ -57,7 +57,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
             <br />
             Esta acción eliminará permanentemente al usuario con el rol de{' '}
             <span className='font-bold'>
-              {currentRow.role.toUpperCase()}
+              {currentRow.tbl_usr_roles_id_rol.toUpperCase()}
             </span>{' '}
             del sistema. Esto no se puede deshacer.
           </p>

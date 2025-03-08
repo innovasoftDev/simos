@@ -1,8 +1,15 @@
-import { faker } from '@faker-js/faker'
+import { getPaginatedUsers } from '@/actions/admin/users/get-users';
+import type { User } from "@/interfaces";
 
-export const users = Array.from({ length: 20 }, () => {
-  const firstName = faker.person.firstName()
-  const lastName = faker.person.lastName()
+export const usersData = async () => {
+  const { users = [] } = await getPaginatedUsers();
+  
+  return (
+    Array.from(users.values())
+  )
+}
+
+/* export const users = Array.from({ length: 20 }, () => {
   return {
     id: faker.string.uuid(),
     firstName,
@@ -23,4 +30,4 @@ export const users = Array.from({ length: 20 }, () => {
     createdAt: faker.date.past(),
     updatedAt: faker.date.recent(),
   }
-})
+}) */
