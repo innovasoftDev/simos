@@ -24,14 +24,16 @@ async function getIdByRole(role: string): Promise<string> {
   
 }
 
-async function CreateUser(name: string, email: string, password: string, role: string) {
+async function CreateUser(username: string, firstname: string, lastname: string, email: string, password: string, role: string, status : string) {
   try {
     await prisma.user.create({
       data: {
         email: email,
-        username: name,
+        username: username,
+        firstName: firstname,
+        lastName: lastname,
         password: bcryptjs.hashSync(password),
-        status: 'true',
+        status: status,
         tbl_usr_roles_id_rol: (await getIdByRole(role)).toString(),
       },
     });
@@ -53,9 +55,9 @@ async function main() {
   });
 
   //Creando usuario administrador
-  CreateUser("Administrador", "admin@google.com", "12345678", "admin");
+  CreateUser("admin", "Usuario", "Administrador", "admin@google.com", "12345678", "admin", "active");
   //Creando usuario normal
-  CreateUser("Usuario", "user@google.com", "12345678", "user");
+  CreateUser("user", "Usuario", "Normal", "user@google.com", "12345678", "user", "inactive");
 
   console.log("Seed ejecutado correctamente");
 }

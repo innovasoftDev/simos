@@ -1,5 +1,3 @@
-
-// https://tailwindcomponents.com/component/hoverable-table
 import { getPaginatedUsers } from "@/actions/admin/users/get-users";
 import { Pagination, Title } from "@/components";
 import PageContainer from "@/components/layout/page-container";
@@ -48,8 +46,6 @@ export default async function UsersPage() {
         </div>
         <UsersTable data={users}></UsersTable>
       </Main>
-
-      <Pagination totalPages={1} />
       {/* </UsersContextProvider> */}
     </PageContainer>
   );

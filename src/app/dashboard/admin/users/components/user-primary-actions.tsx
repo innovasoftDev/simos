@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IconMailPlus, IconUserPlus } from '@tabler/icons-react'
+import { IconUserPlus } from '@tabler/icons-react'
 import { Button } from '@/components/ui/button'
 import { UsersActionDialog } from './users-action-dialog'
 
@@ -8,10 +8,6 @@ export function UserPrimaryActions() {
   return (
     <>
       <div className='flex gap-2'>
-        <Button variant='outline'>
-          Invite User
-          <IconMailPlus />
-        </Button>
         <Button onClick={() => setOpen(true)}>
           Agregar Usuario
           <IconUserPlus />

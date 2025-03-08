@@ -42,7 +42,7 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: 'username',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Usuario' />
+      <DataTableColumnHeader column={column} title='Username' />
     ),
     cell: ({ row }) => (
       <LongText className='max-w-36'>{row.getValue('username')}</LongText>
@@ -78,14 +78,6 @@ export const columns: ColumnDef<User>[] = [
     ),
   },
   {
-    accessorKey: 'phoneNumber',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Teléfono' />
-    ),
-    cell: ({ row }) => <div>{row.getValue('phoneNumber')}</div>,
-    enableSorting: false,
-  },
-  /* {
     accessorKey: 'status',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Estado' />
@@ -104,15 +96,15 @@ export const columns: ColumnDef<User>[] = [
     filterFn: 'weakEquals',
     enableSorting: false,
     enableHiding: false,
-  }, */
- /*  {
+  },
+  {
     accessorKey: 'role',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Rol' />
     ),
     cell: ({ row }) => {
-      const { role } = row.original
-      const userType = userTypes.find(({ value }) => value === role)
+      const { tbl_usr_roles_id_rol } = row.original
+      const userType = userTypes.find(({ value }) => value === tbl_usr_roles_id_rol)
 
       if (!userType) {
         return null
@@ -130,7 +122,7 @@ export const columns: ColumnDef<User>[] = [
     filterFn: 'weakEquals',
     enableSorting: false,
     enableHiding: false,
-  }, */
+  },
   {
     id: 'actions',
     cell: DataTableRowActions,

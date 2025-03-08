@@ -1,59 +1,37 @@
 "use client";
-import { useState } from "react";
-import { UserPlus, MailPlus } from "lucide-react";
+import { useEffect, useState } from "react";
+import { UserPlus } from "lucide-react";
 import useDialogState from "@/hooks/use-dialog-state";
 import { Button } from "@/components/ui/button";
 import { Main } from "@/components/layout/main";
 import { UsersActionDialog } from "./components/users-action-dialog";
 import { columns } from "./components/users-columns";
 import { UsersDeleteDialog } from "./components/users-delete-dialog";
-//import { getPaginatedUsers } from "@/actions/admin/users/get-users";
+import { getPaginatedUsers } from "@/actions/admin/users/get-users";
 import { UsersTable } from "./components/users-table";
 import UsersContextProvider, {
   type UsersDialogType,
 } from "./context/users-context";
 import { User } from "./data/schema";
-import { users } from "./data/users";
 import PageContainer from "@/components/layout/page-container";
-import prisma from "@/lib/prisma";
-//import { usersData } from './data/usersData';
 
-export const getPaginatedUsers = async () => {
-  const users = await prisma.user.findMany({
-    orderBy: {
-      username: "desc",
-    },
-  });
+async function getData(): Promise<User[]> {
+  const { users = [] } = await getPaginatedUsers();
 
-  return {
-    users: users
-  };
-};
-
-
+  // Fetch data from your API here.
+  return users;
+}
 
 export default function UsersPage() {
+  const [data, setData] = useState<User[]>([]);
+
+  useEffect(() => {
+    getData().then(setData);
+  }, []);
+
   // Dialog states
   const [currentRow, setCurrentRow] = useState<User | null>(null);
   const [open, setOpen] = useDialogState<UsersDialogType>(null);
-
-  const data: User[] = [
-  {
-    id_user: "string",
-    status: "active",
-    email: "string",
-    image: "string",
-    password: "string",
-    firstName: "string",
-    lastName: "string",
-    username: "string",
-    emailVerified: null,
-    phoneNumber: "99999999",
-    tbl_usr_roles_id_rol: "",
-    created: null,
-    updated: null,
-  },
-];
 
   return (
     <PageContainer scrollable>
@@ -78,7 +56,6 @@ export default function UsersPage() {
           </div>
           <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0">
             <UsersTable data={data} columns={columns} />
-
           </div>
         </Main>
 
