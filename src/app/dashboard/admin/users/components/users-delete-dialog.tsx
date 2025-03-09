@@ -10,7 +10,7 @@ import { ConfirmDialog } from "@/components/confirm-dialog";
 import { User } from "../data/schema";
 import { toast } from "sonner";
 import { DeleteUser } from "@/actions/admin/users/delete-user";
-import { useRouter } from "next/navigation";
+import useSWR from 'swr'
 
 interface Props {
   open: boolean;
@@ -20,17 +20,17 @@ interface Props {
 
 export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   const [value, setValue] = useState("");
-  const router = useRouter();
+  const { mutate } = useSWR("/dashboard/admin/users", fetch);
 
   const handleDelete = async () => {
     if (value.trim() !== currentRow.username) return;
     const result = await DeleteUser(value.trim());
 
     if (result.ok) {
+      mutate();
       toast.error("Eliminar", {
         description: "¡Se ha eliminado el usuario!",
       });
-      router.refresh();
     } else {
       toast.error("Eliminar", {
         description: "¡Ocurrió un error!",
