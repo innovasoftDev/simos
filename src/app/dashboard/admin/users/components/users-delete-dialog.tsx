@@ -1,38 +1,44 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { TriangleAlert } from 'lucide-react';
-import { toast } from '@/hooks/use-toast'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { ConfirmDialog } from '@/components/confirm-dialog'
-import { User } from '../data/schema'
+import { useState } from "react";
+import { TriangleAlert } from "lucide-react";
+//import { toast } from '@/hooks/use-toast'
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ConfirmDialog } from "@/components/confirm-dialog";
+import { User } from "../data/schema";
+import { toast } from "sonner";
+import { DeleteUser } from "@/actions/admin/users/delete-user";
+import { useRouter } from "next/navigation";
 
 interface Props {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  currentRow: User
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  currentRow: User;
 }
 
 export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState("");
+  const router = useRouter();
 
-  const handleDelete = () => {
-    if (value.trim() !== currentRow.username) return
+  const handleDelete = async () => {
+    if (value.trim() !== currentRow.username) return;
+    const result = await DeleteUser(value.trim());
 
-    onOpenChange(false)
-    toast({
-      title: 'The following user has been deleted:',
-      description: (
-        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-          <code className='text-white'>
-            {JSON.stringify(currentRow, null, 2)}
-          </code>
-        </pre>
-      ),
-    })
-  }
+    if (result.ok) {
+      toast.error("Eliminar", {
+        description: "¡Se ha eliminado el usuario!",
+      });
+      router.refresh();
+    } else {
+      toast.error("Eliminar", {
+        description: "¡Ocurrió un error!",
+      });
+    }
+
+    onOpenChange(false);
+  };
 
   return (
     <ConfirmDialog
@@ -41,37 +47,37 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       handleConfirm={handleDelete}
       disabled={value.trim() !== currentRow.username}
       title={
-        <span className='text-destructive'>
+        <span className="text-destructive">
           <TriangleAlert
-            className='mr-1 inline-block stroke-destructive'
+            className="mr-1 inline-block stroke-destructive"
             size={18}
-          />{' '}
+          />{" "}
           Eliminar usuario
         </span>
       }
       desc={
-        <div className='space-y-4'>
-          <p className='mb-2'>
-            ¿Estás segura de que quieres eliminar?{' '}
-            <span className='font-bold'>{currentRow.username}</span>?
+        <div className="space-y-4">
+          <p className="mb-2">
+            ¿Estás segura de que quieres eliminar?{" "}
+            <span className="font-bold">{currentRow.username}</span>?
             <br />
-            Esta acción eliminará permanentemente al usuario con el rol de{' '}
-            <span className='font-bold'>
+            Esta acción eliminará permanentemente al usuario con el rol de{" "}
+            <span className="font-bold">
               {currentRow.tbl_usr_roles_id_rol.toUpperCase()}
-            </span>{' '}
+            </span>{" "}
             del sistema. Esto no se puede deshacer.
           </p>
 
-          <Label className='my-2'>
+          <Label className="my-2">
             Nombre de usuario:
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder='Introduzca el nombre de usuario para confirmar la eliminación.'
+              placeholder="Introduzca el nombre de usuario para confirmar la eliminación."
             />
           </Label>
 
-          <Alert variant='destructive'>
+          <Alert variant="destructive">
             <AlertTitle>¡Advertencia!</AlertTitle>
             <AlertDescription>
               Tenga cuidado, esta operación no se puede revertir.
@@ -79,8 +85,8 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
           </Alert>
         </div>
       }
-      confirmText='Delete'
+      confirmText="Delete"
       destructive
     />
-  )
+  );
 }

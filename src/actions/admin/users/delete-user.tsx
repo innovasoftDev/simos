@@ -1,10 +1,9 @@
 "use server";
-
-import { auth } from "@/auth.config";
 import prisma from "@/lib/prisma";
+import { auth } from "@/auth.config";
 import { revalidatePath } from "next/cache";
 
-export const AddUser = async (values: {}) => {
+export const DeleteUser = async (username: string) => {
   const session = await auth();
 
   if (session?.user.role !== "admin") {
@@ -15,15 +14,11 @@ export const AddUser = async (values: {}) => {
   }
 
   try {
-    /* const { email, username } = values; */
-
-   /*  const user = await prisma.user.create({
-   
-      data: {
-        email: values.email,
-        username: "Elsa Prisma",
+    const deleteUser = await prisma.user.delete({
+      where: {
+        username: username,
       },
-    }); */
+    })
 
     revalidatePath("/admin/users");
 

@@ -1,23 +1,20 @@
 import { z } from "zod";
 
 export type User = {
-  id_user: string;
-  status: string;
-  tbl_usr_roles_id_rol: string;
   email: string;
-  image: string;
   password: string;
-  firstName: string;
-  lastName: string;
+  status: string;
+  image: string | null;
+  id_user: string;
+  firstName: string | null;
+  lastName: string | null;
   username: string;
-  emailVerified: Date;
-  phoneNumber: string;
-  created: Date;
-  updated: Date;
+  emailVerified: Date | null;
+  phoneNumber: string | null;
+  created: Date | null;
+  updated: Date | null;
+  tbl_usr_roles_id_rol: string;
 };
 
-const userStatusSchema = z.union([
-  z.string(),
-  z.string()
-])
-export type UserStatus = z.infer<typeof userStatusSchema>
+const userStatusSchema = z.union([z.string(), z.string()]);
+export type UserStatus = z.infer<typeof userStatusSchema>;

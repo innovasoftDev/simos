@@ -27,25 +27,6 @@ interface SeedData {
   roles: SeedRole[];
 }
 
-export const initialUserData: SeedUsers = {
-  users: [
-    {
-      email: "admin@google.com",
-      name: "Administrador",
-      password: bcryptjs.hashSync("12345678"),
-      status: 'true',
-      tbl_usr_roles_id_rol: '',
-    },
-    {
-      email: "user@google.com",
-      name: "Usuario",
-      password: bcryptjs.hashSync("12345678"),
-      status: 'true',
-      tbl_usr_roles_id_rol: '',
-    },
-  ],
-};
-
 export const initialRolesData: SeedRoles = {
   roles: [
     {
