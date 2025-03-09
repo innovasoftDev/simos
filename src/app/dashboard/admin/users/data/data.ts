@@ -16,8 +16,8 @@ export const userTypes = [
     icon: Shield,
   },
   {
-    label: 'Normal',
-    value: 'normal',
+    label: 'User',
+    value: 'user',
     icon: User,
   },
 ] as const

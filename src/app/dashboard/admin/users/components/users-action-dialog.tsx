@@ -3,7 +3,8 @@
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { toast } from '@/hooks/use-toast'
+/* import { toast } from '@/hooks/use-toast' */
+import { toast } from "sonner";
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -27,6 +28,7 @@ import { PasswordInput } from '@/components/password-input'
 import { SelectDropdown } from '@/components/select-dropdown'
 import { userTypes } from '../data/data'
 import { User } from '../data/schema'
+import { AddUser } from '@/actions/admin/users/add-user';
 
 const formSchema = z
   .object({
@@ -39,7 +41,7 @@ const formSchema = z
       .min(1, { message: 'Email is required.' })
       .email({ message: 'Email is invalid.' }),
     password: z.string().transform((pwd) => pwd.trim()),
-    role: z.string().min(1, { message: 'Role is required.' }),
+    tbl_usr_roles_id_rol: z.string().min(1, { message: 'Role is required.' }),
     confirmPassword: z.string().transform((pwd) => pwd.trim()),
     isEdit: z.boolean(),
   })
@@ -110,7 +112,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           lastName: '',
           username: '',
           email: '',
-          role: '',
+          tbl_usr_roles_id_rol: '',
           phoneNumber: '',
           password: '',
           confirmPassword: '',
@@ -118,16 +120,29 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
         },
   })
 
-  const onSubmit = (values: UserForm) => {
+  const onSubmit = async (values: UserForm) => {
+    const result = await AddUser(values);
+
+    if (result.ok) {
+      toast.error("Editar", {
+        description: "¡Se ha editado el usuario!",
+      });
+    }else{
+      toast.error("Editar", {
+        description: "¡Ocurrió un error!",
+      });
+    }
+    
     form.reset()
-    toast({
+    /* toast({
       title: 'You submitted the following values:',
       description: (
         <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
           <code className='text-white'>{JSON.stringify(values, null, 2)}</code>
         </pre>
       ),
-    })
+    }) */
+    
     onOpenChange(false)
   }
 
@@ -255,11 +270,11 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
               />
               <FormField
                 control={form.control}
-                name='role'
+                name='tbl_usr_roles_id_rol'
                 render={({ field }) => (
                   <FormItem className='grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0'>
                     <FormLabel className='col-span-2 text-right'>
-                      Rol
+                      Role
                     </FormLabel>
                     <SelectDropdown
                       defaultValue={field.value}

@@ -7,7 +7,7 @@ import { Main } from "@/components/layout/main";
 import { UsersActionDialog } from "./components/users-action-dialog";
 import { columns } from "./components/users-columns";
 import { UsersDeleteDialog } from "./components/users-delete-dialog";
-import { getPaginatedUsers } from "@/actions/admin/users/get-users";
+import { getUsers } from "@/actions/admin/users/get-users";
 import { UsersTable } from "./components/users-table";
 import UsersContextProvider, {
   type UsersDialogType,
@@ -16,7 +16,7 @@ import { User } from "./data/schema";
 import PageContainer from "@/components/layout/page-container";
 
 async function getData(): Promise<User[]> {
-  const { users = [] } = await getPaginatedUsers();
+  const { users = [] } = await getUsers();
 
   // Fetch data from your API here.
   return users;

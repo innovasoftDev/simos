@@ -1,130 +1,152 @@
-import { ColumnDef } from '@tanstack/react-table'
-import { cn } from '@/lib/utils'
-import { Badge } from '@/components/ui/badge'
-import { Checkbox } from '@/components/ui/checkbox'
-import LongText from '@/components/long-text'
-import { callTypes, userTypes } from '../data/data'
-import { User } from '../data/schema'
-import { DataTableColumnHeader } from './data-table-column-header'
-import { DataTableRowActions } from './data-table-row-actions'
+import { ColumnDef } from "@tanstack/react-table";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
+import LongText from "@/components/long-text";
+import { callTypes, userTypes } from "../data/data";
+import { User } from "../data/schema";
+import { DataTableColumnHeader } from "./data-table-column-header";
+import { DataTableRowActions } from "./data-table-row-actions";
+import { getRoleById } from "@/actions/admin/roles/getRoleById";
+import { useEffect, useState } from "react";
+
+async function getRole(id: string): Promise<string> {
+  const rol = await getRoleById(id);
+
+  return rol;
+}
+
+function ObternerRol(id: string): string {
+  const [data, setData] = useState<string>("");
+
+  useEffect(() => {
+    getRole(id).then(setData);
+  }, [id]);
+
+  return data;
+}
 
 export const columns: ColumnDef<User>[] = [
   {
-    id: 'select',
+    id: "select",
     header: ({ table }) => (
       <Checkbox
         checked={
           table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && 'indeterminate')
+          (table.getIsSomePageRowsSelected() && "indeterminate")
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label='Seleccionar todo'
-        className='translate-y-[2px]'
+        aria-label="Seleccionar todo"
+        className="translate-y-[2px]"
       />
     ),
     meta: {
       className: cn(
-        'sticky md:table-cell left-0 z-10 rounded-tl',
-        'bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted'
+        "sticky md:table-cell left-0 z-10 rounded-tl",
+        "bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted"
       ),
     },
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label='Seleccionar Columna'
-        className='translate-y-[2px]'
+        aria-label="Seleccionar Columna"
+        className="translate-y-[2px]"
       />
     ),
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: 'username',
+    accessorKey: "username",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Username' />
+      <DataTableColumnHeader column={column} title="Username" />
     ),
     cell: ({ row }) => (
-      <LongText className='max-w-36'>{row.getValue('username')}</LongText>
+      <LongText className="max-w-36">{row.getValue("username")}</LongText>
     ),
     meta: {
       className: cn(
-        'drop-shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:drop-shadow-[0_1px_2px_rgb(255_255_255_/_0.1)] lg:drop-shadow-none',
-        'bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted',
-        'sticky left-6 md:table-cell'
+        "drop-shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:drop-shadow-[0_1px_2px_rgb(255_255_255_/_0.1)] lg:drop-shadow-none",
+        "bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted",
+        "sticky left-6 md:table-cell"
       ),
     },
     enableHiding: false,
   },
   {
-    id: 'fullName',
+    id: "fullName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Nombre' />
+      <DataTableColumnHeader column={column} title="Nombre" />
     ),
     cell: ({ row }) => {
-      const { firstName, lastName } = row.original
-      const fullName = `${firstName} ${lastName}`
-      return <LongText className='max-w-36'>{fullName}</LongText>
+      const { firstName, lastName } = row.original;
+      const fullName = `${firstName} ${lastName}`;
+      return <LongText className="max-w-36">{fullName}</LongText>;
     },
-    meta: { className: 'w-36' },
+    meta: { className: "w-36" },
   },
   {
-    accessorKey: 'email',
+    accessorKey: "email",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Email' />
+      <DataTableColumnHeader column={column} title="Email" />
     ),
     cell: ({ row }) => (
-      <div className='w-fit text-nowrap'>{row.getValue('email')}</div>
+      <div className="w-fit text-nowrap">{row.getValue("email")}</div>
     ),
   },
   {
-    accessorKey: 'status',
+    accessorKey: "status",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Estado' />
+      <DataTableColumnHeader column={column} title="Estado" />
     ),
     cell: ({ row }) => {
-      const { status } = row.original
-      const badgeColor = callTypes.get(status)
+      const { status } = row.original;
+      const badgeColor = callTypes.get(status);
       return (
-        <div className='flex space-x-2'>
-          <Badge variant='outline' className={cn('capitalize', badgeColor)}>
-            {row.getValue('status')}
+        <div className="flex space-x-2">
+          <Badge variant="outline" className={cn("capitalize", badgeColor)}>
+            {row.getValue("status")}
           </Badge>
         </div>
-      )
+      );
     },
-    filterFn: 'weakEquals',
+    filterFn: "weakEquals",
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: 'role',
+    accessorKey: "tbl_usr_roles_id_rol",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Rol' />
+      <DataTableColumnHeader column={column} title="Rol" />
     ),
     cell: ({ row }) => {
-      const { tbl_usr_roles_id_rol } = row.original
-      const userType = userTypes.find(({ value }) => value === tbl_usr_roles_id_rol)
+      const { tbl_usr_roles_id_rol } = row.original;
+
+      const role = ObternerRol(tbl_usr_roles_id_rol);
+      const userType = userTypes.find(({ value }) => value === role);
 
       if (!userType) {
-        return null
+        return null;
       }
 
       return (
-        <div className='flex gap-x-2 items-center'>
+        <div className="flex gap-x-2 items-center">
           {userType.icon && (
-            <userType.icon size={16} className='text-muted-foreground' />
+            <userType.icon size={16} className="text-muted-foreground" />
           )}
-          <span className='capitalize text-sm'>{row.getValue('role')}</span>
+          <span className="capitalize text-sm">
+            {role}
+          </span>
         </div>
-      )
+      );
     },
-    filterFn: 'weakEquals',
+    filterFn: "weakEquals",
     enableSorting: false,
     enableHiding: false,
   },
   {
-    id: 'actions',
+    id: "actions",
     cell: DataTableRowActions,
   },
-]
+];
