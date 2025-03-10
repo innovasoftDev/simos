@@ -153,6 +153,22 @@ export const navItems: NavItem[] = [
     items: [] // No child items
   },
   {
+    title: 'Alertas',
+    url: '/dashboard/alertas',
+    icon: 'alert',
+    shortcut: ['p', 'p'],
+    isActive: false,
+    items: [] // No child items
+  },
+  {
+    title: 'Errores',
+    url: '/dashboard/errores',
+    icon: 'error',
+    shortcut: ['p', 'p'],
+    isActive: false,
+    items: [] // No child items
+  },
+  {
     title: 'Acerca de',
     url: '/dashboard/about',
     icon: 'kanban',

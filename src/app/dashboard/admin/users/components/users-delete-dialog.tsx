@@ -58,14 +58,15 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       desc={
         <div className="space-y-4">
           <p className="mb-2">
-            ¿Estás segura de que quieres eliminar?{" "}
-            <span className="font-bold">{currentRow.username}</span>?
+            ¿Estás segura de que quieres eliminar este usuario?
             <br />
-            Esta acción eliminará permanentemente al usuario con el rol de{" "}
+            Esta acción eliminará permanentemente al usuario {" "}
             <span className="font-bold">
-              {currentRow.tbl_usr_roles_id_rol.toUpperCase()}
+              {currentRow.username}
             </span>{" "}
-            del sistema. Esto no se puede deshacer.
+            del sistema. 
+            <br />
+            Esto no se puede deshacer.
           </p>
 
           <Label className="my-2">

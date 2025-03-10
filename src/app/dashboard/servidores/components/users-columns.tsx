@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import LongText from "@/components/long-text";
 import { callTypes, userTypes } from "../data/data";
-import { Service } from "../data/schema";
+import { Server } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { getRoleById } from "@/actions/admin/roles/getRoleById";
@@ -26,7 +26,7 @@ function ObternerRol(id: string): string {
   return data;
 }
 
-export const columns: ColumnDef<Service>[] = [
+export const columns: ColumnDef<Server>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -58,12 +58,12 @@ export const columns: ColumnDef<Service>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "nombre_servicio",
+    accessorKey: "nombre_servidor",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Servicio" />
+      <DataTableColumnHeader column={column} title="Servidor" />
     ),
     cell: ({ row }) => (
-      <div className="w-fit text-nowrap">{row.getValue("nombre_servicio")}</div>
+      <div className="w-fit text-nowrap">{row.getValue("nombre_servidor")}</div>
     ),
   },
   {

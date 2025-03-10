@@ -1,16 +1,16 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth.config";
-import ServicesPage from "./servicesPage";
+import ServersPage from "./serversPage";
 
 export const metadata = {
-  title: "Dashboard : Servicios",
+  title: "Dashboard : Servidores",
 };
 
 export default async function page() {
   const session = await auth();
 
   if (session?.user.role === "admin") {
-    return <ServicesPage/>;
+    return <ServersPage/>;
   } else {
     redirect("/");
   }

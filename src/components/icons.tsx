@@ -34,7 +34,9 @@ import {
   HandPlatter,
   Server,
   Bolt,
-  X
+  X,
+  TriangleAlert,
+  CircleX
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -75,4 +77,6 @@ export const Icons = {
   bolt: Bolt, 
   check: Check,
   segurity: Shield,  
+  alert: TriangleAlert,
+  error: CircleX 
 };
