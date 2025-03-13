@@ -2,105 +2,25 @@ generator client {
   provider = "prisma-client-js"
 }
 
-/// *
-///    * shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+  /**
+   * shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+   */
 }
 
-model alertas_servidor {
-  Id_Alertas_Servidor      Int      @id @default(autoincrement())
-  Codigo_Alerta            String   @db.VarChar(125)
-  Descripcion_Alerta       String   @db.VarChar(125)
-  Fecha_Creacion           DateTime
-  Servidores_Id_Servidores Int
-
-  @@index([Servidores_Id_Servidores], map: "FK_ALERTAS_SERVIDOR_SERVIDORES")
+enum Role {
+  admin
+  user
 }
 
-model errores_servidor {
-  Id_Error_Servidor        Int    @id @default(autoincrement())
-  Codigo_Error             String @db.VarChar(125)
-  Descripcion_Error        String @db.VarChar(125)
-  Servidores_Id_Servidores Int
-
-  @@index([Servidores_Id_Servidores], map: "FK_ERRORES_SERVIDOR_SERVIDORES")
-}
-
-model servicios {
-  Id_Servicio              Int      @id @default(autoincrement())
-  Nombre_Servicio          String   @db.VarChar(125)
-  Descripcion              String   @db.VarChar(125)
-  Fecha_Creacion           DateTime
-  Servidores_Id_Servidores Int
-
-  @@index([Servidores_Id_Servidores], map: "SERVICIOS_Servidores_Id_Servidores_fkey")
-}
-
-model servidores {
-  Id_servidor                            Int      @id @default(autoincrement())
-  Nombre_Servidor                        String   @db.VarChar(125)
-  Descripcion                            String   @db.VarChar(125)
-  Fecha_Creacion                         DateTime
-  tbl_grupo_servidores_Id_Grupo_Servidor Int
-
-  @@index([tbl_grupo_servidores_Id_Grupo_Servidor], map: "SERVIDORES_tbl_grupo_servidores_Id_Grupo_Servidor_fkey")
-}
-
-model tbl_grupo_servidores {
-  Id_Grupo_Servidor     Int    @id @default(autoincrement())
-  Nombre_Grupo_Servidor String @db.VarChar(125)
-  Descripcion           String @db.VarChar(125)
-  user_id_user          String
-
-  @@index([user_id_user], map: "TBL_GRUPO_SERVIDORES_user_id_user_fkey")
-}
-
-model tbl_hist_contrasenia {
-  id_historial_contra String  @id
-  contrasenia         String? @db.VarChar(255)
-  user_id_user        String?
-
-  @@index([user_id_user], map: "TBL_HIST_CONTRASENIA_user_id_user_fkey")
-}
-
-model tbl_objetos {
-  id_objeto   String @id
-  objeto      String @db.VarChar(70)
-  descripcion String @db.VarChar(70)
-  tipo_objeto String @db.VarChar(20)
-}
-
-model tbl_permisos {
-  id_permisos           String   @id
-  permiso_insertar      String   @db.VarChar(50)
-  permiso_consultar     String   @db.VarChar(50)
-  permiso_actualizar    String   @db.VarChar(50)
-  permiso_eliminar      String   @db.VarChar(50)
-  creador               String   @db.VarChar(50)
-  modificado_por        String   @db.VarChar(50)
-  fecha_creacion        DateTime @db.DateTime(0)
-  fecha_modificacion    DateTime @default(now()) @db.Timestamp(0)
-  tbl_usr_roles_id_rol  String
-  tbl_objetos_id_objeto String
-
-  @@index([tbl_objetos_id_objeto], map: "TBL_PERMISOS_tbl_objetos_id_objeto_fkey")
-  @@index([tbl_usr_roles_id_rol], map: "TBL_PERMISOS_tbl_usr_roles_id_rol_fkey")
-}
-
-model tbl_usr_roles {
-  id_rol      String            @id
-  rol         tbl_usr_roles_rol @unique(map: "TBL_USR_ROLES_rol_key") @default(user)
-  descripcion String?           @db.VarChar(70)
-}
-
-model user {
-  id_user              String    @id
+model User {
+  id_user              String                 @id @default(uuid())
   firstName            String?
   lastName             String?
-  username             String    @unique(map: "User_username_key") @db.VarChar(70)
-  email                String    @unique(map: "User_email_key")
+  username             String                 @unique @db.VarChar(70)
+  email                String                 @unique
   emailVerified        DateTime?
   phoneNumber          String?
   password             String
@@ -108,12 +28,46 @@ model user {
   status               String
   created              DateTime?
   updated              DateTime?
+  rol                  TBL_USR_ROLES          @relation(fields: [tbl_usr_roles_id_rol], references: [id_rol])
   tbl_usr_roles_id_rol String
-
-  @@index([tbl_usr_roles_id_rol], map: "User_tbl_usr_roles_id_rol_fkey")
+  historial_contra     TBL_HIST_CONTRASENIA[]
 }
 
-enum tbl_usr_roles_rol {
-  admin
-  user
+model TBL_OBJETOS {
+  id_objeto   String         @id @default(uuid())
+  objeto      String         @db.VarChar(70)
+  descripcion String         @db.VarChar(70)
+  tipo_objeto String         @db.VarChar(20)
+  permisos    TBL_PERMISOS[]
+}
+
+model TBL_HIST_CONTRASENIA {
+  id_historial_contra    String  @id @default(uuid())
+  contrasenia            String? @db.VarChar(255)
+  user                   User?   @relation(fields: [tbl_usuario_id_usuario], references: [id_user])
+  tbl_usuario_id_usuario String?
+}
+
+model TBL_PERMISOS {
+  id_permisos           String        @id @default(uuid())
+  permiso_insertar      String        @db.VarChar(50)
+  permiso_consultar     String        @db.VarChar(50)
+  permiso_actualizar    String        @db.VarChar(50)
+  permiso_eliminar      String        @db.VarChar(50)
+  creador               String        @db.VarChar(50)
+  modificado_por        String        @db.VarChar(50)
+  fecha_creacion        DateTime      @db.DateTime(0)
+  fecha_modificacion    DateTime      @updatedAt @db.Timestamp(0)
+  tbl_usr_roles_id_rol  String
+  tbl_objetos_id_objeto String
+  rol                   TBL_USR_ROLES @relation(fields: [tbl_usr_roles_id_rol], references: [id_rol])
+  objeto                TBL_OBJETOS   @relation(fields: [tbl_objetos_id_objeto], references: [id_objeto])
+}
+
+model TBL_USR_ROLES {
+  id_rol      String         @id @default(uuid())
+  rol         Role           @unique @default(user)
+  descripcion String?        @db.VarChar(70)
+  permisos    TBL_PERMISOS[]
+  user        User[]
 }

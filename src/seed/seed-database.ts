@@ -24,16 +24,16 @@ async function getIdByRole(role: string): Promise<string> {
   
 }
 
-async function CreateUser(username: string, firstname: string, lastname: string, email: string, password: string, role: string, status: string) {
+async function CreateUser(username: string, firstname: string, lastname: string, email: string, password: string, role: string, status : string) {
   try {
     await prisma.user.create({
       data: {
-        email,
-        username,
+        email: email,
+        username: username,
         firstName: firstname,
         lastName: lastname,
         password: bcryptjs.hashSync(password),
-        status,
+        status: status,
         tbl_usr_roles_id_rol: (await getIdByRole(role)).toString(),
       },
     });
@@ -41,7 +41,6 @@ async function CreateUser(username: string, firstname: string, lastname: string,
     console.log(error);
   }
 }
-
 
 async function main() {
   // 1. Borrar registros previos
