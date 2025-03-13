@@ -7,7 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ConfirmDialog } from "@/components/confirm-dialog";
-import { Service } from "../data/schema";
+import { Server } from '../data/schema';
 import { toast } from "sonner";
 import { DeleteUser } from "@/actions/admin/users/delete-user";
 import useSWR from 'swr'
@@ -15,7 +15,7 @@ import useSWR from 'swr'
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  currentRow: Service;
+  currentRow: Server;
 }
 
 export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
@@ -23,7 +23,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   const { mutate } = useSWR("/dashboard/admin/users", fetch);
 
   const handleDelete = async () => {
-    if (value.trim() !== currentRow.id_servicio) return;
+    if (value.trim() !== currentRow.id_servidor) return;
     /* const result = await DeleteUser(value.trim());
 
     if (result.ok) {
@@ -45,24 +45,24 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={value.trim() !== currentRow.id_servicio}
+      disabled={value.trim() !== currentRow.id_servidor}
       title={
         <span className="text-destructive">
           <TriangleAlert
             className="mr-1 inline-block stroke-destructive"
             size={18}
           />{" "}
-          Eliminar Servicio
+          Eliminar Servidor
         </span>
       }
       desc={
         <div className="space-y-4">
           <p className="mb-2">
-            ¿Estás segura de que quieres eliminar este usuario?
+            ¿Estás seguro de que quieres eliminar este servidor?
             <br />
-            Esta acción eliminará permanentemente al usuario {" "}
+            Esta acción eliminará permanentemente el servidor {" "}
             <span className="font-bold">
-              {currentRow.id_servicio}
+              {currentRow.id_servidor}
             </span>{" "}
             del sistema. 
             <br />
@@ -74,7 +74,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder="Introduzca el nombre de usuario para confirmar la eliminación."
+              placeholder="Introduzca el nombre de servidor para confirmar la eliminación."
             />
           </Label>
 
