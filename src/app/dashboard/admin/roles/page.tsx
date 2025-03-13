@@ -7,6 +7,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { MoreVertical } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { getAllRoles } from "@/actions/admin/roles/getAllRoles";
+import { Role } from "./data/schema";
 
 // Tipo de permiso
 interface Permission {
@@ -15,12 +17,24 @@ interface Permission {
   screen: string;
 }
 
+async function getData(): Promise<Role[]> {
+  const { roles = [] } = await getAllRoles();
+
+  // Fetch data from your API here.
+  return roles;
+}
+
 export default function UsersPage() {
   const [permissions, setPermissions] = useState<Permission[]>([]);
   const [currentPermission, setCurrentPermission] = useState<Permission | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
+  const [data, setData] = useState<Role[]>([]);
+
+  useEffect(() => {
+    getData().then(setData);
+  }, []);
 
   useEffect(() => {
     setPermissions([
@@ -49,7 +63,7 @@ export default function UsersPage() {
     setPermissions((prev) =>
       currentPermission.id
         ? prev.map((p) => (p.id === currentPermission.id ? { ...currentPermission } : p))
-        : [...prev, { ...currentPermission, id: prev.length ? Math.max(...prev.map((p) => p.id)) + 1 : 1 } ]
+        : [...prev, { ...currentPermission, id: prev.length ? Math.max(...prev.map((p) => p.id)) + 1 : 1 }]
     );
 
     setModalOpen(false);
