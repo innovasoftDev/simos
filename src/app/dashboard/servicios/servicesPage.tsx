@@ -63,10 +63,10 @@ export default function ServicesPage() {
           <div className="mb-2 flex items-center justify-between space-y-2 flex-wrap">
             <div>
               <h2 className="text-2xl font-bold tracking-tight">
-                Servidor
+                Servicios
               </h2>
               <p className="text-muted-foreground">
-                Administra aquí tus servidores.
+                Administra aquí tus servicios.
               </p>
             </div>
             <div className="flex gap-2">
