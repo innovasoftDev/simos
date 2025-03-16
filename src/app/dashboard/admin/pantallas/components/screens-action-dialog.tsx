@@ -1,8 +1,6 @@
 'use client'
 
-import { z } from 'zod'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import {
@@ -23,153 +21,94 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { PasswordInput } from '@/components/password-input'
-import { SelectDropdown } from '@/components/select-dropdown'
-import { userTypes } from '../data/data'
-import { Screens } from '../data/schema'
 import { Switch } from "@/components/ui/switch";
+import React, { useState } from 'react'
 
+const formSchema = {
+  firstName: '',
+  lastName: '',
+  username: '',
+  phoneNumber: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+  status: true,
+};
 
-
-const formSchema = z
-  .object({
-    firstName: z.string().min(1, { message: 'Nombre Requerido.' }),
-    lastName: z.string().min(1, { message: 'Descripción Requerida.' }),
-    username: z.string().min(1, { message: '' }),
-    phoneNumber: z.string().min(1, { message: 'Phone number is required.' }),
-    email: z
-      .string()
-      .min(1, { message: 'Email is required.' })
-      .email({ message: 'Email is invalid.' }),
-    password: z.string().transform((pwd) => pwd.trim()),
-    role: z.string().min(1, { message: 'Role is required.' }),
-    confirmPassword: z.string().transform((pwd) => pwd.trim()),
-    isEdit: z.boolean(),
-    status: z.boolean(),
-  })
-  .superRefine(({ isEdit, password, confirmPassword }, ctx) => {
-    if (!isEdit || (isEdit && password !== '')) {
-      if (password === '') {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Password is required.',
-          path: ['password'],
-        })
-      }
-
-      if (password.length < 8) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Password must be at least 8 characters long.',
-          path: ['password'],
-        })
-      }
-
-      if (!password.match(/[a-z]/)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Password must contain at least one lowercase letter.',
-          path: ['password'],
-        })
-      }
-
-      if (!password.match(/\d/)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: 'Password must contain at least one number.',
-          path: ['password'],
-        })
-      }
-
-      if (password !== confirmPassword) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Passwords don't match.",
-          path: ['confirmPassword'],
-        })
-      }
-    }
-  })
-type ScreensForm = z.infer<typeof formSchema>
+type ScreensForm = typeof formSchema
 
 interface Props {
-  isEdit: boolean 
+  isEdit: boolean
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
 export function ScreenssActionDialog({ open, onOpenChange, isEdit }: Props) {
-  // const isEdit = !!currentRow
+  const [warningMessage, setWarningMessage] = useState<string | null>(null)
+
   const form = useForm<ScreensForm>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-          firstName: '',
-          lastName: '',
-          username: '',
-          email: '',
-          role: '',
-          phoneNumber: '',
-          password: '',
-          confirmPassword: '',
-          status: true,
-        },
-        mode: "onChange", // Valida en cada cambio
+    defaultValues: formSchema,
+    mode: "onChange",
   })
 
-  const { 
-      setValue, // <-- Add the setValue prop
-      handleSubmit,
-      control,
+  const {
+    setValue,
+    handleSubmit,
   } = form;
-  
-  const handleChange = (
+
+  const handleNameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    fieldName: keyof z.infer<typeof formSchema>
+    fieldName: keyof ScreensForm
   ) => {
-    const { value } = e.target; // <-- Extract the value
-    setValue(fieldName, value, { shouldDirty: true, shouldValidate: true }); // <-- Set the form value
-    console.log(`${fieldName}: `, value);  };
+    let value = e.target.value;
+
+    if (!/^[a-zA-Z0-9 ]*$/.test(value)) {
+      setWarningMessage("No se permiten caracteres especiales.");
+      return;
+    }
+
+    if (value.length > 30) {
+      setWarningMessage("Máximo 30 caracteres permitidos.");
+      value = value.slice(0, 30);
+    } else {
+      setWarningMessage(null);
+    }
+
+    setValue(fieldName, value, { shouldDirty: true, shouldValidate: true });
+  };
 
   const onSubmit = (values: ScreensForm) => {
-    form.reset()
     toast({
-      title: 'You submitted the following values:',
+      title: 'Se guardaron los siguientes datos:',
       description: (
         <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
           <code className='text-white'>{JSON.stringify(values, null, 2)}</code>
         </pre>
       ),
     })
+    form.reset()
     onOpenChange(false)
   }
 
-  const isPasswordTouched = !!form.formState.dirtyFields.password
+  const handleCancel = () => {
+    form.reset();
+    onOpenChange(false);
+  }
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(state) => {
-        form.reset()
-        onOpenChange(state)
-      }}
-    >
+    <Dialog open={open} onOpenChange={(state) => { form.reset(); onOpenChange(state); }}>
       <DialogContent className='sm:max-w-lg'>
         <DialogHeader className='text-left'>
-          <DialogTitle>{isEdit ? 'Editar la pantalla aquí' : 'Agregar Nueva Pantalla. '}</DialogTitle>
-          {/* <DialogTitle>{'Agregar pantalla'}</DialogTitle> */}
+          <DialogTitle>{isEdit ? 'Editar la pantalla aquí' : 'Agregar Nueva Pantalla.'}</DialogTitle>
           <DialogDescription>
-            {isEdit ? 'Actualiza la pantalla aquí. Haga clic en guardar cuando haya terminado. ' : 'Crea una nueva pantalla. Haga clic en guardar cuando haya terminado. '}
-            {'' }
-            {/* Agregar una nueva pantalla. Haga clic en guardar cuando haya terminado. */}
+            {isEdit ? 'Actualiza la pantalla aquí. Haga clic en guardar cuando haya terminado.' : 'Crea una nueva pantalla. Haga clic en guardar cuando haya terminado.'}
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className='h-[26.25rem] w-full pr-4 -mr-4 py-1'>
           <Form {...form}>
-            <form
-              id='user-form'
-              onSubmit={form.handleSubmit(onSubmit)}
-              className='space-y-4 p-0.5'
-            >
+            <form id='user-form' onSubmit={handleSubmit(onSubmit)} className='space-y-4 p-0.5'>
+
+              {/* Nombre de la pantalla */}
               <FormField
                 control={form.control}
                 name='firstName'
@@ -183,19 +122,18 @@ export function ScreenssActionDialog({ open, onOpenChange, isEdit }: Props) {
                         placeholder='Ingrese el nombre de la pantalla'
                         className='col-span-4'
                         autoComplete='off'
-                        maxLength={20}
                         {...field}
-                        onChange={(e) => handleChange(e, field.name)}
+                        onChange={(e) => handleNameChange(e, field.name)}
                       />
                     </FormControl>
-                    <FormMessage className='col-span-4 col-start-3' />
+                    {warningMessage && (
+                      <FormMessage className='text-red-600 col-span-4 col-start-3'>{warningMessage}</FormMessage>
+                    )}
                   </FormItem>
-
-                  
-                                   
                 )}
               />
 
+              {/* Descripción de la pantalla */}
               <FormField
                 control={form.control}
                 name='lastName'
@@ -209,18 +147,18 @@ export function ScreenssActionDialog({ open, onOpenChange, isEdit }: Props) {
                         placeholder='Ingrese descripción de la pantalla'
                         className='col-span-4'
                         autoComplete='off'
-                        maxLength={20}
                         {...field}
-                        onChange={(e) => handleChange(e, field.name)}
+                        onChange={(e) => handleNameChange(e, field.name)}
                       />
                     </FormControl>
-                    <FormMessage className='col-span-4 col-start-3' />
+                    {warningMessage && (
+                      <FormMessage className='text-red-600 col-span-4 col-start-3'>{warningMessage}</FormMessage>
+                    )}
                   </FormItem>
-
-                                   
                 )}
               />
-              
+
+              {/* Estado */}
               <FormField
                 control={form.control}
                 name='username'
@@ -230,21 +168,20 @@ export function ScreenssActionDialog({ open, onOpenChange, isEdit }: Props) {
                       Estado
                     </FormLabel>
                     <FormControl>
-                    <Switch {...field}/>
-
+                      <Switch checked={!!field.value} onCheckedChange={(checked) => setValue('username', checked ? 'activo' : 'inactivo')} />
                     </FormControl>
                     <FormMessage className='col-span-4 col-start-3' />
                   </FormItem>
-
-                                   
                 )}
               />
-            
-            
+
             </form>
           </Form>
         </ScrollArea>
-        <DialogFooter>
+        <DialogFooter className="flex justify-end gap-2">
+          <Button variant='outline' type='button' onClick={handleCancel}>
+            Cancelar
+          </Button>
           <Button type='submit' form='user-form'>
             Guardar Cambios
           </Button>
