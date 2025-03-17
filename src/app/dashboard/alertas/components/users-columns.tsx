@@ -60,7 +60,7 @@ export const columns: ColumnDef<Service>[] = [
   {
     accessorKey: "nombre_servicio",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Servicio" />
+      <DataTableColumnHeader column={column} title="Alerta servicio" />
     ),
     cell: ({ row }) => (
       <div className="w-fit text-nowrap">{row.getValue("nombre_servicio")}</div>
@@ -86,7 +86,7 @@ export const columns: ColumnDef<Service>[] = [
   {
     accessorKey: "id_servidor",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Server" />
+      <DataTableColumnHeader column={column} title="Codigo Alerta" />
     ),
     cell: ({ row }) => (
       <div className="w-fit text-nowrap">{row.getValue("id_servidor")}</div>

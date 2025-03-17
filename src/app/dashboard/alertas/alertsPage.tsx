@@ -32,18 +32,18 @@ export default function AlertsPage() {
   const data: Service[] = [
     {
       id_servicio: "123456789",
-      id_servidor: "123456789",
+      id_servidor: "1234",
       nombre_servicio: "API_Service",
-      descripcion: "Servicio de ventas",
+      descripcion: "El servicio esta activo!",
       status: "active",
       created: null,
       updated: null,
     },
     {
       id_servicio: "123456789",
-      id_servidor: "123456789",
+      id_servidor: "1234",
       nombre_servicio: "Icommerce_Service",
-      descripcion: "Servicio de ventas",
+      descripcion: "El servicio esta caido!",
       status: "inactive",
       created: null,
       updated: null,
