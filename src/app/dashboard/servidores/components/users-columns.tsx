@@ -86,7 +86,7 @@ export const columns: ColumnDef<Server>[] = [
   {
     accessorKey: "id_servidor",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Server" />
+      <DataTableColumnHeader column={column} title="ID Servidor" />
     ),
     cell: ({ row }) => (
       <div className="w-fit text-nowrap">{row.getValue("id_servidor")}</div>
