@@ -33,8 +33,8 @@ export default function ErrorsPage() {
     {
       id_servicio: "123456789",
       id_servidor: "123456789",
-      nombre_servicio: "API_Service",
-      descripcion: "Servicio de ventas",
+      nombre_servicio: "Error 401",
+      descripcion: " Acceso no autorizado, inicio de sesión con las credenciales adecuadas para acceder a este recurso.",
       status: "active",
       created: null,
       updated: null,
@@ -42,12 +42,40 @@ export default function ErrorsPage() {
     {
       id_servicio: "123456789",
       id_servidor: "123456789",
-      nombre_servicio: "Icommerce_Service",
-      descripcion: "Servicio de ventas",
+      nombre_servicio: "Error 403",
+      descripcion: "Acceso Prohibido, No tiene el permiso necesario para ver este recurso.",
       status: "inactive",
       created: null,
       updated: null,
     },
+    {
+      id_servicio: "123456789",
+      id_servidor: "123456789",
+      nombre_servicio: "Error 404",
+      descripcion: "Página no encontrada, la página que se busca no existe o ha sido eliminada.",
+      status: "inactive",
+      created: null,
+      updated: null,
+    },
+    {
+      id_servicio: "123456789",
+      id_servidor: "123456789",
+      nombre_servicio: "Error 500",
+      descripcion: "Algo salió mal, Intentalo de más tarde.",
+      status: "inactive",
+      created: null,
+      updated: null,
+    },
+    {
+      id_servicio: "123456789",
+      id_servidor: "123456789",
+      nombre_servicio: "Error 503",
+      descripcion: "El sitio web está en mantenimiento. No está disponible en este momento. Pronto estará en línea.",
+      status: "inactive",
+      created: null,
+      updated: null,
+    },
+    
   ];
 
   // Dialog states

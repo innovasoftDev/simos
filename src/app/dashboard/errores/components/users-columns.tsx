@@ -60,7 +60,7 @@ export const columns: ColumnDef<Service>[] = [
   {
     accessorKey: "nombre_servicio",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Servicio" />
+      <DataTableColumnHeader column={column} title="Errores" />
     ),
     cell: ({ row }) => (
       <div className="w-fit text-nowrap">{row.getValue("nombre_servicio")}</div>
@@ -86,34 +86,34 @@ export const columns: ColumnDef<Service>[] = [
   {
     accessorKey: "id_servidor",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Server" />
+      <DataTableColumnHeader column={column} title="Fecha/Hora" />
     ),
     cell: ({ row }) => (
       <div className="w-fit text-nowrap">{row.getValue("id_servidor")}</div>
     ),
   },
-  {
-    accessorKey: "status",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Estado" />
-    ),
-    cell: ({ row }) => {
-      const { status } = row.original;
-      const badgeColor = callTypes.get(status);
-      return (
-        <div className="flex space-x-2">
-          <Badge variant="outline" className={cn("capitalize", badgeColor)}>
-            {row.getValue("status")}
-          </Badge>
-        </div>
-      );
-    },
-    filterFn: "weakEquals",
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    id: "actions",
-    cell: DataTableRowActions,
-  },
+  // {
+  //   accessorKey: "status",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Estado" />
+  //   ),
+  //   cell: ({ row }) => {
+  //     const { status } = row.original;
+  //     const badgeColor = callTypes.get(status);
+  //     return (
+  //       <div className="flex space-x-2">
+  //         <Badge variant="outline" className={cn("capitalize", badgeColor)}>
+  //           {row.getValue("status")}
+  //         </Badge>
+  //       </div>
+  //     );
+  //   },
+  //   filterFn: "weakEquals",
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
+  // {
+  //   id: "actions",
+  //   cell: DataTableRowActions,
+  // },
 ];
