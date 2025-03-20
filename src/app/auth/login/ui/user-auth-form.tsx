@@ -11,7 +11,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authenticate } from "@/actions";
-/* import { signIn } from "next-auth/react"; */
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useFormState, useFormStatus } from "react-dom";
@@ -26,16 +25,15 @@ const formSchema = z.object({
   email: z
     .string()
     .min(1, { message: "Por favor ingresa tu correo electrónico." })
+    .max(20, { message: "Máximo 30 caracteres." })
     .email({ message: "Dirección de correo electrónico no válida" })
-    .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, { message: "Dirección de correo electrónico no valido"}),
+    .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, { message: "Correo inválido." }),
   password: z
     .string()
-    .min(1, {
-      message: "Por favor ingresa tu contraseña.",
-    })
-    .min(7, {
-      message: "La contraseña debe tener al menos 7 caracteres.",
-    }),
+    .min(1, { message: "Por favor ingresa tu contraseña." })
+    .min(7, { message: "Debe tener al menos 7 caracteres." })
+    .max(30, { message: "Máximo 30 caracteres." })
+    .regex(/^[a-zA-Z0-9]+$/, { message: "No se permiten caracteres especiales." }),
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
@@ -45,6 +43,7 @@ export default function UserAuthForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
   const [loading, startTransition] = useTransition();
+  const [charWarning, setCharWarning] = useState({ email: "", password: "" });
 
   const defaultValues = {
     email: "admin@google.com",
@@ -54,78 +53,64 @@ export default function UserAuthForm() {
   const form = useForm<UserFormValue>({
     resolver: zodResolver(formSchema),
     defaultValues,
-    mode: "onChange", // Valida en cada cambio
+    mode: "onChange",
   });
 
-  const { 
-    setValue, // <-- Add the setValue prop
-    handleSubmit,
-    control,
-} = form;
+  const { setValue, handleSubmit, control } = form;
 
-const handleChange = (
-  e: React.ChangeEvent<HTMLInputElement>,
-  fieldName: keyof z.infer<typeof formSchema>
-) => {
-  const { value } = e.target; // <-- Extract the value
-  setValue(fieldName, value, { shouldDirty: true, shouldValidate: true }); // <-- Set the form value
-  console.log(`${fieldName}: `, value); 
-};
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fieldName: keyof UserFormValue
+  ) => {
+    const value = e.target.value;
 
-  /* const onSubmit = async (data: UserFormValue) => {
-    startTransition(() => {
-      signIn("credentials", {
-        email: data.email,
-        password: data.password,
-        callbackUrl: callbackUrl ?? "/dashboard/overview",
-      });
-      //toast.success("Signed In Successfully!");
-    });
-  }; */
+    if (/[^a-zA-Z0-9.@+-]/.test(value) && fieldName === "email") {
+      setCharWarning((prev) => ({ ...prev, [fieldName]: "¡No se permiten caracteres especiales!" }));
+      return;
+    }
+
+    if (/[^a-zA-Z0-9]/.test(value) && fieldName === "password") {
+      setCharWarning((prev) => ({ ...prev, [fieldName]: "¡No se permiten caracteres especiales!" }));
+      return;
+    }
+
+    if (value.length > 30) {
+      setCharWarning((prev) => ({ ...prev, [fieldName]: "" }));
+    } else {
+      setCharWarning((prev) => ({ ...prev, [fieldName]: "" }));
+    }
+
+    setValue(fieldName, value, { shouldDirty: true, shouldValidate: true });
+  };
 
   useEffect(() => {
     if (state === "Success") {
-      // redireccionar
-      // router.replace('/');
       window.location.replace("/dashboard/overview");
     }
   }, [state]);
 
-  {
-    state === "CredentialsSignin" &&
-      toast.error("Error de inicio de sesión", {
-        description: "¡Credenciales no son correctas!",
-      });
-  }
-  /* console.log(state); */
-
   return (
     <>
       <Form {...form}>
-        <form
-          action={dispatch}
-          /* onSubmit={form.handleSubmit(onSubmit)} */
-          className="w-full space-y-2"
-        >
+        <form action={dispatch} className="w-full space-y-2">
           <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel className="text-white">Email</FormLabel>
                 <FormControl>
                   <Input
-                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                     type="email"
                     placeholder="Ingrese su email..."
                     disabled={loading}
-                    maxLength={20}
-                    
+                    maxLength={30}
                     {...field}
                     onChange={(e) => handleChange(e, field.name)}
                   />
                 </FormControl>
-                <FormMessage />
+                {charWarning.email && <p className="text-red-700 text-sm font-medium">{charWarning.email}</p>}
+                <FormMessage className="text-red-700 text-sm font-medium" />
               </FormItem>
             )}
           />
@@ -136,7 +121,7 @@ const handleChange = (
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center justify-between">
-                  <FormLabel>Contraseña</FormLabel>
+                  <FormLabel className="text-white">Contraseña</FormLabel>
                   <Link
                     href="/auth/forgot-password"
                     className="text-sm font-medium text-muted-foreground hover:opacity-75"
@@ -147,19 +132,16 @@ const handleChange = (
                 <FormControl>
                   <PasswordInput
                     placeholder="Ingrese su contraseña..."
-                    maxLength={20}
+                    maxLength={31}
                     {...field}
                     onChange={(e) => handleChange(e, field.name)}
                   />
                 </FormControl>
-                <FormMessage />
+                {charWarning.password && <p className="text-red-700 text-sm font-medium">{charWarning.password}</p>}
+                <FormMessage className="text-red-700 text-sm font-medium" />
               </FormItem>
             )}
           />
-
-          {/* <Button disabled={loading} className="ml-auto w-full" type="submit">
-            Ingresar
-          </Button> */}
 
           <LoginButton />
         </form>
@@ -183,7 +165,7 @@ function LoginButton() {
     <Button
       className={clsx({
         "btn-primary": !pending,
-        "btn-disabled": !pending,
+        "btn-disabled": pending,
         "ml-auto w-full": true,
       })}
       disabled={pending}
