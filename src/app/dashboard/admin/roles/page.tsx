@@ -30,6 +30,8 @@ export default function UsersPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false); // Estado para el diálogo de confirmación de eliminación
+  const [roleToDelete, setRoleToDelete] = useState<Permission | null>(null); // Rol que se va a eliminar
   const [data, setData] = useState<Role[]>([]);
 
   useEffect(() => {
@@ -45,6 +47,7 @@ export default function UsersPage() {
 
   const deletePermission = (id: number) => {
     setPermissions((prev) => prev.filter((p) => p.id !== id));
+    setDeleteDialogOpen(false); // Cerrar el diálogo después de eliminar
   };
 
   const openModal = (permission?: Permission) => {
@@ -57,6 +60,13 @@ export default function UsersPage() {
   const savePermission = () => {
     if (!currentPermission || !currentPermission.role || !currentPermission.screen) {
       setErrorMessage("No se permiten caracteres especiales ni campos vacíos.");
+      return;
+    }
+
+    // Verificar si el rol ya existe
+    const roleExists = permissions.some((permission) => permission.role === currentPermission.role);
+    if (roleExists) {
+      setErrorMessage("El rol ya existe.");
       return;
     }
 
@@ -88,6 +98,16 @@ export default function UsersPage() {
     }
     setWarningMessage(null);
     setCurrentPermission((prev) => prev ? { ...prev, role: value } : prev);
+  };
+
+  const confirmDelete = (permission: Permission) => {
+    setRoleToDelete(permission); // Guardar el rol a eliminar
+    setDeleteDialogOpen(true); // Abrir el diálogo de confirmación
+  };
+
+  const cancelDelete = () => {
+    setDeleteDialogOpen(false); // Cerrar el diálogo sin eliminar
+    setRoleToDelete(null);
   };
 
   return (
@@ -128,7 +148,7 @@ export default function UsersPage() {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem onClick={() => openModal(permission)}>Editar</DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => deletePermission(permission.id)}>Eliminar</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => confirmDelete(permission)}>Eliminar</DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TooltipTrigger>
@@ -143,7 +163,23 @@ export default function UsersPage() {
           </tbody>
         </table>
 
-        {/* MODAL */}
+        {/* MODAL DE CONFIRMACIÓN DE ELIMINACIÓN */}
+        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Confirmar Eliminación</DialogTitle>
+            </DialogHeader>
+            <div>
+              <p>¿Estás seguro de que deseas eliminar este ROL? Esta acción no se puede revertir.</p>
+            </div>
+            <div className="flex space-x-2 mt-4">
+              <Button variant="outline" className="w-full" onClick={cancelDelete}>CANCELAR</Button>
+              <Button onClick={() => roleToDelete && deletePermission(roleToDelete.id)} className="w-full bg-red-600">ELIMINAR</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* MODAL DE EDICIÓN */}
         <Dialog open={modalOpen} onOpenChange={setModalOpen}>
           <DialogContent>
             <DialogHeader>

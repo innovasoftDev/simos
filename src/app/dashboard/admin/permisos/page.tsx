@@ -21,6 +21,7 @@ export default function UsersPage() {
   const [permissions, setPermissions] = useState<Permission[]>([]);
   const [currentPermission, setCurrentPermission] = useState<Permission | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false); // Modal de confirmación de eliminación
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { theme } = useTheme();
 
@@ -28,10 +29,6 @@ export default function UsersPage() {
     setPermissions([
       { id: 1, role: "Administrador", screen: "Dashboard", permissions: ["INSERTAR"] },
       { id: 2, role: "Usuario", screen: "Servicio", permissions: ["CONSULTAR"] },
-      { id: 3, role: "Administrador", screen: "Errores", permissions: ["ELIMINAR"] },
-      { id: 4, role: "Usuario", screen: "Alertas", permissions: ["ACTUALIZAR"] },
-      { id: 5, role: "Administrador", screen: "Servidores", permissions: ["ELIMINAR"] },
-      { id: 6, role: "Usuario", screen: "Pantallas", permissions: ["ACTUALIZAR"] },
     ]);
   }, []);
 
@@ -52,12 +49,18 @@ export default function UsersPage() {
 
   const deletePermission = (id: number) => {
     setPermissions((prev) => prev.filter((p) => p.id !== id));
+    setDeleteModalOpen(false); // Cierra el modal después de eliminar
   };
 
   const openModal = (permission?: Permission) => {
     setCurrentPermission(permission || { id: 0, role: "", screen: "", permissions: ["INSERTAR"] });
     setErrorMessage(null);
     setModalOpen(true);
+  };
+
+  const openDeleteModal = (permission: Permission) => {
+    setCurrentPermission(permission);
+    setDeleteModalOpen(true);
   };
 
   const savePermission = () => {
@@ -79,6 +82,10 @@ export default function UsersPage() {
     setModalOpen(false);
     setErrorMessage(null);
     setCurrentPermission(null); // Limpia los datos del formulario al cancelar
+  };
+
+  const cancelDeleteModal = () => {
+    setDeleteModalOpen(false); // Cierra el modal de eliminación sin hacer cambios
   };
 
   return (
@@ -120,7 +127,7 @@ export default function UsersPage() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem onClick={() => openModal(permission)}>Editar</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => deletePermission(permission.id)}>Eliminar</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => openDeleteModal(permission)}>Eliminar</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </td>
@@ -129,7 +136,7 @@ export default function UsersPage() {
           </tbody>
         </table>
 
-        {/* MODAL */}
+        {/* MODAL DE PERMISO */}
         <Dialog open={modalOpen} onOpenChange={setModalOpen}>
           <DialogContent>
             <DialogHeader>
@@ -185,6 +192,20 @@ export default function UsersPage() {
             <div className="flex space-x-2 mt-4">
               <Button variant="outline" className="w-full" onClick={cancelModal}>CANCELAR</Button>
               <Button onClick={savePermission} className="w-full bg-blue-500">GUARDAR</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* MODAL DE CONFIRMACION DE ELIMINACION */}
+        <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>¿Estás seguro de eliminar los permisos de este ROL?</DialogTitle>
+            </DialogHeader>
+            <p>Esta acción no se puede revertir.</p>
+            <div className="flex space-x-2 mt-4">
+              <Button variant="outline" className="w-full" onClick={cancelDeleteModal}>CANCELAR</Button>
+              <Button onClick={() => currentPermission && deletePermission(currentPermission.id)} className="w-full bg-red-600">ELIMINAR</Button>
             </div>
           </DialogContent>
         </Dialog>
