@@ -21,20 +21,37 @@ const formSchema = z.object({
   email: z
     .string()
     .min(1, { message: 'Por favor ingrese su correo electrónico.' })
-    .email({ message: 'Dirección de correo electrónico no válida' }),
+    .max(30, { message: 'Máximo 30 caracteres.' })
+    .email({ message: 'Dirección de correo electrónico no válida' })
+    .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, { message: 'Correo inválido.' }),
 })
 
 export function ForgotForm({ className, ...props }: ForgotFormProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const [charWarning, setCharWarning] = useState('');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { email: '' },
   })
 
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    
+    if (/[^a-zA-Z0-9.@+-]/.test(value)) {
+      setCharWarning('¡No se permiten caracteres especiales!');
+      return;
+    }
+    if (value.length > 30) {
+      setCharWarning('Máximo 30 caracteres permitidos.');
+      return;
+    }
+    setCharWarning('');
+    form.setValue('email', value, { shouldDirty: true, shouldValidate: true });
+  }
+
   function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    // eslint-disable-next-line no-console
     console.log(data)
 
     setTimeout(() => {
@@ -54,9 +71,10 @@ export function ForgotForm({ className, ...props }: ForgotFormProps) {
                 <FormItem className='space-y-1'>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder='nombre@ejemplo.com' {...field} />
+                    <Input placeholder='nombre@ejemplo.com' {...field} onChange={handleChange} />
                   </FormControl>
-                  <FormMessage />
+                  {charWarning && <p className='text-red-700 text-sm font-medium'>{charWarning}</p>}
+                  <FormMessage className='text-red-700 text-sm font-medium' />
                 </FormItem>
               )}
             />

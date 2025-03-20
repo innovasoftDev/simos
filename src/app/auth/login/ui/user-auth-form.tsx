@@ -64,7 +64,7 @@ export default function UserAuthForm() {
   ) => {
     const value = e.target.value;
 
-    if (/[^a-zA-Z0-9.@+-]/.test(value) && fieldName === "email") {
+    if (/[^a-zA-Z0-9.@]/.test(value) && fieldName === "email") {
       setCharWarning((prev) => ({ ...prev, [fieldName]: "¡No se permiten caracteres especiales!" }));
       return;
     }
