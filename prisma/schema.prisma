@@ -10,17 +10,12 @@ datasource db {
    */
 }
 
-enum Role {
-  admin
-  user
-}
-
 model User {
-  id_user              String                 @id @default(uuid())
+  id_user              String        @id @default(uuid())
   firstName            String?
   lastName             String?
-  username             String                 @unique @db.VarChar(70)
-  email                String                 @unique
+  username             String        @unique @db.VarChar(70)
+  email                String        @unique
   emailVerified        DateTime?
   phoneNumber          String?
   password             String
@@ -28,46 +23,131 @@ model User {
   status               String
   created              DateTime?
   updated              DateTime?
-  rol                  TBL_USR_ROLES          @relation(fields: [tbl_usr_roles_id_rol], references: [id_rol])
+  rol                  TBL_USR_ROLES @relation(fields: [tbl_usr_roles_id_rol], references: [id_rol])
   tbl_usr_roles_id_rol String
-  historial_contra     TBL_HIST_CONTRASENIA[]
-}
 
-model TBL_OBJETOS {
-  id_objeto   String         @id @default(uuid())
-  objeto      String         @db.VarChar(70)
-  descripcion String         @db.VarChar(70)
-  tipo_objeto String         @db.VarChar(20)
-  permisos    TBL_PERMISOS[]
-}
+  Grup_Servidores Grup_Servidor[]
 
-model TBL_HIST_CONTRASENIA {
-  id_historial_contra    String  @id @default(uuid())
-  contrasenia            String? @db.VarChar(255)
-  user                   User?   @relation(fields: [tbl_usuario_id_usuario], references: [id_user])
-  tbl_usuario_id_usuario String?
-}
-
-model TBL_PERMISOS {
-  id_permisos           String        @id @default(uuid())
-  permiso_insertar      String        @db.VarChar(50)
-  permiso_consultar     String        @db.VarChar(50)
-  permiso_actualizar    String        @db.VarChar(50)
-  permiso_eliminar      String        @db.VarChar(50)
-  creador               String        @db.VarChar(50)
-  modificado_por        String        @db.VarChar(50)
-  fecha_creacion        DateTime      @db.DateTime(0)
-  fecha_modificacion    DateTime      @updatedAt @db.Timestamp(0)
-  tbl_usr_roles_id_rol  String
-  tbl_objetos_id_objeto String
-  rol                   TBL_USR_ROLES @relation(fields: [tbl_usr_roles_id_rol], references: [id_rol])
-  objeto                TBL_OBJETOS   @relation(fields: [tbl_objetos_id_objeto], references: [id_objeto])
+  @@map("Users")
 }
 
 model TBL_USR_ROLES {
-  id_rol      String         @id @default(uuid())
-  rol         Role           @unique @default(user)
-  descripcion String?        @db.VarChar(70)
-  permisos    TBL_PERMISOS[]
+  id_rol      String    @id @default(uuid())
+  rol         String    @unique
+  descripcion String?   @db.VarChar(70)
   user        User[]
+  Permisos    Permiso[]
+
+  @@map("TBL_USR_ROLES")
+}
+
+/**
+ * --------------------------------------------------------------------------------
+ */
+model Objeto {
+  Id_Objeto     Int     @id @default(autoincrement())
+  Nombre_Objeto String
+  Descripcion   String?
+  Tipo_Objeto   String
+
+  Permisos Permiso[]
+
+  @@map("Objeto")
+}
+
+model Permiso {
+  Id_Permiso        Int     @id @default(autoincrement())
+  Permiso_Inserta   Boolean
+  Permiso_Actualiza Boolean
+  Permiso_Elimina   Boolean
+  Permiso_Consulta  Boolean
+
+  Objeto          Objeto        @relation(fields: [ObjetoId], references: [Id_Objeto])
+  ObjetoId        Int
+  TBL_USR_ROLES   TBL_USR_ROLES @relation(fields: [TBL_USR_ROLESId], references: [id_rol])
+  TBL_USR_ROLESId String
+
+  @@map("Permisos")
+}
+
+/**
+ * --------------------------------------------------------------------------------
+ */
+model Grup_Servidor {
+  Id_Grup_Servidor        Int      @id @default(autoincrement())
+  Nombre_Grupo_Servidores String
+  Descripcion             String?
+  Fecha_Creacion          DateTime
+
+  user       User       @relation(fields: [userId], references: [id_user])
+  userId     String
+  Servidores Servidor[]
+
+  @@map("Grup_Servidores")
+}
+
+model Servidor {
+  Id_Servidor     Int      @id @default(autoincrement())
+  Nombre_Servidor String
+  Descripcion     String?
+  Fecha_Creacion  DateTime
+
+  Grup_Servidor   Grup_Servidor @relation(fields: [Grup_ServidorId], references: [Id_Grup_Servidor])
+  Grup_ServidorId Int
+
+  Servicios        Servicio[]
+  Errores_Servidor Error_Servidor[]
+  Alertas_Servidor Alerta_Servidor[]
+  Dato_Servidor    Dato_Servidor?
+
+  @@map("Servidores")
+}
+
+model Servicio {
+  Id_Servicio     Int      @id @default(autoincrement())
+  Nombre_Servicio String
+  Descripcion     String?
+  Fecha_Creacion  DateTime
+
+  Servidor   Servidor @relation(fields: [ServidorId], references: [Id_Servidor])
+  ServidorId Int
+
+  @@map("Servicios")
+}
+
+model Error_Servidor {
+  Id_Error_Servidor Int      @id @default(autoincrement())
+  Codigo_Error      String
+  Descripcion_Error String?
+  Fecha_Creacion    DateTime
+
+  Servidor   Servidor @relation(fields: [ServidorId], references: [Id_Servidor])
+  ServidorId Int
+
+  @@map("Errores_Servidor")
+}
+
+model Alerta_Servidor {
+  Id_Alerta_Servidor Int      @id @default(autoincrement())
+  Codigo_Alerta      String
+  Descripcion_Alerta String?  @unique
+  Fecha_Creacion     DateTime
+
+  Servidor   Servidor @relation(fields: [ServidorId], references: [Id_Servidor])
+  ServidorId Int
+
+  @@map("Alertas_Servidor")
+}
+
+model Dato_Servidor {
+  Id_Dato_Servidor  Int     @id @default(autoincrement())
+  Sistema_Operativo String
+  Tipo_Sevidor      String?
+  URL               String
+  Estado            Boolean
+
+  Servidor   Servidor @relation(fields: [ServidorId], references: [Id_Servidor])
+  ServidorId Int      @unique
+
+  @@map("Dato_Servidor")
 }
