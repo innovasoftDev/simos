@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Role } from "../data/schema";
 import { toast } from "sonner";
-import { DeleteUser } from "@/actions/admin/users/delete-user";
+import { DeleteRole } from "@/actions/admin/roles/delete-role";
 import useSWR from 'swr'
 
 interface Props {
@@ -23,8 +23,8 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   const { mutate } = useSWR("/dashboard/admin/roles", fetch);
 
   const handleDelete = async () => {
-    if (value.trim() !== currentRow.id_rol) return;
-    const result = await DeleteUser(value.trim());
+    if (value.trim() !== currentRow.rol) return;
+    const result = await DeleteRole(value.trim());
 
     if (result.ok) {
       mutate();
@@ -45,7 +45,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={value.trim() !== currentRow.id_rol}
+      disabled={value.trim() !== currentRow.rol}
       title={
         <span className="text-destructive">
           <TriangleAlert
