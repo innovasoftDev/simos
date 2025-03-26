@@ -38,12 +38,12 @@ const formSchema = z
       .string()
       .min(1, { message: "Nombre requerido." })
       .max(30, { message: "Máximo 30 caracteres." })
-      .regex(/^[a-zA-Z\s]*$/, { message: "No se permiten caracteres especiales." }),
+      .regex(/^[a-zA-Z0-9_]+$/, { message: "No se permiten caracteres especiales." }),
     lastName: z
       .string()
       .min(1, { message: "Apellidos requerido." })
       .max(30, { message: "Máximo 30 caracteres." })
-      .regex(/^[a-zA-Z\s]*$/, { message: "No se permiten caracteres especiales." }),
+      .regex(/^[a-zA-Z0-9_]+$/, { message: "No se permiten caracteres especiales." }),
     username: z
       .string()
       .min(1, { message: "Usuario requerido." })
@@ -52,18 +52,36 @@ const formSchema = z
     phoneNumber: z
       .string()
       .min(1, { message: "Teléfono requerido." })
-      .max(30, { message: "Máximo 30 caracteres." })
+      .max(8, { message: "Máximo 8 caracteres." })
       .regex(/^[0-9]+$/, { message: "Solo números permitidos." }),
     email: z
       .string()
       .min(1, { message: "Email requerido." })
       .email({ message: "Formato de email inválido." })
       .max(30, { message: "Máximo 30 caracteres." }),
-    password: z.string().transform((pwd) => pwd.trim()),
+    password: z
+      .string()
+      .regex(/[A-Z]/, { message: "Debe contener al menos una letra mayúscula." }) 
+      .min(8, { message: "Debe tener al menos 8 caracteres." })
+      .regex(/[a-zA-Z]/, { message: "Debe contener al menos una letra." })
+      .regex(/\d/, { message: "Debe contener al menos un número." })
+      .regex(/[^a-zA-Z0-9]/, { message: "Debe contener al menos un carácter especial." }) 
+      .transform((pwd) => pwd.trim()),
     tbl_usr_roles_id_rol: z.string().min(1, { message: "Role requerido." }),
-    confirmPassword: z.string().transform((pwd) => pwd.trim()),
+    confirmPassword: z
+      .string() 
+      .regex(/[A-Z]/, { message: "Debe contener al menos una letra mayúscula." })
+      .min(8, { message: "Debe tener al menos 8 caracteres." })
+      .regex(/[a-zA-Z]/, { message: "Debe contener al menos una letra." })
+      .regex(/\d/, { message: "Debe contener al menos un número." })
+      .regex(/[^a-zA-Z0-9]/, { message: "Debe contener al menos un carácter especial." })       
+      .transform((pwd) => pwd.trim()),
     isEdit: z.boolean(),
   })
+
+
+
+
   .superRefine(({ isEdit, password, confirmPassword }, ctx) => {
     // Validación de contraseña mínima
     if (!isEdit || (isEdit && password !== "")) {
@@ -151,7 +169,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
 
     // Validación de caracteres especiales
     if (fieldName === "firstName" || fieldName === "lastName") {
-      if (/[^a-zA-Z\s]/.test(value)) {
+      if (/[^a-zA-Z0-9_]/.test(value)) {
         e.preventDefault();
         setSpecialCharError((prev) => ({
           ...prev,
@@ -173,13 +191,22 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
       }
     }
 
-    // Validación para teléfono (solo números)
+    // Validación para teléfono (solo números y máximo 8 caracteres)
     if (fieldName === "phoneNumber") {
       if (/[^0-9]/.test(value)) {
         e.preventDefault();
         setSpecialCharError((prev) => ({
           ...prev,
           [fieldName]: "Solo números permitidos.",
+        }));
+        return;
+      }
+      // Bloquear la entrada si el valor tiene más de 8 caracteres
+      if (value.length > 8) {
+        e.preventDefault();
+        setSpecialCharError((prev) => ({
+          ...prev,
+          [fieldName]: "Máximo 8 caracteres.",
         }));
         return;
       }
@@ -223,7 +250,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
         e.preventDefault();
         setSpecialCharError((prev) => ({
           ...prev,
-          [fieldName]: "No se permiten caracteres especiales.",
+          [fieldName]: "No se permiten números ni, caracteres especiales.",
         }));
       }
     }
@@ -265,7 +292,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
     if (result.ok) {
       toast.success(isEdit ? "Usuario editado" : "Usuario creado");
     } else {
-      toast.error("¡Ocurrió un error!");
+      toast.error("¡Ya existe un usuario con ese mismo nombre, porfavor ingresar uno diferente!");
     }
 
     form.reset();
@@ -273,6 +300,8 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
   };
 
   const isPasswordTouched = !!form.formState.dirtyFields.password;
+
+
 
 
   return (
@@ -421,7 +450,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     <FormLabel className="col-span-2 text-right">Teléfono</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="+123456789"
+                        placeholder="12345678"
                         className="col-span-4"
                         {...field}
                         value={field.value}

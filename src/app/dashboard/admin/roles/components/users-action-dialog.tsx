@@ -35,12 +35,12 @@ const formSchema = z
       .string()
       .min(1, { message: "Rol es requerido." })
       .max(30, { message: "Máximo 30 caracteres." })
-      .regex(/^[a-zA-Z\s]*$/, { message: "No se permiten caracteres especiales." }),
+      .regex(/^[a-zA-Z0-9_ ]+$/, { message: "No se permiten caracteres especiales." }),
     descripcion: z
       .string()
       .min(1, { message: "Descripción es requerido." })
       .max(200, { message: "Máximo 200 caracteres." })
-      .regex(/^[a-zA-Z0-9_ ]+$/, { message: "Solo letras, números y guion bajo." }),    
+      .regex(/^[a-zA-Z0-9_ ]+$/, { message: "No se permiten caracteres especiales." }),    
     isEdit: z.boolean(),
   })
 
@@ -80,7 +80,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
 
     // Validación de caracteres especiales
     if (fieldName === "id_rol" || fieldName === "descripcion") {
-      if (/[^a-zA-Z\s]/.test(value)) {
+      if (/[^a-zA-Z0-9_ ]/.test(value)) {
         e.preventDefault();
         setSpecialCharError((prev) => ({
           ...prev,
@@ -96,7 +96,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
         e.preventDefault();
         setSpecialCharError((prev) => ({
           ...prev,
-          [fieldName]: "Solo letras, números y guion bajo.",
+          [fieldName]: "No se permiten caracteres especiales.",
         }));
         return;
       }
@@ -124,11 +124,11 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
     const key = e.key;
 
     if (fieldName === "id_rol" || fieldName === "descripcion") {
-      if (/[^a-zA-Z\s]/.test(key) && key !== "Backspace") {
+      if (/[^a-zA-Z0-9_ ]+$/.test(key) && key !== "Backspace") {
         e.preventDefault();
         setSpecialCharError((prev) => ({
           ...prev,
-          [fieldName]: "No se permiten caracteres especiales.",
+          [fieldName]: "No se permiten caracteres especiales..",
         }));
       }
     }
@@ -138,7 +138,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
         e.preventDefault();
         setSpecialCharError((prev) => ({
           ...prev,
-          [fieldName]: "Solo letras, números y guion bajo.",
+          [fieldName]: "No se permiten caracteres especiales.",
         }));
       }
     }
@@ -151,7 +151,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
     if (result.ok) {
       toast.success(isEdit ? "Rol editado" : "Rol creado");
     } else {
-      toast.error("¡Ocurrió un error!");
+      toast.error("¡Ya existe un rol con este mismo nombre, ingrese uno diferente!");
     }
 
     form.reset();
@@ -220,7 +220,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     <FormLabel className="col-span-2 text-right">Nombre del Rol</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Doe"
+                        placeholder="rol"
                         className="col-span-4"
                         autoComplete="off"
                         {...field}
@@ -248,7 +248,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     <FormLabel className="col-span-2 text-right">Descripción</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="john_doe"
+                        placeholder="descripción rol"
                         className="col-span-4"
                         {...field}
                         value={field.value}
