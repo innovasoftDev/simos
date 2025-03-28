@@ -27,13 +27,12 @@ const formSchema = z.object({
     .min(1, { message: "Por favor ingresa tu correo electrónico." })
     .max(20, { message: "Máximo 30 caracteres." })
     .email({ message: "Dirección de correo electrónico no válida" })
-    .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, { message: "Correo inválido." }),
+    .regex(/^[a-zA-Z0-9._%+-]+@*[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, { message: "Correo inválido." }),
   password: z
     .string()
     .min(1, { message: "Por favor ingresa tu contraseña." })
     .min(7, { message: "Debe tener al menos 7 caracteres." })
     .max(30, { message: "Máximo 30 caracteres." })
-    .regex(/^[a-zA-Z0-9]+$/, { message: "No se permiten caracteres especiales." }),
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
@@ -69,7 +68,7 @@ export default function UserAuthForm() {
       return;
     }
 
-    if (/[^a-zA-Z0-9]/.test(value) && fieldName === "password") {
+    if (/[^a-zA-Z0-9.*]/.test(value) && fieldName === "password") {
       setCharWarning((prev) => ({ ...prev, [fieldName]: "¡No se permiten caracteres especiales!" }));
       return;
     }
