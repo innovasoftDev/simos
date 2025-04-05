@@ -21,6 +21,7 @@ import clsx from "clsx";
 import { PasswordInput } from "../../../../components/password-input";
 import Link from "next/link";
 
+// Validación SOLO para email
 const formSchema = z.object({
   email: z
     .string()
@@ -28,11 +29,7 @@ const formSchema = z.object({
     .max(20, { message: "Máximo 30 caracteres." })
     .email({ message: "Dirección de correo electrónico no válida" })
     .regex(/^[a-zA-Z0-9._%+-]+@*[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, { message: "Correo inválido." }),
-  password: z
-    .string()
-    .min(1, { message: "Por favor ingresa tu contraseña." })
-    .min(7, { message: "Debe tener al menos 7 caracteres." })
-    .max(30, { message: "Máximo 30 caracteres." })
+  password: z.string(), // Sin validaciones
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
@@ -46,7 +43,7 @@ export default function UserAuthForm() {
 
   const defaultValues = {
     email: "admin@google.com",
-    password: "12345678",
+    password: "12345678", 
   };
 
   const form = useForm<UserFormValue>({
@@ -64,20 +61,15 @@ export default function UserAuthForm() {
     const value = e.target.value;
 
     if (/[^a-zA-Z0-9.@]/.test(value) && fieldName === "email") {
-      setCharWarning((prev) => ({ ...prev, [fieldName]: "¡No se permiten caracteres especiales!" }));
+      setCharWarning((prev) => ({
+        ...prev,
+        [fieldName]: "¡No se permiten caracteres especiales!",
+      }));
       return;
     }
 
-    if (/[^a-zA-Z0-9.*]/.test(value) && fieldName === "password") {
-      setCharWarning((prev) => ({ ...prev, [fieldName]: "¡No se permiten caracteres especiales!" }));
-      return;
-    }
-
-    if (value.length > 30) {
-      setCharWarning((prev) => ({ ...prev, [fieldName]: "" }));
-    } else {
-      setCharWarning((prev) => ({ ...prev, [fieldName]: "" }));
-    }
+    
+    setCharWarning((prev) => ({ ...prev, [fieldName]: "" }));
 
     setValue(fieldName, value, { shouldDirty: true, shouldValidate: true });
   };
@@ -108,7 +100,11 @@ export default function UserAuthForm() {
                     onChange={(e) => handleChange(e, field.name)}
                   />
                 </FormControl>
-                {charWarning.email && <p className="text-red-700 text-sm font-medium">{charWarning.email}</p>}
+                {charWarning.email && (
+                  <p className="text-red-700 text-sm font-medium">
+                    {charWarning.email}
+                  </p>
+                )}
                 <FormMessage className="text-red-700 text-sm font-medium" />
               </FormItem>
             )}
@@ -131,12 +127,15 @@ export default function UserAuthForm() {
                 <FormControl>
                   <PasswordInput
                     placeholder="Ingrese su contraseña..."
-                    maxLength={31}
                     {...field}
                     onChange={(e) => handleChange(e, field.name)}
                   />
                 </FormControl>
-                {charWarning.password && <p className="text-red-700 text-sm font-medium">{charWarning.password}</p>}
+                {charWarning.password && (
+                  <p className="text-red-700 text-sm font-medium">
+                    {charWarning.password}
+                  </p>
+                )}
                 <FormMessage className="text-red-700 text-sm font-medium" />
               </FormItem>
             )}
