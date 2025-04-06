@@ -26,7 +26,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
     if (value.trim() !== currentRow.username) return;
     const result = await DeleteUser(value.trim());
 
-    if (result.ok) {
+    /* if (result.ok) {
       mutate();
       toast.error("Eliminar", {
         description: "¡Se ha eliminado el usuario!",
@@ -35,8 +35,9 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       toast.error("Eliminar", {
         description: "¡Ocurrió un error!",
       });
-    }
+    } */
 
+    if (result.ok) {location.reload();}
     onOpenChange(false);
   };
 

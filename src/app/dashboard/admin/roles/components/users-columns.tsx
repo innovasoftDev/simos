@@ -39,7 +39,7 @@ export const columns: ColumnDef<Role>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-  {
+  /* {
     accessorKey: "id_rol",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ID" />
@@ -55,7 +55,7 @@ export const columns: ColumnDef<Role>[] = [
       ),
     },
     enableHiding: false,
-  },
+  }, */
   {
     accessorKey: "rol",
     header: ({ column }) => (

@@ -60,9 +60,9 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       desc={
         <div className="space-y-4">
           <p className="mb-2">
-            ¿Estás segura de que quieres eliminar este rol?
+            ¿Estás segura de que quieres eliminar esta pantalla?
             <br />
-            Esta acción eliminará permanentemente al rol {" "}
+            Esta acción eliminará permanentemente la pantalla {" "}
             <span className="font-bold">
               {currentRow.Id_Objeto}
             </span>{" "}
@@ -72,11 +72,11 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
           </p>
 
           <Label className="my-2">
-            Nombre de rol:
+            ID de pantalla:
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder="Introduzca el nombre de rol para confirmar la eliminación."
+              placeholder="Introduzca el ID de pantalla para confirmar la eliminación."
             />
           </Label>
 

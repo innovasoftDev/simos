@@ -297,12 +297,13 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
   const onSubmit = async (values: UserForm) => {
     const result = await AddOrUpdateUser(values);
 
-    if (result.ok) {
+    /* if (result.ok) {
       toast.success(isEdit ? "Usuario editado" : "Usuario creado");
     } else {
       toast.error("¡Ya existe un usuario con ese mismo nombre, porfavor ingresar uno diferente!");
-    }
+    } */
 
+    if (result.ok) {location.reload();}
     form.reset();
     onOpenChange(false);
   };

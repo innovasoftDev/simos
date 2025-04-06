@@ -2,7 +2,7 @@ import { Cross2Icon } from '@radix-ui/react-icons'
 import { Table } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { userTypes } from '../data/data'
+import { pantallaStatus } from '../data/data'
 import { DataTableFacetedFilter } from './data-table-faceted-filter'
 import { DataTableViewOptions } from './data-table-view-options'
 
@@ -21,19 +21,19 @@ export function DataTableToolbar<TData>({
         <Input
           placeholder='Filtrar usuarios...'
           value={
-            (table.getColumn('id_rol')?.getFilterValue() as string) ?? ''
+            (table.getColumn('Id_Objeto')?.getFilterValue() as string) ?? ''
           }
           onChange={(event) =>
-            table.getColumn('id_rol')?.setFilterValue(event.target.value)
+            table.getColumn('Id_Objeto')?.setFilterValue(event.target.value)
           }
           className='h-8 w-[150px] lg:w-[250px]'
         />
         <div className='flex gap-x-2'>
-          {table.getColumn('rol') && (
+          {table.getColumn('Nombre_Objeto') && (
             <DataTableFacetedFilter
-              column={table.getColumn('rol')}
-              title='Rol'
-              options={userTypes.map((t) => ({ ...t }))}
+              column={table.getColumn('Nombre_Objeto')}
+              title='Pantalla'
+              options={pantallaStatus.map((t) => ({ ...t }))}
             />
           )}
         </div>

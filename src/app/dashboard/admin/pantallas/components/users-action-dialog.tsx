@@ -39,12 +39,7 @@ const formSchema = z.object({
       message: "No se permiten caracteres especiales.",
     }),
   Descripcion: z.nullable(
-    z
-      .string()
-      .max(200, { message: "Máximo 200 caracteres." })
-      .regex(/^[a-zA-Z0-9_ ]+$/, {
-        message: "No se permiten caracteres especiales.",
-      })
+    z.string().max(200, { message: "Máximo 200 caracteres." })
   ),
   Tipo_Objeto: z
     .string()
@@ -54,13 +49,7 @@ const formSchema = z.object({
       message: "No se permiten caracteres especiales.",
     }),
   Estado: z
-    .string()
-    .min(1, { message: "Estado es requerido." })
-    .max(200, { message: "Máximo 200 caracteres." })
-    .regex(/^[a-zA-Z0-9_ ]+$/, {
-      message: "No se permiten caracteres especiales.",
-    }),
-
+    .string(),
   isEdit: z.boolean(),
 });
 
@@ -75,6 +64,7 @@ interface Props {
 export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
   const isEdit = !!currentRow;
   const [specialCharError, setSpecialCharError] = useState({
+    Id_Objeto: 0,
     Nombre_Objeto: "",
     Descripcion: "",
     Tipo_Objeto: "",
@@ -89,6 +79,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           isEdit,
         }
       : {
+          Id_Objeto: 1,
           Nombre_Objeto: "",
           Descripcion: "",
           Tipo_Objeto: "",
@@ -119,7 +110,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
 
       // Validación para el descripcion (solo letras, números, guion bajo)
       if (fieldName === "Nombre_Objeto") {
-        if (/[^a-zA-Z0-9_]/.test(value)) {
+        if (/[^a-zA-Z0-9_ ]/.test(value)) {
           e.preventDefault();
           setSpecialCharError((prev) => ({
             ...prev,
@@ -166,7 +157,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
       }
 
       if (fieldName === "Nombre_Objeto") {
-        if (/[^a-zA-Z0-9_]/.test(key) && key !== "Backspace") {
+        if (/[^a-zA-Z0-9_ ]/.test(key) && key !== "Backspace") {
           e.preventDefault();
           setSpecialCharError((prev) => ({
             ...prev,
@@ -177,6 +168,10 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
     };
 
   const onSubmit = async (values: UserForm) => {
+
+    if (values.isEdit) {
+      
+    } 
     const result = await AddOrUpdatePantalla(values);
 
     /* if (result.ok) {      
@@ -184,6 +179,8 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
     } else {
       toast.error("¡Ya existe un rol con este mismo nombre, ingrese uno diferente!");
     }     */
+
+    console.log("Action");
     form.reset();
     onOpenChange(false);
 
@@ -199,6 +196,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
         form.reset();
         onOpenChange(state);
         setSpecialCharError({
+          Id_Objeto: 0,
           Nombre_Objeto: "",
           Descripcion: "",
           Tipo_Objeto: "",
@@ -214,7 +212,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           <DialogDescription>
             {isEdit
               ? "Actualiza las pantallas aquí."
-              : "Crea un nuevo rol aquí."}{" "}
+              : "Crea una nueva pantalla aquí."}{" "}
             Haga clic en guardar cuando haya terminado.
           </DialogDescription>
         </DialogHeader>
@@ -225,6 +223,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-4 p-0.5"
             >
+              
               {/* Pantalla */}
               <FormField
                 control={form.control}
@@ -283,6 +282,36 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                   </FormItem>
                 )}
               />
+
+              {/* Tipo Objeto */}
+              <FormField
+                control={form.control}
+                name="Tipo_Objeto"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-6 items-center gap-x-4">
+                    <FormLabel className="col-span-2 text-right">
+                      Tipo_Objeto
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Nombre de pantalla"
+                        className="col-span-4"
+                        autoComplete="off"
+                        {...field}
+                        value={field.value}
+                        onChange={handleInputChange("Tipo_Objeto")}
+                        onKeyDown={preventSpecialChars("Tipo_Objeto")}
+                      />
+                    </FormControl>
+                    {specialCharError.Tipo_Objeto && (
+                      <p className="text-red-500 col-span-4 col-start-3 text-sm">
+                        {specialCharError.Tipo_Objeto}
+                      </p>
+                    )}
+                    <FormMessage className="col-span-4 col-start-3" />
+                  </FormItem>
+                )}
+              />
               {/* Estado */}
               <FormField
                 control={form.control}
@@ -290,7 +319,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
                     <FormLabel className="col-span-2 text-right">
-                    Estado
+                      Estado
                     </FormLabel>
                     <SelectDropdown
                       defaultValue={field.value}
@@ -317,6 +346,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
               form.reset();
               onOpenChange(false); // Cierra el modal sin guardar
               setSpecialCharError({
+                Id_Objeto: 0,
                 Nombre_Objeto: "",
                 Descripcion: "",
                 Tipo_Objeto: "",
