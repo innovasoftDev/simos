@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/auth.config";
 import { revalidatePath } from "next/cache";
 
-export const DeleteRole = async (rol: string) => {
+export const DeletePantalla = async (id_objeto: number) => {
   const session = await auth();
 
   if (session?.user.role !== "admin") {
@@ -14,9 +14,9 @@ export const DeleteRole = async (rol: string) => {
   }
 
   try {
-    await prisma.tBL_USR_ROLES.delete({
+    await prisma.objeto.delete({
       where: {
-        rol: rol,
+        Id_Objeto: id_objeto,
       },
     })
 
@@ -29,7 +29,7 @@ export const DeleteRole = async (rol: string) => {
     console.log(error);
     return {
       ok: false,
-      message: "No se pudo eliminar el role, revisar logs",
+      message: "No se pudo Eliminar el Objeto, revisar logs",
     };
   }
 };

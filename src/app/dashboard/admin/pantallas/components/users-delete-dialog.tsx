@@ -7,15 +7,15 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ConfirmDialog } from "@/components/confirm-dialog";
-import { Role } from "../data/schema";
-import { toast } from "sonner";
-import { DeleteRole } from "@/actions/admin/roles/delete-role";
+import { Pantalla } from "../data/schema";
+//import { toast } from "sonner";
+import { DeletePantalla } from "@/actions/admin/pantallas/delete-pantalla";
 //import useSWR from 'swr'
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  currentRow: Role;
+  currentRow: Pantalla;
 }
 
 export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
@@ -23,8 +23,8 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   //const { mutate } = useSWR("/dashboard/admin/roles", fetch);
 
   const handleDelete = async () => {
-    if (value.trim() !== currentRow.rol) return;
-    const result = await DeleteRole(value.trim());
+    if (parseInt(value.trim()) !== currentRow.Id_Objeto) return;
+    const result = await DeletePantalla(parseInt(value.trim()));
 
     /* if (result.ok) {
       //mutate();
@@ -47,7 +47,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={value.trim() !== currentRow.rol}
+      disabled={parseInt(value.trim()) !== currentRow.Id_Objeto}
       title={
         <span className="text-destructive">
           <TriangleAlert
@@ -64,7 +64,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
             <br />
             Esta acción eliminará permanentemente al rol {" "}
             <span className="font-bold">
-              {currentRow.rol}
+              {currentRow.Id_Objeto}
             </span>{" "}
             del sistema. 
             <br />

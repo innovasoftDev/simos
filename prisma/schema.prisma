@@ -49,7 +49,7 @@ model Objeto {
   Nombre_Objeto String
   Descripcion   String?
   Tipo_Objeto   String
-
+  Estado        String
   Permisos Permiso[]
 
   @@map("Objeto")

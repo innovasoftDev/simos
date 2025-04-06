@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth.config";
-import PantallasPage from "./pantallasPage";
+import PantallasPage from "./components/pantallas";
+
 
 export const metadata = {
   title: "Dashboard : Admin : Pantallas",

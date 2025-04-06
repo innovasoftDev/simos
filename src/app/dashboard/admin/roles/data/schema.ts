@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export type Role = {
-  rol: string;
+  rol: string | undefined;
   id_rol: string;
   descripcion: string | null;
 };

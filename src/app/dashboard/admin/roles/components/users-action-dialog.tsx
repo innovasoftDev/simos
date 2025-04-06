@@ -26,6 +26,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Role } from "../data/schema";
 import { useState } from "react";
 import { AddOrUpdateRole } from "@/actions/admin/roles/add-update-role";
+import { useRouter } from "next/navigation";
 
 const formSchema = z
   .object({
@@ -37,10 +38,11 @@ const formSchema = z
       .max(30, { message: "Máximo 30 caracteres." })
       .regex(/^[a-zA-Z0-9_ ]+$/, { message: "No se permiten caracteres especiales." }),
     descripcion: z
-      .string()
-      .min(1, { message: "Descripción es requerido." })
-      .max(200, { message: "Máximo 200 caracteres." })
-      .regex(/^[a-zA-Z0-9_ ]+$/, { message: "No se permiten caracteres especiales." }),    
+      .nullable(
+        z.string()
+        .min(1, { message: "Descripción es requerido." })
+        .max(200, { message: "Máximo 200 caracteres." })
+        .regex(/^[a-zA-Z0-9_ ]+$/, { message: "No se permiten caracteres especiales." })),                
     isEdit: z.boolean(),
   })
 
@@ -144,18 +146,19 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
     }
   };
 
-  const onSubmit = async (values: UserForm) => {
-    //const result = await AddOrUpdateUser(values);
+  //const router = useRouter();
+  const onSubmit = async (values: UserForm) => {    
     const result = await AddOrUpdateRole(values);
 
-    if (result.ok) {
-      toast.success(isEdit ? "Rol editado" : "Rol creado");
+    /* if (result.ok) {      
+      toast.success(isEdit ? "Rol editado" : "Rol creado");      
     } else {
       toast.error("¡Ya existe un rol con este mismo nombre, ingrese uno diferente!");
-    }
-
+    }     */
     form.reset();
     onOpenChange(false);
+
+    if (result.ok) {location.reload();}
   };
 
   return (
@@ -183,34 +186,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
         <ScrollArea className="h-[26.25rem] w-full pr-4 -mr-4 py-1">
           <Form {...form}>
             <form id="user-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-0.5">
-              {/* Nombre */}
-              {/* <FormField
-                control={form.control}
-                name="id_rol"
-                render={({ field }) => (
-                  <FormItem className="grid grid-cols-6 items-center gap-x-4">
-                    <FormLabel className="col-span-2 text-right">Nombre</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="John"
-                        className="col-span-4"
-                        autoComplete="off"
-                        {...field}
-                        value={field.value}
-                        onChange={handleInputChange("id_rol")}
-                        onKeyDown={preventSpecialChars("id_rol")}
-                      />
-                    </FormControl>
-                    {specialCharError.id_rol && (
-                      <p className="text-red-500 col-span-4 col-start-3 text-sm">
-                        {specialCharError.id_rol}
-                      </p>
-                    )}
-                    <FormMessage className="col-span-4 col-start-3" />
-                  </FormItem>
-                )}
-              /> */}
-  
+
               {/* Rol */}
               <FormField
                 control={form.control}
@@ -238,7 +214,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                   </FormItem>
                 )}
               />
-  
+
               {/* Descripcion */}
               <FormField
                 control={form.control}
@@ -251,7 +227,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                         placeholder="descripción rol"
                         className="col-span-4"
                         {...field}
-                        value={field.value}
+                        value={field.value?.toString()}
                         onChange={handleInputChange("descripcion")}
                         onKeyDown={preventSpecialChars("descripcion")}
                       />

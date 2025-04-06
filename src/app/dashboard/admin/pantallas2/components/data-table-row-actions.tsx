@@ -10,15 +10,19 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useUsersContext } from '../context/users-context'
-import { Pantalla } from '../data/schema'
+import { ScreensDialogType, useScreensContext } from '../context/screens-context'
+import { Screens } from '../data/schema'
+import useDialogState from '@/hooks/use-dialog-state';
+import { ScreenssActionDialog } from './screens-action-dialog';
 
 interface DataTableRowActionsProps {
-  row: Row<Pantalla>
+  row: Row<Screens>
 }
 
-export function DataTableRowActions({ row }: DataTableRowActionsProps) {
-  const { setOpen, setCurrentRow } = useUsersContext()
+// export function DataTableRowActions({ row }: DataTableRowActionsProps) {
+export function DataTableRowActions() {
+  const { setOpen, setCurrentRow } = useScreensContext()
+  const [open, setOpenModal] = useDialogState<ScreensDialogType>(null);
   return (
     <>
       <DropdownMenu modal={false}>
@@ -34,8 +38,8 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
         <DropdownMenuContent align='end' className='w-[160px]'>
           <DropdownMenuItem
             onClick={() => {
-              setCurrentRow(row.original)
-              setOpen('edit')
+              // setCurrentRow(row.original)
+              setOpenModal('edit')
             }}
           >
             Editar
@@ -46,7 +50,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => {
-              setCurrentRow(row.original)
+              // setCurrentRow(row.original)
               setOpen('delete')
             }}
             className='!text-red-500'
@@ -58,6 +62,12 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+       <ScreenssActionDialog
+                      
+                      key="user-add"
+                       open={open === "edit"}
+                       isEdit={open === "edit"}
+                      onOpenChange={() => setOpenModal("edit")}/>
     </>
   )
 }

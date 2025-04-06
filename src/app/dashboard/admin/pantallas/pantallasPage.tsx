@@ -1,38 +1,36 @@
 "use client";
 import { useEffect, useState } from "react";
-import { ShieldPlus } from 'lucide-react';
+import { Monitor } from 'lucide-react';
 import useDialogState from "@/hooks/use-dialog-state";
 import { Button } from "@/components/ui/button";
 import { Main } from "@/components/layout/main";
 import { UsersActionDialog } from "./components/users-action-dialog";
 import { columns } from "./components/users-columns";
 import { UsersDeleteDialog } from "./components/users-delete-dialog";
-import { RolesTable } from "./components/roles-table";
+import { PantallasTable } from "./components/pantallas-table";
 import UsersContextProvider, {
   type UsersDialogType,
 } from "./context/users-context";
-import { Role } from "./data/schema";
-import { getAllRoles } from "@/actions/admin/roles/getAllRoles";
+import { Pantalla } from "./data/schema";
+import { getAllPantallas } from "@/actions/admin/pantallas/getAllPantallas";
 import PageContainer from "@/components/layout/page-container";
-import { useRouter } from "next/navigation";
 
-async function getData(): Promise<Role[]> {
-  const { roles = [] } = await getAllRoles();
+async function getData(): Promise<Pantalla[]> {
+  const { pantallas = [] } = await getAllPantallas();
 
   // Fetch data from your API here.
-  return roles;
+  return pantallas;
 }
 
-export default function RolesPage() {
-  const [data, setData] = useState<Role[]>([]);
-  const router = useRouter();
+export default function PantallasPage() {
+  const [data, setData] = useState<Pantalla[]>([]);
 
   useEffect(() => {
     getData().then(setData);
   }, []);
 
   // Dialog states
-  const [currentRow, setCurrentRow] = useState<Role | null>(null);
+  const [currentRow, setCurrentRow] = useState<Pantalla | null>(null);
   const [open, setOpen] = useDialogState<UsersDialogType>(null);
 
   return (
@@ -44,20 +42,20 @@ export default function RolesPage() {
           <div className="mb-2 flex items-center justify-between space-y-2 flex-wrap">
             <div>
               <h2 className="text-2xl font-bold tracking-tight">
-                Roles
+                Pantallas
               </h2>
               <p className="text-muted-foreground">
-                Administra aquí a sus roles.
+                Administra aquí a sus pantallas.
               </p>
             </div>
             <div className="flex gap-2">
               <Button className="space-x-1" onClick={() => setOpen("add")}>
-                <span>Agregar Role</span> <ShieldPlus size={18} />
+                <span>Agregar Pantalla</span> <Monitor size={18} />
               </Button>
             </div>
           </div>
           <div className="-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0">
-            <RolesTable data={data} columns={columns} />
+            <PantallasTable data={data} columns={columns} />
           </div>
         </Main>
 
@@ -70,7 +68,7 @@ export default function RolesPage() {
         {currentRow && (
           <>
             <UsersActionDialog
-              key={`user-edit-${currentRow.id_rol}`}
+              key={`user-edit-${currentRow.Id_Objeto}`}
               open={open === "edit"}
               onOpenChange={() => {
                 setOpen("edit");
@@ -82,7 +80,7 @@ export default function RolesPage() {
             />
 
             <UsersDeleteDialog
-              key={`user-delete-${currentRow.id_rol}`}
+              key={`user-delete-${currentRow.Id_Objeto}`}
               open={open === "delete"}
               onOpenChange={() => {
                 setOpen("delete");

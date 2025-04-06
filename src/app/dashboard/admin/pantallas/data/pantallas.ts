@@ -14,12 +14,9 @@ export const users = Array.from({ length: 20 }, () => {
     phoneNumber: faker.phone.number({ style: 'international' }),
     status: faker.helpers.arrayElement([
       'active',
-      'inactive',
-/*       'invited',
-      'suspended', */
+      'inactive'
     ]),
     role: faker.helpers.arrayElement([
-      'superadmin',
       'admin',
       'normal'
     ]),

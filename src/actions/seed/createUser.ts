@@ -13,23 +13,20 @@ async function getIdByRole(role: string): Promise<string> {
   return admin?.id_rol ?? "";
 }
 /* export const getStockBySlug = async( slug: string ): Promise<number> => {*/
-export const CreateUsers = async (
-  name: string,
-  email: string,
-  password: string,
-  role: string
-) => {
+async function CreateUser(username: string, firstname: string, lastname: string, email: string, password: string, role: string, status : string) {
   try {
     await prisma.user.create({
       data: {
         email: email,
-        name: name,
+        username: username,
+        firstName: firstname,
+        lastName: lastname,
         password: bcryptjs.hashSync(password),
-        status: true,
+        status: status,
         tbl_usr_roles_id_rol: (await getIdByRole(role)).toString(),
       },
     });
   } catch (error) {
     console.log(error);
   }
-};
+}

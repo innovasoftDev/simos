@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { PasswordInput } from "@/components/password-input";
 import { SelectDropdown } from "@/components/select-dropdown";
-import { userTypes } from "../data/data";
+import { userTypes, userStatus } from "../data/data";
 import { User } from "../data/schema";
 import { AddOrUpdateUser } from "@/actions/admin/users/add-update-user";
 import { useState } from "react";
@@ -68,6 +68,13 @@ const formSchema = z
       .regex(/[^a-zA-Z0-9]/, { message: "Debe contener al menos un carácter especial." }) 
       .transform((pwd) => pwd.trim()),
     tbl_usr_roles_id_rol: z.string().min(1, { message: "Role requerido." }),
+    status: z
+    .string()
+    .min(1, { message: "Estado es requerido." })
+    .max(200, { message: "Máximo 200 caracteres." })
+    .regex(/^[a-zA-Z0-9_ ]+$/, {
+      message: "No se permiten caracteres especiales.",
+    }),
     confirmPassword: z
       .string() 
       .regex(/[A-Z]/, { message: "Debe contener al menos una letra mayúscula." })
@@ -160,6 +167,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           phoneNumber: "",
           password: "",
           confirmPassword: "",
+          status: "active",
           isEdit,
         },
   });
@@ -479,6 +487,26 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                       placeholder="Seleccionar un rol"
                       className="col-span-4"
                       items={userTypes.map(({ label, value }) => ({
+                        label,
+                        value,
+                      }))}
+                    />
+                    <FormMessage className="col-span-4 col-start-3" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
+                    <FormLabel className="col-span-2 text-right">Estado</FormLabel>
+                    <SelectDropdown
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
+                      placeholder="Seleccionar un Estado"
+                      className="col-span-4"
+                      items={userStatus.map(({ label, value }) => ({
                         label,
                         value,
                       }))}

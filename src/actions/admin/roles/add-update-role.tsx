@@ -9,7 +9,7 @@ import { getIdByRole } from "../roles/getRoleById";
 export const AddOrUpdateRole = async (values: {
   id_rol: string;
   rol: string;
-  descripcion: string;
+  descripcion: string | null;
   isEdit: boolean;
 }) => {
   const session = await auth();

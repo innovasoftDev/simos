@@ -21,3 +21,16 @@ export const userTypes = [
     icon: User,
   },
 ] as const
+
+export const userStatus = [
+  {
+    label: 'Activo',
+    value: 'active',
+    icon: Shield,
+  },
+  {
+    label: 'Inactivo',
+    value: 'inactive',
+    icon: User,
+  },
+] as const
