@@ -73,6 +73,7 @@ async function main() {
   // 1. Borrar registros previos
   await prisma.user.deleteMany();
   await prisma.tBL_USR_ROLES.deleteMany();
+  await prisma.objeto.deleteMany();
 
   // Creando roles admin y user
   const { roles } = initialRolesData;

@@ -39,7 +39,7 @@ export const columns: ColumnDef<Pantalla>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-  {
+  /* {
     accessorKey: "Id_Objeto",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ID" />
@@ -55,7 +55,7 @@ export const columns: ColumnDef<Pantalla>[] = [
       ),
     },
     enableHiding: false,
-  },
+  }, */
   {
     accessorKey: "Nombre_Objeto",
     header: ({ column }) => (
