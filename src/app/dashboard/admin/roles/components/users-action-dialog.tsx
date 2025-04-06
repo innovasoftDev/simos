@@ -156,7 +156,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
       toast.error("¡Ya existe un rol con este mismo nombre, ingrese uno diferente!");
     }     */
     form.reset();
-    onOpenChange(false);
+    onOpenChange(false); 
 
     if (result.ok) {location.reload();}
   };
