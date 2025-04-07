@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export type Pantalla = {
-  Id_Objeto: number;
+  Id_Objeto: string;
   Nombre_Objeto: string;
   Descripcion: string | null;
   Tipo_Objeto: string;

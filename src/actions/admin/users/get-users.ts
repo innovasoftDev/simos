@@ -17,6 +17,9 @@ export const getUsers = async () => {
     orderBy: {
       username: "desc",
     },
+    include: {
+      rol: true, // ← trae el rol relacionado
+    },
   });
 
   return {

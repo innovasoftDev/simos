@@ -4,7 +4,7 @@ import { auth } from "@/auth.config";
 import { revalidatePath } from "next/cache";
 
 export const AddOrUpdatePantalla = async (values: {
-  Id_Objeto: number;
+  Id_Objeto: string;
   Nombre_Objeto: string;
   Descripcion: string | null;
   Tipo_Objeto: string;

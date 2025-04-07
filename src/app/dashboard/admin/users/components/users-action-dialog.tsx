@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { PasswordInput } from "@/components/password-input";
 import { SelectDropdown } from "@/components/select-dropdown";
-import { userTypes, userStatus } from "../data/data";
+import { userTypes, userStatus, UsersRoles } from "../data/data";
 import { User } from "../data/schema";
 import { AddOrUpdateUser } from "@/actions/admin/users/add-update-user";
 import { useState } from "react";
@@ -34,26 +34,39 @@ const specialCharRegex = /^[a-zA-Z0-9_@.]*$/;
 
 const formSchema = z
   .object({
-    firstName: z
-      .string()
-      .min(1, { message: "Nombre requerido." })
-      .max(30, { message: "Máximo 30 caracteres." })
-      .regex(/^[a-zA-Z0-9_]+$/, { message: "No se permiten caracteres especiales." }),
-    lastName: z
-      .string()
-      .min(1, { message: "Apellidos requerido." })
-      .max(30, { message: "Máximo 30 caracteres." })
-      .regex(/^[a-zA-Z0-9_]+$/, { message: "No se permiten caracteres especiales." }),
+    id_user: z.string(),
+    firstName: z.nullable(
+      z
+        .string()
+        .min(1, { message: "Nombre requerido." })
+        .max(30, { message: "Máximo 30 caracteres." })
+        .regex(/^[a-zA-Z0-9_]+$/, {
+          message: "No se permiten caracteres especiales.",
+        })
+    ),
+    lastName: z.nullable(
+      z
+        .string()
+        .min(1, { message: "Apellidos requerido." })
+        .max(30, { message: "Máximo 30 caracteres." })
+        .regex(/^[a-zA-Z0-9_]+$/, {
+          message: "No se permiten caracteres especiales.",
+        })
+    ),
     username: z
       .string()
       .min(1, { message: "Usuario requerido." })
       .max(30, { message: "Máximo 30 caracteres." })
-      .regex(/^[a-zA-Z0-9_]+$/, { message: "Solo letras, números y guion bajo." }),
-    phoneNumber: z
-      .string()
-      .min(1, { message: "Teléfono requerido." })
-      .max(8, { message: "Máximo 8 caracteres." })
-      .regex(/^[0-9]+$/, { message: "Solo números permitidos." }),
+      .regex(/^[a-zA-Z0-9_]+$/, {
+        message: "Solo letras, números y guion bajo.",
+      }),
+    phoneNumber: z.nullable(
+      z
+        .string()
+        .min(1, { message: "Teléfono requerido." })
+        .max(8, { message: "Máximo 8 caracteres." })
+        .regex(/^[0-9]+$/, { message: "Solo números permitidos." })
+    ),
     email: z
       .string()
       .min(1, { message: "Email requerido." })
@@ -61,33 +74,44 @@ const formSchema = z
       .max(30, { message: "Máximo 30 caracteres." }),
     password: z
       .string()
-      .regex(/[A-Z]/, { message: "Debe contener al menos una letra mayúscula." }) 
+      .regex(/[A-Z]/, {
+        message: "Debe contener al menos una letra mayúscula.",
+      })
       .min(8, { message: "Debe tener al menos 8 caracteres." })
+
       .regex(/[a-zA-Z]/, { message: "Debe contener al menos una letra." })
       .regex(/\d/, { message: "Debe contener al menos un número." })
-      .regex(/[^a-zA-Z0-9]/, { message: "Debe contener al menos un carácter especial." }) 
+      .regex(/[^a-zA-Z0-9]/, {
+        message: "Debe contener al menos un carácter especial.",
+      })
       .transform((pwd) => pwd.trim()),
-    tbl_usr_roles_id_rol: z.string().min(1, { message: "Role requerido." }),
+    tbl_usr_roles_id_rol: z.string(),
     status: z
-    .string()
-    .min(1, { message: "Estado es requerido." })
-    .max(200, { message: "Máximo 200 caracteres." })
-    .regex(/^[a-zA-Z0-9_ ]+$/, {
-      message: "No se permiten caracteres especiales.",
-    }),
+      .string()
+      .min(1, { message: "Estado es requerido." })
+      .max(200, { message: "Máximo 200 caracteres." })
+      .regex(/^[a-zA-Z0-9_ ]+$/, {
+        message: "No se permiten caracteres especiales.",
+      }),
     confirmPassword: z
-      .string() 
-      .regex(/[A-Z]/, { message: "Debe contener al menos una letra mayúscula." })
+      .string()
+      .regex(/[A-Z]/, {
+        message: "Debe contener al menos una letra mayúscula.",
+      })
       .min(8, { message: "Debe tener al menos 8 caracteres." })
       .regex(/[a-zA-Z]/, { message: "Debe contener al menos una letra." })
       .regex(/\d/, { message: "Debe contener al menos un número." })
-      .regex(/[^a-zA-Z0-9]/, { message: "Debe contener al menos un carácter especial." })       
+      .regex(/[^a-zA-Z0-9]/, {
+        message: "Debe contener al menos un carácter especial.",
+      })
       .transform((pwd) => pwd.trim()),
+    rol: z.object({
+      id_rol: z.string(),
+      rol: z.string(),
+      descripcion: z.nullable(z.string()),
+    }),
     isEdit: z.boolean(),
   })
-
-
-
 
   .superRefine(({ isEdit, password, confirmPassword }, ctx) => {
     // Validación de contraseña mínima
@@ -140,13 +164,25 @@ interface Props {
 }
 
 export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
+  const userRoles = UsersRoles();
+
   const isEdit = !!currentRow;
   const [specialCharError, setSpecialCharError] = useState({
+    id_user: "",
     firstName: "",
     lastName: "",
     username: "",
-    phoneNumber: "",
     email: "",
+    tbl_usr_roles_id_rol: "",
+    rol: {
+      rol: "",
+      id_rol: "",
+      descripcion: "",
+    },
+    phoneNumber: "",
+    password: "",
+    confirmPassword: "",
+    status: "",
   });
 
   const form = useForm<UserForm>({
@@ -159,11 +195,17 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           isEdit,
         }
       : {
+          id_user: "",
           firstName: "",
           lastName: "",
           username: "",
           email: "",
           tbl_usr_roles_id_rol: "",
+          rol: {
+            rol: "",
+            id_rol: "",
+            descripcion: "",
+          },
           phoneNumber: "",
           password: "",
           confirmPassword: "",
@@ -172,127 +214,129 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
         },
   });
 
-  const handleInputChange = (fieldName: keyof typeof specialCharError) => (e: any) => {
-    const value = e.target.value;
+  const handleInputChange =
+    (fieldName: keyof typeof specialCharError) => (e: any) => {
+      const value = e.target.value;
 
-    // Validación de caracteres especiales
-    if (fieldName === "firstName" || fieldName === "lastName") {
-      if (/[^a-zA-Z0-9_]/.test(value)) {
+      // Validación de caracteres especiales
+      if (fieldName === "firstName" || fieldName === "lastName") {
+        if (/[^a-zA-Z0-9_]/.test(value)) {
+          e.preventDefault();
+          setSpecialCharError((prev) => ({
+            ...prev,
+            [fieldName]: "No se permiten caracteres especiales.",
+          }));
+          return;
+        }
+      }
+
+      // Validación para el username (solo letras, números, guion bajo)
+      if (fieldName === "username") {
+        if (/[^a-zA-Z0-9_]/.test(value)) {
+          e.preventDefault();
+          setSpecialCharError((prev) => ({
+            ...prev,
+            [fieldName]: "Solo letras, números y guion bajo.",
+          }));
+          return;
+        }
+      }
+
+      // Validación para teléfono (solo números y máximo 8 caracteres)
+      if (fieldName === "phoneNumber") {
+        if (/[^0-9]/.test(value)) {
+          e.preventDefault();
+          setSpecialCharError((prev) => ({
+            ...prev,
+            [fieldName]: "Solo números permitidos.",
+          }));
+          return;
+        }
+        // Bloquear la entrada si el valor tiene más de 8 caracteres
+        if (value.length > 8) {
+          e.preventDefault();
+          setSpecialCharError((prev) => ({
+            ...prev,
+            [fieldName]: "Máximo 8 caracteres.",
+          }));
+          return;
+        }
+      }
+
+      // Validación para email (permitir @, _, . y letras/números)
+      if (fieldName === "email") {
+        if (/[^a-zA-Z0-9@._]/.test(value)) {
+          e.preventDefault();
+          setSpecialCharError((prev) => ({
+            ...prev,
+            [fieldName]: "No se permiten caracteres especiales.",
+          }));
+          return;
+        }
+      }
+
+      // Validación de longitud
+      if (value.length > 30) {
         e.preventDefault();
         setSpecialCharError((prev) => ({
           ...prev,
-          [fieldName]: "No se permiten caracteres especiales.",
+          [fieldName]: "Máximo 30 caracteres.",
         }));
         return;
       }
-    }
 
-    // Validación para el username (solo letras, números, guion bajo)
-    if (fieldName === "username") {
-      if (/[^a-zA-Z0-9_]/.test(value)) {
-        e.preventDefault();
-        setSpecialCharError((prev) => ({
-          ...prev,
-          [fieldName]: "Solo letras, números y guion bajo.",
-        }));
-        return;
-      }
-    }
-
-    // Validación para teléfono (solo números y máximo 8 caracteres)
-    if (fieldName === "phoneNumber") {
-      if (/[^0-9]/.test(value)) {
-        e.preventDefault();
-        setSpecialCharError((prev) => ({
-          ...prev,
-          [fieldName]: "Solo números permitidos.",
-        }));
-        return;
-      }
-      // Bloquear la entrada si el valor tiene más de 8 caracteres
-      if (value.length > 8) {
-        e.preventDefault();
-        setSpecialCharError((prev) => ({
-          ...prev,
-          [fieldName]: "Máximo 8 caracteres.",
-        }));
-        return;
-      }
-    }
-
-    // Validación para email (permitir @, _, . y letras/números)
-    if (fieldName === "email") {
-      if (/[^a-zA-Z0-9@._]/.test(value)) {
-        e.preventDefault();
-        setSpecialCharError((prev) => ({
-          ...prev,
-          [fieldName]: "No se permiten caracteres especiales.",
-        }));
-        return;
-      }
-    }
-
-    // Validación de longitud
-    if (value.length > 30) {
-      e.preventDefault();
       setSpecialCharError((prev) => ({
         ...prev,
-        [fieldName]: "Máximo 30 caracteres.",
+        [fieldName]: "",
       }));
-      return;
-    }
 
-    setSpecialCharError((prev) => ({
-      ...prev,
-      [fieldName]: "",
-    }));
+      form.setValue(fieldName as any, value);
+    };
 
-    form.setValue(fieldName as any, value);
-  };
+  const preventSpecialChars =
+    (fieldName: keyof typeof specialCharError) => (e: any) => {
+      const key = e.key;
 
-  const preventSpecialChars = (fieldName: keyof typeof specialCharError) => (e: any) => {
-    const key = e.key;
-
-    if (fieldName === "firstName" || fieldName === "lastName") {
-      if (/[^a-zA-Z\s]/.test(key) && key !== "Backspace") {
-        e.preventDefault();
-        setSpecialCharError((prev) => ({
-          ...prev,
-          [fieldName]: "No se permiten números ni, caracteres especiales.",
-        }));
+      if (fieldName === "firstName" || fieldName === "lastName") {
+        if (/[^a-zA-Z\s]/.test(key) && key !== "Backspace") {
+          e.preventDefault();
+          setSpecialCharError((prev) => ({
+            ...prev,
+            [fieldName]: "No se permiten números ni, caracteres especiales.",
+          }));
+        }
       }
-    }
 
-    if (fieldName === "username") {
-      if (/[^a-zA-Z0-9_]/.test(key) && key !== "Backspace") {
-        e.preventDefault();
-        setSpecialCharError((prev) => ({
-          ...prev,
-          [fieldName]: "Solo letras, números y guion bajo.",
-        }));
+      if (fieldName === "username") {
+        if (/[^a-zA-Z0-9_]/.test(key) && key !== "Backspace") {
+          e.preventDefault();
+          setSpecialCharError((prev) => ({
+            ...prev,
+            [fieldName]: "Solo letras, números y guion bajo.",
+          }));
+        }
       }
-    }
 
-    if (fieldName === "phoneNumber") {
-      if (/[^0-9]/.test(key) && key !== "Backspace") {
-        e.preventDefault();
-        setSpecialCharError((prev) => ({
-          ...prev,
-          [fieldName]: "Solo números permitidos.",
-        }));
+      if (fieldName === "phoneNumber") {
+        if (/[^0-9]/.test(key) && key !== "Backspace") {
+          e.preventDefault();
+          setSpecialCharError((prev) => ({
+            ...prev,
+            [fieldName]: "Solo números permitidos.",
+          }));
+        }
       }
-    }
 
-    if (fieldName === "email") {
-      if (/[^a-zA-Z0-9@._]/.test(key) && key !== "Backspace") {
-        e.preventDefault();
-        setSpecialCharError((prev) => ({
-          ...prev,
-          [fieldName]: "No se permiten caracteres especiales.",
-        }));
+      if (fieldName === "email") {
+        if (/[^a-zA-Z0-9@._]/.test(key) && key !== "Backspace") {
+          e.preventDefault();
+          setSpecialCharError((prev) => ({
+            ...prev,
+            [fieldName]: "No se permiten caracteres especiales.",
+          }));
+        }
       }
-    }
-  };
+    };
 
   const onSubmit = async (values: UserForm) => {
     const result = await AddOrUpdateUser(values);
@@ -303,15 +347,16 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
       toast.error("¡Ya existe un usuario con ese mismo nombre, porfavor ingresar uno diferente!");
     } */
 
-    if (result.ok) {location.reload();}
+    if (result.ok) {
+      location.reload();
+    } else {
+      toast.error(result.message);
+    }
     form.reset();
     onOpenChange(false);
   };
 
   const isPasswordTouched = !!form.formState.dirtyFields.password;
-
-
-
 
   return (
     <Dialog
@@ -320,40 +365,59 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
         form.reset();
         onOpenChange(state);
         setSpecialCharError({
+          id_user: "",
           firstName: "",
           lastName: "",
           username: "",
-          phoneNumber: "",
           email: "",
+          tbl_usr_roles_id_rol: "",
+          rol: {
+            rol: "",
+            id_rol: "",
+            descripcion: "",
+          },
+          phoneNumber: "",
+          password: "",
+          confirmPassword: "",
+          status: "",
         });
       }}
     >
       <DialogContent className="sm:max-w-lg">
         <DialogHeader className="text-left">
-          <DialogTitle>{isEdit ? "Editar Usuario" : "Agregar Nuevo Usuario"}</DialogTitle>
+          <DialogTitle>
+            {isEdit ? "Editar Usuario" : "Agregar Nuevo Usuario"}
+          </DialogTitle>
           <DialogDescription>
             {isEdit
               ? "Actualiza al usuario aquí."
-              : "Crea un nuevo usuario aquí."} Haga clic en guardar cuando haya terminado.
+              : "Crea un nuevo usuario aquí."}{" "}
+            Haga clic en guardar cuando haya terminado.
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="h-[26.25rem] w-full pr-4 -mr-4 py-1">
           <Form {...form}>
-            <form id="user-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-0.5">
+            <form
+              id="user-form"
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4 p-0.5"
+            >
               {/* Nombre */}
               <FormField
                 control={form.control}
                 name="firstName"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4">
-                    <FormLabel className="col-span-2 text-right">Nombre</FormLabel>
+                    <FormLabel className="col-span-2 text-right">
+                      Nombre
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="John"
                         className="col-span-4"
                         autoComplete="off"
                         {...field}
-                        value={field.value}
+                        value={field.value?.toString()}
                         onChange={handleInputChange("firstName")}
                         onKeyDown={preventSpecialChars("firstName")}
                       />
@@ -367,21 +431,23 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                   </FormItem>
                 )}
               />
-  
+
               {/* Apellidos */}
               <FormField
                 control={form.control}
                 name="lastName"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4">
-                    <FormLabel className="col-span-2 text-right">Apellidos</FormLabel>
+                    <FormLabel className="col-span-2 text-right">
+                      Apellidos
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Doe"
                         className="col-span-4"
                         autoComplete="off"
                         {...field}
-                        value={field.value}
+                        value={field.value?.toString()}
                         onChange={handleInputChange("lastName")}
                         onKeyDown={preventSpecialChars("lastName")}
                       />
@@ -395,14 +461,16 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                   </FormItem>
                 )}
               />
-  
+
               {/* Usuario */}
               <FormField
                 control={form.control}
                 name="username"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4">
-                    <FormLabel className="col-span-2 text-right">Usuario</FormLabel>
+                    <FormLabel className="col-span-2 text-right">
+                      Usuario
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="john_doe"
@@ -422,14 +490,16 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                   </FormItem>
                 )}
               />
-  
+
               {/* Email */}
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4">
-                    <FormLabel className="col-span-2 text-right">Email</FormLabel>
+                    <FormLabel className="col-span-2 text-right">
+                      Email
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="john.doe@gmail.com"
@@ -449,20 +519,22 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                   </FormItem>
                 )}
               />
-  
+
               {/* Teléfono */}
               <FormField
                 control={form.control}
                 name="phoneNumber"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4">
-                    <FormLabel className="col-span-2 text-right">Teléfono</FormLabel>
+                    <FormLabel className="col-span-2 text-right">
+                      Teléfono
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="12345678"
                         className="col-span-4"
                         {...field}
-                        value={field.value}
+                        value={field.value?.toString()}
                         onChange={handleInputChange("phoneNumber")}
                         onKeyDown={preventSpecialChars("phoneNumber")}
                       />
@@ -478,19 +550,23 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
               />
               <FormField
                 control={form.control}
-                name="tbl_usr_roles_id_rol"
+                name="rol.rol"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
-                    <FormLabel className="col-span-2 text-right">Role</FormLabel>
+                    <FormLabel className="col-span-2 text-right">
+                      Role
+                    </FormLabel>
                     <SelectDropdown
                       defaultValue={field.value}
                       onValueChange={field.onChange}
                       placeholder="Seleccionar un rol"
                       className="col-span-4"
-                      items={userTypes.map(({ label, value }) => ({
-                        label,
-                        value,
-                      }))}
+                      items={
+                        userRoles.map(({ rol }) => ({
+                        label: rol? rol : "",
+                        value: rol? rol : "",
+                      }))
+                    }
                     />
                     <FormMessage className="col-span-4 col-start-3" />
                   </FormItem>
@@ -501,7 +577,9 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                 name="status"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
-                    <FormLabel className="col-span-2 text-right">Estado</FormLabel>
+                    <FormLabel className="col-span-2 text-right">
+                      Estado
+                    </FormLabel>
                     <SelectDropdown
                       defaultValue={field.value}
                       onValueChange={field.onChange}
@@ -521,7 +599,9 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                 name="password"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
-                    <FormLabel className="col-span-2 text-right">Contraseña</FormLabel>
+                    <FormLabel className="col-span-2 text-right">
+                      Contraseña
+                    </FormLabel>
                     <FormControl>
                       <PasswordInput
                         placeholder="e.g., S3cur3P@ssw0rd"
@@ -538,7 +618,9 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                 name="confirmPassword"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
-                    <FormLabel className="col-span-2 text-right">Confirmar Contraseña</FormLabel>
+                    <FormLabel className="col-span-2 text-right">
+                      Confirmar Contraseña
+                    </FormLabel>
                     <FormControl>
                       <PasswordInput
                         disabled={!isPasswordTouched}
@@ -562,18 +644,28 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
               form.reset();
               onOpenChange(false); // Cierra el modal sin guardar
               setSpecialCharError({
+                id_user: "",
                 firstName: "",
                 lastName: "",
                 username: "",
-                phoneNumber: "",
                 email: "",
+                tbl_usr_roles_id_rol: "",
+                rol: {
+                  rol: "",
+                  id_rol: "",
+                  descripcion: "",
+                },
+                phoneNumber: "",
+                password: "",
+                confirmPassword: "",
+                status: "",
               });
             }}
             variant="outline" // Cambia el estilo si es necesario
           >
             Cancelar
           </Button>
-          
+
           {/* Botón Guardar Cambios */}
           <Button type="submit" form="user-form">
             Guardar Cambios
@@ -582,4 +674,4 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
       </DialogContent>
     </Dialog>
   );
-}  
+}

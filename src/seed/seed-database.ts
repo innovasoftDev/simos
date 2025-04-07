@@ -23,6 +23,24 @@ async function getIdByRole(role: string): Promise<string> {
   }
 }
 
+async function getIdFromObject(nameObject: string): Promise<string> {
+  const idObject = await prisma.objeto.findUnique({
+    where: { Nombre_Objeto: nameObject },
+    select: { Id_Objeto: true },
+  });
+
+  return idObject?.Id_Objeto ?? "";
+}
+
+async function getIdFromRole(nameRole: string): Promise<string> {
+  const idRole = await prisma.tBL_USR_ROLES.findUnique({
+    where: { rol: nameRole },
+    select: { id_rol: true },
+  });
+
+  return idRole?.id_rol ?? "";
+}
+
 async function CreateUser(
   username: string,
   firstname: string,
@@ -69,19 +87,48 @@ async function CreatePantallas(
   }
 }
 
-async function main() {
-  // 1. Borrar registros previos
-  await prisma.user.deleteMany();
-  await prisma.tBL_USR_ROLES.deleteMany();
-  await prisma.objeto.deleteMany();
+async function CreatePermiso(
+  Permiso_Inserta: boolean,
+  Permiso_Actualiza: boolean,
+  Permiso_Elimina: boolean,
+  Permiso_Consulta: boolean,
+  Pantalla: string,
+  Rol: string
+) {
+  try {
+    await prisma.permiso.create({
+      data: {
+        Permiso_Inserta: Permiso_Inserta,
+        Permiso_Actualiza: Permiso_Actualiza,
+        Permiso_Elimina: Permiso_Elimina,
+        Permiso_Consulta: Permiso_Consulta,
+        ObjetoId: (await getIdFromObject(Pantalla)).toString(),
+        TBL_USR_ROLESId: (await getIdFromRole(Rol)).toString(),
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-  // Creando roles admin y user
+async function main() {
+  //! Borrar registros previos
+  await prisma.user.deleteMany();
+  await prisma.permiso.deleteMany();
+  await prisma.objeto.deleteMany();
+  await prisma.tBL_USR_ROLES.deleteMany();
+
+  //! Para vista roles
+  //? Creando roles admin y user
   const { roles } = initialRolesData;
   await prisma.tBL_USR_ROLES.createMany({
     data: roles,
   });
 
-  //Creando usuario administrador
+  await delay(50);
+
+  //! Para Vista Usuarios
+  //? Creando usuario administrador
   CreateUser(
     "admin",
     "Usuario",
@@ -91,7 +138,7 @@ async function main() {
     "admin",
     "active"
   );
-  //Creando usuario normal
+  //? Creando usuario normal
   CreateUser(
     "user",
     "Usuario",
@@ -101,8 +148,9 @@ async function main() {
     "user",
     "inactive"
   );
-
-  //Creando las pantallas actuales en gestion de pantallas
+  await delay(100);
+  
+  //! Creando las pantallas actuales en gestion de pantallas
   //? Dashboard
   CreatePantallas(
     "Dashboard",
@@ -138,15 +186,32 @@ async function main() {
     "Pantalla",
     "active"
   );
-  //? Usuarios
+  //? Acerca De
   CreatePantallas(
-    "Usuarios",
-    "Permite la gestión de los usuarios del sistema de monitoreo.",
+    "AcercaDe",
+    "Sobre nosotros el grupo de Innovasoft Dev.",
     "Pantalla",
     "active"
   );
+
+  await delay(100);
+
+  //! Para vista Permisos
+  //? Creando permiso para Dashboard
+  CreatePermiso(true, false, true, false, "Dashboard", "admin");
+  CreatePermiso(true, true, true, true, "Servicios", "admin");
+  CreatePermiso(true, true, true, true, "Servidores", "admin");
+  CreatePermiso(true, true, true, true, "Alertas", "admin");
+  CreatePermiso(true, true, true, true, "Errores", "admin");  
+  CreatePermiso(true, false, true, false, "AcercaDe", "admin");
+
   console.log("Seed ejecutado correctamente");
 }
+
+// Simple delay function using setTimeout and promise
+export const delay = (milliseconds: number) => {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+};
 
 (() => {
   if (process.env.NODE_ENV === "production") return;

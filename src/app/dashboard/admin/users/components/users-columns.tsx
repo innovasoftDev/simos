@@ -7,7 +7,7 @@ import { callTypes, userTypes } from "../data/data";
 import { User } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { getRoleById } from "@/actions/admin/roles/getRoleById";
+/* import { getRoleById } from "@/actions/admin/roles/getRoleById";
 import { useEffect, useState } from "react";
 
 async function getRole(id: string): Promise<string> {
@@ -24,7 +24,7 @@ function ObternerRol(id: string): string {
   }, [id]);
 
   return data;
-}
+} */
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -116,18 +116,18 @@ export const columns: ColumnDef<User>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "tbl_usr_roles_id_rol",
+    accessorKey: "rol.rol",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Rol" />
     ),
     cell: ({ row }) => {
-      const { tbl_usr_roles_id_rol } = row.original;
+      const { rol } = row.original;
 
-      const role = ObternerRol(tbl_usr_roles_id_rol);
-      const userType = userTypes.find(({ value }) => value === role);
+      //const role = ObternerRol(tbl_usr_roles_id_rol);
+      const userType = userTypes.find(({ value }) => value === rol.rol);
 
       if (!userType) {
-        return null;
+        return <div className="w-fit text-nowrap">{rol.rol}</div>;
       }
 
       return (
@@ -136,7 +136,7 @@ export const columns: ColumnDef<User>[] = [
             <userType.icon size={16} className="text-muted-foreground" />
           )}
           <span className="capitalize text-sm">
-            {role}
+            {rol.rol}
           </span>
         </div>
       );

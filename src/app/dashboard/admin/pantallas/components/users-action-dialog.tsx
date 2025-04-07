@@ -30,7 +30,7 @@ import { AddOrUpdatePantalla } from "@/actions/admin/pantallas/add-update-pantal
 import { SelectDropdown } from "@/components/select-dropdown";
 
 const formSchema = z.object({
-  Id_Objeto: z.number(),
+  Id_Objeto: z.string(),
   Nombre_Objeto: z
     .string()
     .min(1, { message: "Pantalla es requerido." })
@@ -64,7 +64,7 @@ interface Props {
 export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
   const isEdit = !!currentRow;
   const [specialCharError, setSpecialCharError] = useState({
-    Id_Objeto: 0,
+    Id_Objeto: "",
     Nombre_Objeto: "",
     Descripcion: "",
     Tipo_Objeto: "",
@@ -79,7 +79,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           isEdit,
         }
       : {
-          Id_Objeto: 1,
+          Id_Objeto: "",
           Nombre_Objeto: "",
           Descripcion: "",
           Tipo_Objeto: "",
@@ -168,24 +168,20 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
     };
 
   const onSubmit = async (values: UserForm) => {
-
-    if (values.isEdit) {
-      
-    } 
     const result = await AddOrUpdatePantalla(values);
 
     /* if (result.ok) {      
-      toast.success(isEdit ? "Pantalla editado" : "Pantalla creado");      
+      toast.success(isEdit ? "Pantalla editada" : "Pantalla creada");      
     } else {
-      toast.error("¡Ya existe un rol con este mismo nombre, ingrese uno diferente!");
+      toast.error("¡Ya existe una pantalla con este mismo nombre, ingrese uno diferente!");
     }     */
-
-    console.log("Action");
     form.reset();
     onOpenChange(false);
 
     if (result.ok) {
       location.reload();
+    }else{
+      toast.error(result.message);
     }
   };
 
@@ -196,7 +192,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
         form.reset();
         onOpenChange(state);
         setSpecialCharError({
-          Id_Objeto: 0,
+          Id_Objeto: "",
           Nombre_Objeto: "",
           Descripcion: "",
           Tipo_Objeto: "",
@@ -346,7 +342,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
               form.reset();
               onOpenChange(false); // Cierra el modal sin guardar
               setSpecialCharError({
-                Id_Objeto: 0,
+                Id_Objeto: "",
                 Nombre_Objeto: "",
                 Descripcion: "",
                 Tipo_Objeto: "",

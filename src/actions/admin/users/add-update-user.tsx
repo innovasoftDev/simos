@@ -7,14 +7,21 @@ import { revalidatePath } from "next/cache";
 import { getIdByRole } from "../roles/getRoleById";
 
 export const AddOrUpdateUser = async (values: {
-  email: string;
+  id_user: string;
+  firstName: string | null;
+  status: string;
+  lastName: string | null;
   username: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
+  phoneNumber: string | null;
+  email: string;
   password: string;
   tbl_usr_roles_id_rol: string;
   confirmPassword: string;
+  rol: {
+    rol: string;
+    id_rol: string;
+    descripcion: string | null;
+  };
   isEdit: boolean;
 }) => {
   const session = await auth();
@@ -29,6 +36,8 @@ export const AddOrUpdateUser = async (values: {
   try {
     const newUser = { ...values };
 
+    //console.log(newUser);
+
     if (!newUser.isEdit) {
       await prisma.user.create({
         data: {
@@ -37,29 +46,34 @@ export const AddOrUpdateUser = async (values: {
           firstName: newUser.firstName,
           lastName: newUser.lastName,
           password: bcryptjs.hashSync(newUser.password),
-          status: "active",
+          phoneNumber: newUser.phoneNumber,
+          status: newUser.status,          
+          created: new Date(),
           tbl_usr_roles_id_rol: (
-            await getIdByRole(newUser.tbl_usr_roles_id_rol)
+            await getIdByRole(newUser.rol.rol)
           ).toString(),
         },
       });
-    } else{
+    } else {
       await prisma.user.update({
         where: {
-          email: newUser.email,
+          id_user: newUser.id_user,
         },
         data: {
           username: newUser.username,
           firstName: newUser.firstName,
           lastName: newUser.lastName,
           password: bcryptjs.hashSync(newUser.password),
-          status: "active",
+          phoneNumber: newUser.phoneNumber,
+          status: newUser.status,
+          updated: new Date(),
           tbl_usr_roles_id_rol: (
-            await getIdByRole(newUser.tbl_usr_roles_id_rol)
+            await getIdByRole(newUser.rol.rol)
           ).toString(),
         },
       });
     }
+
     revalidatePath("/admin/users");
 
     return {

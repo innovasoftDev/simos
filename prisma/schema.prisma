@@ -45,8 +45,8 @@ model TBL_USR_ROLES {
  * --------------------------------------------------------------------------------
  */
 model Objeto {
-  Id_Objeto     Int     @id @default(autoincrement())
-  Nombre_Objeto String
+  Id_Objeto     String  @id @default(uuid())
+  Nombre_Objeto String  @unique
   Descripcion   String?
   Tipo_Objeto   String
   Estado        String
@@ -56,14 +56,14 @@ model Objeto {
 }
 
 model Permiso {
-  Id_Permiso        Int     @id @default(autoincrement())
+  Id_Permiso        String   @id @default(uuid())
   Permiso_Inserta   Boolean
   Permiso_Actualiza Boolean
   Permiso_Elimina   Boolean
   Permiso_Consulta  Boolean
 
   Objeto          Objeto        @relation(fields: [ObjetoId], references: [Id_Objeto])
-  ObjetoId        Int
+  ObjetoId        String
   TBL_USR_ROLES   TBL_USR_ROLES @relation(fields: [TBL_USR_ROLESId], references: [id_rol])
   TBL_USR_ROLESId String
 

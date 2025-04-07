@@ -14,6 +14,11 @@ export type User = {
   created: Date | null;
   updated: Date | null;
   tbl_usr_roles_id_rol: string;
+  rol: {
+    id_rol: string;
+    rol: string;
+    descripcion: string | null;
+  };
 };
 
 const userStatusSchema = z.union([z.string(), z.string()]);
