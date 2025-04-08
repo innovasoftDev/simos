@@ -45,7 +45,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
             className="mr-1 inline-block stroke-destructive"
             size={18}
           />{" "}
-          Eliminar Rol
+          Eliminar Pantalla
         </span>
       }
       desc={

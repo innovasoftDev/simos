@@ -285,7 +285,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Nombre de pantalla"
+                        placeholder="Tipo"
                         className="col-span-4"
                         autoComplete="off"
                         {...field}
