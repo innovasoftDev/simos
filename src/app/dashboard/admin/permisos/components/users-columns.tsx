@@ -84,7 +84,7 @@ export const columns: ColumnDef<Pantalla>[] = [
   {
     accessorKey: "ObjetoId",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Rol" />
+      <DataTableColumnHeader column={column} title="ROL" />
     ),
     cell: ({ row }) => {
       const { TBL_USR_ROLES } = row.original;
@@ -103,7 +103,7 @@ export const columns: ColumnDef<Pantalla>[] = [
   {
     accessorKey: "TBL_USR_ROLESId",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Pantalla" />
+      <DataTableColumnHeader column={column} title="PANTALLA" />
     ),
     cell: ({ row }) => {
       const { Objeto } = row.original;

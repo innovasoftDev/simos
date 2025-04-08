@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/auth.config";
 import { revalidatePath } from "next/cache";
 
-export const DeletePantalla = async (id_objeto: string) => {
+export const DeletePermiso = async (id_permiso: string) => {
   const session = await auth();
 
   if (session?.user.role !== "admin") {
@@ -14,13 +14,11 @@ export const DeletePantalla = async (id_objeto: string) => {
   }
 
   try {
-    //console.log(id_objeto);
-
-    await prisma.objeto.delete({
+    await prisma.permiso.delete({
       where: {
-        Id_Objeto: id_objeto,
+        Id_Permiso: id_permiso,
       },
-    })
+    });
 
     revalidatePath("/admin/users");
 

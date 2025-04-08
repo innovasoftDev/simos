@@ -170,11 +170,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
   const onSubmit = async (values: UserForm) => {
     const result = await AddOrUpdatePantalla(values);
 
-    /* if (result.ok) {      
-      toast.success(isEdit ? "Pantalla editada" : "Pantalla creada");      
-    } else {
-      toast.error("¡Ya existe una pantalla con este mismo nombre, ingrese uno diferente!");
-    }     */
     form.reset();
     onOpenChange(false);
 

@@ -32,12 +32,6 @@ export const getAllPermisos = async () => {
     },
   });
 
- /*  const pantallas = permisos.map((u) => u.Objeto.Nombre_Objeto);
-  const roles = permisos.map((u) => u.TBL_USR_ROLES.rol);
-
-  console.log(pantallas);
-  console.log(roles); */
-
   return {
     ok: true,
     permisos: permisos,

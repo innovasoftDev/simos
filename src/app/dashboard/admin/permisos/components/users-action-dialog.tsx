@@ -20,14 +20,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+//import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Pantalla } from "../data/schema";
 import { useState } from "react";
 import { GetObjetos, UsersRoles } from "../data/data";
 import { SelectDropdown } from "@/components/select-dropdown";
 import { AddOrUpdatePermiso } from "@/actions/admin/permisos/add-update-permisos";
+import { Switch } from "@/components/ui/switch";
+//import { Label } from "@/components/ui/label";
 
 const formSchema = z.object({
   Id_Permiso: z.string(),
@@ -40,13 +43,13 @@ const formSchema = z.object({
   Objeto: z.object({
     Nombre_Objeto: z.string(),
   }),
-  rol: z.object({
+  TBL_USR_ROLES: z.object({
     rol: z.string(),
   }),
   isEdit: z.boolean(),
 });
 
-type UserForm = z.infer<typeof formSchema>;
+type PermisosForm = z.infer<typeof formSchema>;
 
 interface Props {
   currentRow?: Pantalla;
@@ -70,12 +73,12 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
     Objeto: {
       Nombre_Objeto: "",
     },
-    rol: {
+    TBL_USR_ROLES: {
       rol: "",
     },
   });
 
-  const form = useForm<UserForm>({
+  const form = useForm<PermisosForm>({
     resolver: zodResolver(formSchema),
     defaultValues: isEdit
       ? {
@@ -93,21 +96,16 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           Objeto: {
             Nombre_Objeto: "",
           },
-          rol: {
+          TBL_USR_ROLES: {
             rol: "",
           },
           isEdit,
         },
   });
 
-  const onSubmit = async (values: UserForm) => {
+  const onSubmit = async (values: PermisosForm) => {
     const result = await AddOrUpdatePermiso(values);
 
-    /* if (result.ok) {      
-      toast.success(isEdit ? "Pantalla editada" : "Pantalla creada");      
-    } else {
-      toast.error("¡Ya existe una pantalla con este mismo nombre, ingrese uno diferente!");
-    }     */
     form.reset();
     onOpenChange(false);
 
@@ -135,7 +133,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           Objeto: {
             Nombre_Objeto: "",
           },
-          rol: {
+          TBL_USR_ROLES: {
             rol: "",
           },
         });
@@ -144,12 +142,12 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
       <DialogContent className="sm:max-w-lg">
         <DialogHeader className="text-left">
           <DialogTitle>
-            {isEdit ? "Editar Pantalla" : "Agregar Nueva Pantalla"}
+            {isEdit ? "Editar Permiso" : "Agregar Nuevo Permiso"}
           </DialogTitle>
           <DialogDescription>
             {isEdit
-              ? "Actualiza las pantallas aquí."
-              : "Crea una nueva pantalla aquí."}{" "}
+              ? "Actualiza los permisos aquí."
+              : "Crea una nueva permiso aquí."}{" "}
             Haga clic en guardar cuando haya terminado.
           </DialogDescription>
         </DialogHeader>
@@ -163,12 +161,10 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
               {/* Role */}
               <FormField
                 control={form.control}
-                name="Objeto.Nombre_Objeto"
+                name="TBL_USR_ROLES.rol"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
-                    <FormLabel className="col-span-2 text-right">
-                      Role
-                    </FormLabel>
+                    <FormLabel className="col-span-2 text-right">Rol</FormLabel>
                     <SelectDropdown
                       defaultValue={field.value}
                       onValueChange={field.onChange}
@@ -187,7 +183,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
               {/* Pantalla */}
               <FormField
                 control={form.control}
-                name="rol.rol"
+                name="Objeto.Nombre_Objeto"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
                     <FormLabel className="col-span-2 text-right">
@@ -207,10 +203,92 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                   </FormItem>
                 )}
               />
+              <FormItem className=" rounded-lg border p-2 text-center">
+                <FormDescription>
+                  Permisos que obtendra el Rol sobre la pantalla.
+                </FormDescription>
+              </FormItem>
 
-              {/* Tipo Objeto */}
+              {/* Permiso_Consulta */}
+              <FormField
+                control={form.control}
+                name="Permiso_Consulta"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-2">
+                    <FormLabel className="col-span-2 text-right">
+                      Consultar
+                    </FormLabel>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage className="col-span-4 col-start-3" />
+                  </FormItem>
+                )}
+              />
 
-              {/* Estado */}
+              {/* Permiso_Inserta */}
+              <FormField
+                control={form.control}
+                name="Permiso_Inserta"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-2">
+                    <FormLabel className="col-span-2 text-right">
+                      Insertar
+                    </FormLabel>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage className="col-span-4 col-start-3" />
+                  </FormItem>
+                )}
+              />
+
+              {/* Permiso_Actualiza */}
+              <FormField
+                control={form.control}
+                name="Permiso_Actualiza"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-2">
+                    <FormLabel className="col-span-2 text-right">
+                      Actualizar
+                    </FormLabel>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage className="col-span-4 col-start-3" />
+                  </FormItem>
+                )}
+              />
+
+              {/* Permiso_Elimina */}
+              <FormField
+                control={form.control}
+                name="Permiso_Elimina"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-2">
+                    <FormLabel className="col-span-2 text-right">
+                      Eliminar
+                    </FormLabel>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    {/* <Label htmlFor="airplane-mode">{field.value? "ON" : "OFF"}</Label> */}
+                    <FormMessage className="col-span-4 col-start-3" />
+                  </FormItem>
+                )}
+              />
             </form>
           </Form>
         </ScrollArea>
@@ -232,14 +310,14 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                 Objeto: {
                   Nombre_Objeto: "",
                 },
-                rol: {
+                TBL_USR_ROLES: {
                   rol: "",
                 },
               });
             }}
             variant="outline" // Cambia el estilo si es necesario
           >
-            Cancelar
+            Cancel
           </Button>
 
           {/* Botón Guardar Cambios */}

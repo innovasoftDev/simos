@@ -1,5 +1,4 @@
 import { titleFont } from "@/config/fonts";
-import { RegisterForm } from "./ui/RegisterForm";
 import { SignUpForm } from "./ui/sign-up-form";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";

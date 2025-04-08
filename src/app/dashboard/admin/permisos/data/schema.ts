@@ -9,15 +9,15 @@ export type Pantalla = {
   ObjetoId: string;
   TBL_USR_ROLESId: string;
   Objeto: {
-    Id_Objeto: string;
     Nombre_Objeto: string;
+    Id_Objeto: string;
     Descripcion: string | null;
     Tipo_Objeto: string;
     Estado: string;
   };
   TBL_USR_ROLES: {
-    id_rol: string;
     rol: string;
+    id_rol: string;
     descripcion: string | null;
   };
 };

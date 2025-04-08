@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { PasswordInput } from "@/components/password-input";
 import { SelectDropdown } from "@/components/select-dropdown";
-import { userTypes, userStatus, UsersRoles } from "../data/data";
+import { userStatus, UsersRoles } from "../data/data";
 import { User } from "../data/schema";
 import { AddOrUpdateUser } from "@/actions/admin/users/add-update-user";
 import { useState } from "react";

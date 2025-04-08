@@ -2,8 +2,8 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth.config";
 import { revalidatePath } from "next/cache";
-import { getRoleById } from "./getAllPermisos";
-import { Role } from "@/app/dashboard/admin/roles/data/schema";
+import { getIdByRole } from "../roles/getRoleById";
+import { getIdByObject } from "../pantallas/getIdByObject";
 
 export const AddOrUpdatePermiso = async (values: {
   Id_Permiso: string;
@@ -16,7 +16,7 @@ export const AddOrUpdatePermiso = async (values: {
   Objeto: {
     Nombre_Objeto: string;
   };
-  rol: {
+  TBL_USR_ROLES: {
     rol: string;
   };
   isEdit: boolean;
@@ -40,8 +40,8 @@ export const AddOrUpdatePermiso = async (values: {
           Permiso_Actualiza: nuevoPermiso.Permiso_Actualiza,
           Permiso_Elimina: nuevoPermiso.Permiso_Elimina,
           Permiso_Consulta: nuevoPermiso.Permiso_Consulta,
-          TBL_USR_ROLESId: (await getRoleById(nuevoPermiso.rol.rol)).toString(),
-          ObjetoId: (await getRoleById(nuevoPermiso.Objeto.Nombre_Objeto)).toString(),
+          TBL_USR_ROLESId: (await getIdByRole(nuevoPermiso.TBL_USR_ROLES.rol)).toString(),
+          ObjetoId: (await getIdByObject(nuevoPermiso.Objeto.Nombre_Objeto)).toString(),
         },
       });
     } else {
@@ -54,8 +54,8 @@ export const AddOrUpdatePermiso = async (values: {
           Permiso_Actualiza: nuevoPermiso.Permiso_Actualiza,
           Permiso_Elimina: nuevoPermiso.Permiso_Elimina,
           Permiso_Consulta: nuevoPermiso.Permiso_Consulta,
-          TBL_USR_ROLESId: (await getRoleById(nuevoPermiso.rol.rol)).toString(),
-          ObjetoId: (await getRoleById(nuevoPermiso.Objeto.Nombre_Objeto)).toString(),
+          TBL_USR_ROLESId: (await getIdByRole(nuevoPermiso.TBL_USR_ROLES.rol)).toString(),
+          ObjetoId: (await getIdByObject(nuevoPermiso.Objeto.Nombre_Objeto)).toString(),
         },
       });
     }

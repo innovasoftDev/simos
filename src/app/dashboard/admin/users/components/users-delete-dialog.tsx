@@ -10,7 +10,7 @@ import { ConfirmDialog } from "@/components/confirm-dialog";
 import { User } from "../data/schema";
 import { toast } from "sonner";
 import { DeleteUser } from "@/actions/admin/users/delete-user";
-import useSWR from 'swr'
+import useSWR from "swr";
 
 interface Props {
   open: boolean;
@@ -24,20 +24,13 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
 
   const handleDelete = async () => {
     if (value.trim() !== currentRow.username) return;
-    const result = await DeleteUser(value.trim());
+    const result = await DeleteUser(currentRow.id_user);
 
-    /* if (result.ok) {
-      mutate();
-      toast.error("Eliminar", {
-        description: "¡Se ha eliminado el usuario!",
-      });
+    if (result.ok) {
+      location.reload();
     } else {
-      toast.error("Eliminar", {
-        description: "¡Ocurrió un error!",
-      });
-    } */
-
-    if (result.ok) {location.reload();}
+      toast.error(result.message);
+    }
     onOpenChange(false);
   };
 
@@ -61,11 +54,9 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
           <p className="mb-2">
             ¿Estás segura de que quieres eliminar este usuario?
             <br />
-            Esta acción eliminará permanentemente al usuario {" "}
-            <span className="font-bold">
-              {currentRow.username}
-            </span>{" "}
-            del sistema. 
+            Esta acción eliminará permanentemente al usuario{" "}
+            <span className="font-bold">{currentRow.username}</span> del
+            sistema.
             <br />
             Esto no se puede deshacer.
           </p>

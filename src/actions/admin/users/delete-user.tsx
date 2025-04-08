@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/auth.config";
 import { revalidatePath } from "next/cache";
 
-export const DeleteUser = async (username: string) => {
+export const DeleteUser = async (id_user: string) => {
   const session = await auth();
 
   if (session?.user.role !== "admin") {
@@ -16,7 +16,7 @@ export const DeleteUser = async (username: string) => {
   try {
     const deleteUser = await prisma.user.delete({
       where: {
-        username: username,
+        id_user: id_user,
       },
     })
 

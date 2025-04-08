@@ -11,8 +11,6 @@ async function getRoleById(id: string): Promise<string> {
     select: { rol: true },
   });
 
-  /* console.log(role?.rol); */
-
   return role?.rol ?? "";
 }
 

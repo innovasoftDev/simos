@@ -2,15 +2,13 @@
 
 import { useState } from "react";
 import { TriangleAlert } from "lucide-react";
-//import { toast } from '@/hooks/use-toast'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Pantalla } from "../data/schema";
-//import { toast } from "sonner";
+import { toast } from "sonner";
 import { DeletePantalla } from "@/actions/admin/pantallas/delete-pantalla";
-//import useSWR from 'swr'
 
 interface Props {
   open: boolean;
@@ -23,23 +21,16 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   //const { mutate } = useSWR("/dashboard/admin/roles", fetch);
 
   const handleDelete = async () => {
-    if (parseInt(value.trim()) !== currentRow.Id_Objeto) return;
-    const result = await DeletePantalla(parseInt(value.trim()));
-
-    /* if (result.ok) {
-      //mutate();
-      toast.error("Eliminar", {
-        description: "¡Se ha eliminado el Rol!",
-      });
-    } else {
-      toast.error("Eliminar", {
-        description: "¡Ocurrió un error!",
-      });
-    } */
+    if (value.trim() !== currentRow.Nombre_Objeto) return;
+    const result = await DeletePantalla(currentRow.Id_Objeto);
 
     onOpenChange(false);
 
-    if (result.ok) {location.reload();}
+    if (result.ok) {
+      location.reload();
+    } else {
+      toast.error(result.message);
+    }
   };
 
   return (
@@ -47,7 +38,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={parseInt(value.trim()) !== currentRow.Id_Objeto}
+      disabled={value.trim() !== currentRow.Nombre_Objeto}
       title={
         <span className="text-destructive">
           <TriangleAlert
@@ -64,7 +55,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
             <br />
             Esta acción eliminará permanentemente la pantalla {" "}
             <span className="font-bold">
-              {currentRow.Id_Objeto}
+              {currentRow.Nombre_Objeto}
             </span>{" "}
             del sistema. 
             <br />
@@ -72,11 +63,11 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
           </p>
 
           <Label className="my-2">
-            ID de pantalla:
+            Nombre de pantalla:
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder="Introduzca el ID de pantalla para confirmar la eliminación."
+              placeholder="Introduzca nombre de pantalla para confirmar la eliminación."
             />
           </Label>
 
