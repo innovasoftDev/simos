@@ -83,7 +83,7 @@ export const AddOrUpdateUser = async (values: {
     console.log(error);
     return {
       ok: false,
-      message: "No se pudo actualizar el role, revisar logs",
+      message: "No se pudo ingresar, ya existe un usuario con ese mismo nombre, porfavor ingrese uno diferente.",
     };
   }
 };

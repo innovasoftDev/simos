@@ -29,7 +29,7 @@ export const DeleteUser = async (id_user: string) => {
     console.log(error);
     return {
       ok: false,
-      message: "No se pudo actualizar el role, revisar logs",
+      message: "No se pudo ingresar, ya existe un usuario con el mismo nombre",
     };
   }
 };
