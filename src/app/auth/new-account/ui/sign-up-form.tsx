@@ -38,7 +38,7 @@ const formSchema = z
     lastName: z.nullable(
       z
         .string()
-        .min(1, { message: "Apellidos requerido." })
+        .min(1, { message: "Apellido requerido." })
         .max(30, { message: "Máximo 30 caracteres." })
         .regex(/^[a-zA-Z0-9_]+$/, {
           message: "No se permiten caracteres especiales.",
