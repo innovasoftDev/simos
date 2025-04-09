@@ -70,7 +70,7 @@ const formSchema = z
         message: "Debe contener al menos una letra mayúscula.",
       })
       .min(8, { message: "Debe tener al menos 8 caracteres." })
-
+      .max(30, { message: "Máximo 30 caracteres." })
       .regex(/[a-zA-Z]/, { message: "Debe contener al menos una letra." })
       .regex(/\d/, { message: "Debe contener al menos un número." })
       .regex(/[^a-zA-Z0-9]/, {
@@ -83,6 +83,7 @@ const formSchema = z
         message: "Debe contener al menos una letra mayúscula.",
       })
       .min(8, { message: "Debe tener al menos 8 caracteres." })
+      .max(30, { message: "Máximo 30 caracteres." })
       .regex(/[a-zA-Z]/, { message: "Debe contener al menos una letra." })
       .regex(/\d/, { message: "Debe contener al menos un número." })
       .regex(/[^a-zA-Z0-9]/, {
