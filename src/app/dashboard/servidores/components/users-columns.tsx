@@ -3,28 +3,10 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import LongText from "@/components/long-text";
-import { callTypes, userTypes } from "../data/data";
 import { Server } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { getRoleById } from "@/actions/admin/roles/getRoleById";
-import { useEffect, useState } from "react";
-
-async function getRole(id: string): Promise<string> {
-  const rol = await getRoleById(id);
-
-  return rol;
-}
-
-function ObternerRol(id: string): string {
-  const [data, setData] = useState<string>("");
-
-  useEffect(() => {
-    getRole(id).then(setData);
-  }, [id]);
-
-  return data;
-}
+import { callTypes } from "../data/data";
 
 export const columns: ColumnDef<Server>[] = [
   {
@@ -58,21 +40,14 @@ export const columns: ColumnDef<Server>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "nombre_servidor",
+    accessorKey: "Nombre_Servidor",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Servidor" />
     ),
     cell: ({ row }) => (
-      <div className="w-fit text-nowrap">{row.getValue("nombre_servidor")}</div>
-    ),
-  },
-  {
-    accessorKey: "descripcion",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Descripción" />
-    ),
-    cell: ({ row }) => (
-      <LongText className="max-w-36">{row.getValue("descripcion")}</LongText>
+      <LongText className="max-w-sm">
+        {row.getValue("Nombre_Servidor")}
+      </LongText>
     ),
     meta: {
       className: cn(
@@ -84,26 +59,55 @@ export const columns: ColumnDef<Server>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id_servidor",
+    accessorKey: "Descripcion",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID Servidor" />
+      <DataTableColumnHeader column={column} title="Descripcion" />
     ),
-    cell: ({ row }) => (
-      <div className="w-fit text-nowrap">{row.getValue("id_servidor")}</div>
-    ),
+    cell: ({ row }) => {
+      return (
+        <LongText className="max-w-sm">{row.getValue("Descripcion")}</LongText>
+      );
+    },
+    meta: {
+      className: cn(
+        "drop-shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:drop-shadow-[0_1px_2px_rgb(255_255_255_/_0.1)] lg:drop-shadow-none",
+        "bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted",
+        "sticky left-6 md:table-cell"
+      ),
+    },
+    enableHiding: false,
   },
   {
-    accessorKey: "status",
+    accessorKey: "Grup_Servidor.Nombre_Grupo_Servidores",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Grupo Servidores" />
+    ),
+    cell: ({ row }) => {
+      const { Grup_Servidor } = row.original;
+      const nombreGrupoServers = Grup_Servidor.Nombre_Grupo_Servidores;
+      return <LongText className="max-w-sm">{nombreGrupoServers}</LongText>;
+    },
+    meta: {
+      className: cn(
+        "drop-shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:drop-shadow-[0_1px_2px_rgb(255_255_255_/_0.1)] lg:drop-shadow-none",
+        "bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted",
+        "sticky left-6 md:table-cell"
+      ),
+    },
+    enableHiding: false,
+  },
+  {
+    accessorKey: "Estado",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Estado" />
     ),
     cell: ({ row }) => {
-      const { status } = row.original;
-      const badgeColor = callTypes.get(status);
+      const { Estado } = row.original;
+      const badgeColor = callTypes.get(Estado);
       return (
         <div className="flex space-x-2">
           <Badge variant="outline" className={cn("capitalize", badgeColor)}>
-            {row.getValue("status")}
+            {row.getValue("Estado")}
           </Badge>
         </div>
       );

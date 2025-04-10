@@ -24,7 +24,7 @@ export default async function ProfilePage() {
   const session = await auth();
 
   if (!session?.user) {
-    redirect("/");
+    redirect("/auth/login?returnTo=/perfil");
   }
 
   const user: UserProfile = session.user as UserProfile;

@@ -29,6 +29,7 @@ export const AddOrUpdateRole = async (values: {
         data: {
           rol: newUser.rol,
           descripcion: newUser.descripcion,
+          created: new Date(),
         },
       });
     } else {
@@ -38,7 +39,8 @@ export const AddOrUpdateRole = async (values: {
         },
         data: {
           rol: newUser.rol,
-          descripcion: newUser.descripcion
+          descripcion: newUser.descripcion,
+          updated: new Date(),
         },
       });
     }

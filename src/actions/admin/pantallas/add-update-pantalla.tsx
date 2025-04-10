@@ -30,6 +30,7 @@ export const AddOrUpdatePantalla = async (values: {
           Descripcion: nuevaPantalla.Descripcion,
           Tipo_Objeto: nuevaPantalla.Tipo_Objeto,
           Estado: nuevaPantalla.Estado,
+          created: new Date(),
         },
       });
     } else {
@@ -42,6 +43,7 @@ export const AddOrUpdatePantalla = async (values: {
           Descripcion: nuevaPantalla.Descripcion,
           Tipo_Objeto: nuevaPantalla.Tipo_Objeto,
           Estado: nuevaPantalla.Estado,
+          updated: new Date(),
         },
       });
     }

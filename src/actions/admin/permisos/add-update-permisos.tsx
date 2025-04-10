@@ -40,8 +40,9 @@ export const AddOrUpdatePermiso = async (values: {
           Permiso_Actualiza: nuevoPermiso.Permiso_Actualiza,
           Permiso_Elimina: nuevoPermiso.Permiso_Elimina,
           Permiso_Consulta: nuevoPermiso.Permiso_Consulta,
+          created: new Date(),
           TBL_USR_ROLESId: (await getIdByRole(nuevoPermiso.TBL_USR_ROLES.rol)).toString(),
-          ObjetoId: (await getIdByObject(nuevoPermiso.Objeto.Nombre_Objeto)).toString(),
+          ObjetoId: (await getIdByObject(nuevoPermiso.Objeto.Nombre_Objeto)).toString(),          
         },
       });
     } else {
@@ -54,6 +55,7 @@ export const AddOrUpdatePermiso = async (values: {
           Permiso_Actualiza: nuevoPermiso.Permiso_Actualiza,
           Permiso_Elimina: nuevoPermiso.Permiso_Elimina,
           Permiso_Consulta: nuevoPermiso.Permiso_Consulta,
+          updated: new Date(),
           TBL_USR_ROLESId: (await getIdByRole(nuevoPermiso.TBL_USR_ROLES.rol)).toString(),
           ObjetoId: (await getIdByObject(nuevoPermiso.Objeto.Nombre_Objeto)).toString(),
         },

@@ -5,9 +5,6 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-  /**
-   * shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-   */
 }
 
 model User {
@@ -21,12 +18,10 @@ model User {
   password             String
   image                String?
   status               String
-  created              DateTime?
+  created              DateTime
   updated              DateTime?
   rol                  TBL_USR_ROLES @relation(fields: [tbl_usr_roles_id_rol], references: [id_rol])
   tbl_usr_roles_id_rol String
-
-  Grup_Servidores Grup_Servidor[]
 
   @@map("Users")
 }
@@ -35,32 +30,35 @@ model TBL_USR_ROLES {
   id_rol      String    @id @default(uuid())
   rol         String    @unique
   descripcion String?   @db.VarChar(70)
+  created     DateTime
+  updated     DateTime?
   user        User[]
   Permisos    Permiso[]
 
   @@map("TBL_USR_ROLES")
 }
 
-/**
- * --------------------------------------------------------------------------------
- */
 model Objeto {
-  Id_Objeto     String  @id @default(uuid())
-  Nombre_Objeto String  @unique
+  Id_Objeto     String    @id @default(uuid())
+  Nombre_Objeto String    @unique
   Descripcion   String?
   Tipo_Objeto   String
   Estado        String
-  Permisos Permiso[]
+  created       DateTime
+  updated       DateTime?
+  Permisos      Permiso[]
 
   @@map("Objeto")
 }
 
 model Permiso {
-  Id_Permiso        String   @id @default(uuid())
+  Id_Permiso        String    @id @default(uuid())
   Permiso_Inserta   Boolean
   Permiso_Actualiza Boolean
   Permiso_Elimina   Boolean
   Permiso_Consulta  Boolean
+  created           DateTime
+  updated           DateTime?
 
   Objeto          Objeto        @relation(fields: [ObjetoId], references: [Id_Objeto])
   ObjetoId        String
@@ -70,84 +68,103 @@ model Permiso {
   @@map("Permisos")
 }
 
-/**
- * --------------------------------------------------------------------------------
- */
 model Grup_Servidor {
-  Id_Grup_Servidor        Int      @id @default(autoincrement())
-  Nombre_Grupo_Servidores String
+  Id_Grup_Servidor        String     @id @default(uuid())
+  Nombre_Grupo_Servidores String     @unique
   Descripcion             String?
-  Fecha_Creacion          DateTime
-
-  user       User       @relation(fields: [userId], references: [id_user])
-  userId     String
-  Servidores Servidor[]
+  created                 DateTime
+  updated                 DateTime?
+  Servidores              Servidor[]
 
   @@map("Grup_Servidores")
 }
 
 model Servidor {
-  Id_Servidor     Int      @id @default(autoincrement())
-  Nombre_Servidor String
+  Id_Servidor     String    @id @default(uuid())
+  Nombre_Servidor String    @unique
   Descripcion     String?
-  Fecha_Creacion  DateTime
+  CPU             String?
+  Memoria         String?
+  Tipo_Sevidor    String?
+  Nombre_AD       String?
+  URL             String?
+  Estado          String
+  created         DateTime
+  updated         DateTime?
 
   Grup_Servidor   Grup_Servidor @relation(fields: [Grup_ServidorId], references: [Id_Grup_Servidor])
-  Grup_ServidorId Int
+  Grup_ServidorId String
 
   Servicios        Servicio[]
   Errores_Servidor Error_Servidor[]
   Alertas_Servidor Alerta_Servidor[]
-  Dato_Servidor    Dato_Servidor?
 
   @@map("Servidores")
 }
 
 model Servicio {
-  Id_Servicio     Int      @id @default(autoincrement())
-  Nombre_Servicio String
-  Descripcion     String?
-  Fecha_Creacion  DateTime
-
-  Servidor   Servidor @relation(fields: [ServidorId], references: [Id_Servidor])
-  ServidorId Int
+  Id_Servicio      String            @id @default(uuid())
+  Nombre_Servicio  String            @unique
+  Descripcion      String?
+  created          DateTime
+  updated          DateTime?
+  Estado           String
+  Servidor         Servidor          @relation(fields: [ServidorId], references: [Id_Servidor])
+  ServidorId       String
+  Errores_Servicio Error_Servicio[]
+  Alertas_Servicio Alerta_Servicio[]
 
   @@map("Servicios")
 }
 
 model Error_Servidor {
-  Id_Error_Servidor Int      @id @default(autoincrement())
-  Codigo_Error      String
+  Id_Error_Servidor String    @id @default(uuid())
+  Codigo_Error      String    @unique
   Descripcion_Error String?
-  Fecha_Creacion    DateTime
-
-  Servidor   Servidor @relation(fields: [ServidorId], references: [Id_Servidor])
-  ServidorId Int
+  created           DateTime
+  updated           DateTime?
+  Estado            String
+  Servidor          Servidor  @relation(fields: [ServidorId], references: [Id_Servidor])
+  ServidorId        String
 
   @@map("Errores_Servidor")
 }
 
 model Alerta_Servidor {
-  Id_Alerta_Servidor Int      @id @default(autoincrement())
-  Codigo_Alerta      String
-  Descripcion_Alerta String?  @unique
-  Fecha_Creacion     DateTime
-
-  Servidor   Servidor @relation(fields: [ServidorId], references: [Id_Servidor])
-  ServidorId Int
+  Id_Alerta_Servidor String    @id @default(uuid())
+  Codigo_Alerta      String    @unique
+  Descripcion_Alerta String?
+  created            DateTime
+  updated            DateTime?
+  Estado             String
+  Servidor           Servidor  @relation(fields: [ServidorId], references: [Id_Servidor])
+  ServidorId         String
 
   @@map("Alertas_Servidor")
 }
 
-model Dato_Servidor {
-  Id_Dato_Servidor  Int     @id @default(autoincrement())
-  Sistema_Operativo String
-  Tipo_Sevidor      String?
-  URL               String
-  Estado            Boolean
+model Error_Servicio {
+  Id_Error_Servidor String    @id @default(uuid())
+  Codigo_Error      String    @unique
+  Descripcion_Error String?
+  created           DateTime
+  updated           DateTime?
+  Estado            String
+  Servicio          Servicio  @relation(fields: [ServicioId], references: [Id_Servicio])
+  ServicioId        String
 
-  Servidor   Servidor @relation(fields: [ServidorId], references: [Id_Servidor])
-  ServidorId Int      @unique
+  @@map("Errores_Servicio")
+}
 
-  @@map("Dato_Servidor")
+model Alerta_Servicio {
+  Id_Alerta_Servidor String    @id @default(uuid())
+  Codigo_Alerta      String    @unique
+  Descripcion_Alerta String?
+  created            DateTime
+  updated            DateTime?
+  Estado             String
+  Servicio           Servicio  @relation(fields: [ServicioId], references: [Id_Servicio])
+  ServicioId         String
+
+  @@map("Alertas_Servicio")
 }

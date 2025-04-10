@@ -8,10 +8,9 @@ export const metadata = {
 
 export default async function page() {
   const session = await auth();
-
-  if (session?.user.role === "admin") {
-    return <ServersPage/>;
+  if (!session?.user) {
+    redirect("/auth/login?returnTo=/perfil");
   } else {
-    redirect("/");
+    return <ServersPage />;
   }
 }

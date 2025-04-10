@@ -121,11 +121,11 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
   });
 
   const onSubmit = async (values: UserForm) => {
-    const result = await AddOrUpdateUser(values);
+    //const result = await AddOrUpdateUser(values);
 
     const { isEdit } = values;
 
-    if (result.ok) {
+    /* if (result.ok) {
       if (isEdit) {
         toast.error("Editar", {
           description: "¡Se ha editado el servidor!",
@@ -145,7 +145,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           description: "¡Ocurrió un error!",
         });
       }
-    }
+    } */
 
     form.reset();
     onOpenChange(false);

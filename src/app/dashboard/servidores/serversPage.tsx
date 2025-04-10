@@ -7,48 +7,33 @@ import { Main } from "@/components/layout/main";
 import { UsersActionDialog } from "./components/users-action-dialog";
 import { columns } from "./components/users-columns";
 import { UsersDeleteDialog } from "./components/users-delete-dialog";
-import { getUsers } from "@/actions/admin/users/get-users";
 import { UsersTable } from "./components/users-table";
 import UsersContextProvider, {
   type UsersDialogType,
 } from "./context/users-context";
 import { Server } from "./data/schema";
 import PageContainer from "@/components/layout/page-container";
+import { GetServidores } from "@/actions/dashboard/servidores/get-servidores";
+import { toast } from "sonner";
 
-/* async function getData(): Promise<Server[]> {
-  const { users = [] } = await getUsers();
+async function getData(): Promise<Server[]> {
+  const { servers = [], ok, message } = await GetServidores();
 
+  if (!ok) {
+    toast.error("Mensaje", {
+      description: message,
+    });
+  }
   // Fetch data from your API here.
-  return users;
-} */
+  return servers;
+}
 
 export default function ServersPage() {
-  /* const [data, setData] = useState<Server[]>([]);
+  const [data, setData] = useState<Server[]>([]);
 
   useEffect(() => {
     getData().then(setData);
-  }, []); */
-
-  const data: Server[] = [
-    {
-      id_servidor: "123456789",
-      id_grupo_servidor: "123456789",
-      nombre_servidor: "API_Server",
-      descripcion: "Servidor de Ventas",
-      status: "active",
-      created: null,
-      updated: null,
-    },
-    {
-      id_servidor: "123456789",
-      id_grupo_servidor: "123456789",
-      nombre_servidor: "API_Server",
-      descripcion: "Servidor de Ventas",
-      status: "inactive",
-      created: null,
-      updated: null,
-    },
-  ];
+  }, []);
 
   // Dialog states
   const [currentRow, setCurrentRow] = useState<Server | null>(null);
@@ -87,7 +72,7 @@ export default function ServersPage() {
         {currentRow && (
           <>
             <UsersActionDialog
-              key={`user-edit-${currentRow.id_servidor}`}
+              key={`user-edit-${currentRow.Id_Servidor}`}
               open={open === "edit"}
               onOpenChange={() => {
                 setOpen("edit");
@@ -99,7 +84,7 @@ export default function ServersPage() {
             />
 
             <UsersDeleteDialog
-              key={`user-delete-${currentRow.id_servidor}`}
+              key={`user-delete-${currentRow.Id_Servidor}`}
               open={open === "delete"}
               onOpenChange={() => {
                 setOpen("delete");

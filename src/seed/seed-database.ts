@@ -1,115 +1,6 @@
-//import { create } from "zustand";
 import { initialRolesData } from "./seed";
-//import { CreateUsers } from "../actions/seed/createUser";
+import { CreateUser, CreatePantallas, CreatePermiso, CreateGrupoServers, CreateServer, CreateServicio } from "./actions";
 import prisma from "../lib/prisma";
-import bcryptjs from "bcryptjs";
-
-async function getIdByRole(role: string): Promise<string> {
-  const admin = await prisma.tBL_USR_ROLES.findUnique({
-    where: { rol: "admin" },
-    select: { id_rol: true },
-  });
-
-  const user = await prisma.tBL_USR_ROLES.findUnique({
-    where: { rol: "user" },
-    select: { id_rol: true },
-  });
-
-  /* console.log(admin?.id_rol); */
-  if (role === "admin") {
-    return admin?.id_rol ?? "";
-  } else {
-    return user?.id_rol ?? "";
-  }
-}
-
-async function getIdFromObject(nameObject: string): Promise<string> {
-  const idObject = await prisma.objeto.findUnique({
-    where: { Nombre_Objeto: nameObject },
-    select: { Id_Objeto: true },
-  });
-
-  return idObject?.Id_Objeto ?? "";
-}
-
-async function getIdFromRole(nameRole: string): Promise<string> {
-  const idRole = await prisma.tBL_USR_ROLES.findUnique({
-    where: { rol: nameRole },
-    select: { id_rol: true },
-  });
-
-  return idRole?.id_rol ?? "";
-}
-
-async function CreateUser(
-  username: string,
-  firstname: string,
-  lastname: string,
-  email: string,
-  password: string,
-  role: string,
-  status: string
-) {
-  try {
-    await prisma.user.create({
-      data: {
-        email: email,
-        username: username,
-        firstName: firstname,
-        lastName: lastname,
-        password: bcryptjs.hashSync(password),
-        status: status,
-        tbl_usr_roles_id_rol: (await getIdByRole(role)).toString(),
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function CreatePantallas(
-  name: string,
-  description: string,
-  type_obj: string,
-  status: string
-) {
-  try {
-    await prisma.objeto.create({
-      data: {
-        Nombre_Objeto: name,
-        Descripcion: description,
-        Tipo_Objeto: type_obj,
-        Estado: status,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function CreatePermiso(
-  Permiso_Inserta: boolean,
-  Permiso_Actualiza: boolean,
-  Permiso_Elimina: boolean,
-  Permiso_Consulta: boolean,
-  Pantalla: string,
-  Rol: string
-) {
-  try {
-    await prisma.permiso.create({
-      data: {
-        Permiso_Inserta: Permiso_Inserta,
-        Permiso_Actualiza: Permiso_Actualiza,
-        Permiso_Elimina: Permiso_Elimina,
-        Permiso_Consulta: Permiso_Consulta,
-        ObjetoId: (await getIdFromObject(Pantalla)).toString(),
-        TBL_USR_ROLESId: (await getIdFromRole(Rol)).toString(),
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 async function main() {
   //! Borrar registros previos
@@ -117,7 +8,10 @@ async function main() {
   await prisma.permiso.deleteMany();
   await prisma.objeto.deleteMany();
   await prisma.tBL_USR_ROLES.deleteMany();
-
+  await prisma.servicio.deleteMany();
+  await prisma.servidor.deleteMany();
+  await prisma.grup_Servidor.deleteMany();
+  
   //! Para vista roles
   //? Creando roles admin y user
   const { roles } = initialRolesData;
@@ -125,7 +19,7 @@ async function main() {
     data: roles,
   });
 
-  await delay(50);
+  await delay(100);
 
   //! Para Vista Usuarios
   //? Creando usuario administrador
@@ -204,6 +98,26 @@ async function main() {
   CreatePermiso(true, true, true, true, "Alertas", "admin");
   CreatePermiso(true, true, true, true, "Errores", "admin");  
   CreatePermiso(true, false, true, false, "AcercaDe", "admin");
+
+  await delay(100);
+
+  //! Para Vista Servidores
+  //? Creando el grupo principal que contendrá todos los servers registrados en Honduras
+  CreateGrupoServers("Servers_HN", "Servidores para la región de Honduras.");
+
+  await delay(100);
+
+  //? Creando dos servidores de ejemplo
+  CreateServer("ICOMMERCE_TGU", "Serveridor de ventas TGU.", "Servers_HN");
+  CreateServer("ICOMMERCE_SPS", "Serveridor de ventas SPS.", "Servers_HN");
+
+  await delay(100);
+
+  //! Para la vista servicios
+  //? Creando dos servicios de ejemplo
+  CreateServicio("API_ICOMMERCE_TGU", "API de ventas TGU.", "active", "ICOMMERCE_TGU");
+  CreateServicio("API_ICOMMERCE_sps", "API de ventas SPS.", "inactive", "ICOMMERCE_SPS");
+  
 
   console.log("Seed ejecutado correctamente");
 }

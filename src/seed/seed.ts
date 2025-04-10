@@ -4,6 +4,7 @@
 interface SeedRole {
   rol: "admin" | "user";
   descripcion: string | null;
+  created: Date;
 }
 
 interface SeedRoles {
@@ -15,10 +16,12 @@ export const initialRolesData: SeedRoles = {
     {
       rol: "admin",
       descripcion: "Usuario Administrador",
+      created: new Date(),
     },
     {
       rol: "user",
       descripcion: "Usuario Normal",
+      created: new Date(),
     },
   ],
 };

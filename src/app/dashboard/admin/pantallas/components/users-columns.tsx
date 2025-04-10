@@ -39,23 +39,6 @@ export const columns: ColumnDef<Pantalla>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-  /* {
-    accessorKey: "Id_Objeto",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID" />
-    ),
-    cell: ({ row }) => (
-      <LongText className="max-w-sm">{row.getValue("Id_Objeto")}</LongText>
-    ),
-    meta: {
-      className: cn(
-        "drop-shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:drop-shadow-[0_1px_2px_rgb(255_255_255_/_0.1)] lg:drop-shadow-none",
-        "bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted",
-        "sticky left-6 md:table-cell"
-      ),
-    },
-    enableHiding: false,
-  }, */
   {
     accessorKey: "Nombre_Objeto",
     header: ({ column }) => (
