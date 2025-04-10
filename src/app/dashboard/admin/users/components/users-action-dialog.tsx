@@ -47,7 +47,7 @@ const formSchema = z
     lastName: z.nullable(
       z
         .string()
-        .min(1, { message: "Apellidos requerido." })
+        .min(1, { message: "Apellido requerido." })
         .max(30, { message: "Máximo 30 caracteres." })
         .regex(/^[a-zA-Z0-9_]+$/, {
           message: "No se permiten caracteres especiales.",
@@ -78,6 +78,7 @@ const formSchema = z
         message: "Debe contener al menos una letra mayúscula.",
       })
       .min(8, { message: "Debe tener al menos 8 caracteres." })
+      .max(30, { message: "Máximo 30 caracteres." })
 
       .regex(/[a-zA-Z]/, { message: "Debe contener al menos una letra." })
       .regex(/\d/, { message: "Debe contener al menos un número." })
@@ -99,6 +100,7 @@ const formSchema = z
         message: "Debe contener al menos una letra mayúscula.",
       })
       .min(8, { message: "Debe tener al menos 8 caracteres." })
+      .max(30, { message: "Máximo 30 caracteres." })
       .regex(/[a-zA-Z]/, { message: "Debe contener al menos una letra." })
       .regex(/\d/, { message: "Debe contener al menos un número." })
       .regex(/[^a-zA-Z0-9]/, {
@@ -432,14 +434,14 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                 )}
               />
 
-              {/* Apellidos */}
+              {/* Apellido */}
               <FormField
                 control={form.control}
                 name="lastName"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4">
                     <FormLabel className="col-span-2 text-right">
-                      Apellidos
+                      Apellido
                     </FormLabel>
                     <FormControl>
                       <Input
