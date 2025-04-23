@@ -36,7 +36,13 @@ import {
   Bolt,
   X,
   TriangleAlert,
-  CircleX
+  CircleX,
+  Bug,
+  Lock,
+  UserRoundX,
+  Ban,
+  ServerOff,
+  Construction 
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -78,5 +84,11 @@ export const Icons = {
   check: Check,
   segurity: Shield,  
   alert: TriangleAlert,
-  error: CircleX 
+  error: CircleX,
+  Bug,
+  Lock,
+  UserRoundX,
+  Ban,
+  ServerOff,
+  Construction 
 };

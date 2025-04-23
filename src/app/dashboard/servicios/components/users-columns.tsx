@@ -3,30 +3,12 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import LongText from "@/components/long-text";
-import { callTypes, userTypes } from "../data/data";
-import { Service } from "../data/schema";
+import { Servicio } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-import { getRoleById } from "@/actions/admin/roles/getRoleById";
-import { useEffect, useState } from "react";
+import { callTypes } from "../data/data";
 
-async function getRole(id: string): Promise<string> {
-  const rol = await getRoleById(id);
-
-  return rol;
-}
-
-function ObternerRol(id: string): string {
-  const [data, setData] = useState<string>("");
-
-  useEffect(() => {
-    getRole(id).then(setData);
-  }, [id]);
-
-  return data;
-}
-
-export const columns: ColumnDef<Service>[] = [
+export const columns: ColumnDef<Servicio>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -58,21 +40,14 @@ export const columns: ColumnDef<Service>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "nombre_servicio",
+    accessorKey: "Nombre_Servicio",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Servicio" />
     ),
     cell: ({ row }) => (
-      <div className="w-fit text-nowrap">{row.getValue("nombre_servicio")}</div>
-    ),
-  },
-  {
-    accessorKey: "descripcion",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Descripción" />
-    ),
-    cell: ({ row }) => (
-      <LongText className="max-w-36">{row.getValue("descripcion")}</LongText>
+      <LongText className="max-w-sm">
+        {row.getValue("Nombre_Servicio")}
+      </LongText>
     ),
     meta: {
       className: cn(
@@ -84,26 +59,55 @@ export const columns: ColumnDef<Service>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id_servidor",
+    accessorKey: "Descripcion",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Server" />
+      <DataTableColumnHeader column={column} title="Descripcion" />
     ),
-    cell: ({ row }) => (
-      <div className="w-fit text-nowrap">{row.getValue("id_servidor")}</div>
-    ),
+    cell: ({ row }) => {
+      return (
+        <LongText className="max-w-sm">{row.getValue("Descripcion")}</LongText>
+      );
+    },
+    meta: {
+      className: cn(
+        "drop-shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:drop-shadow-[0_1px_2px_rgb(255_255_255_/_0.1)] lg:drop-shadow-none",
+        "bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted",
+        "sticky left-6 md:table-cell"
+      ),
+    },
+    enableHiding: false,
   },
   {
-    accessorKey: "status",
+    accessorKey: "Servidor.Nombre_Servidor",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Servidor" />
+    ),
+    cell: ({ row }) => {
+      const { Servidor } = row.original;
+      const nombreServers = Servidor.Nombre_Servidor;
+      return <LongText className="max-w-sm">{nombreServers}</LongText>;
+    },
+    meta: {
+      className: cn(
+        "drop-shadow-[0_1px_2px_rgb(0_0_0_/_0.1)] dark:drop-shadow-[0_1px_2px_rgb(255_255_255_/_0.1)] lg:drop-shadow-none",
+        "bg-background transition-colors duration-200 group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted",
+        "sticky left-6 md:table-cell"
+      ),
+    },
+    enableHiding: false,
+  },
+  {
+    accessorKey: "Estado",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Estado" />
     ),
     cell: ({ row }) => {
-      const { status } = row.original;
-      const badgeColor = callTypes.get(status);
+      const { Estado } = row.original;
+      const badgeColor = callTypes.get(Estado);
       return (
         <div className="flex space-x-2">
           <Badge variant="outline" className={cn("capitalize", badgeColor)}>
-            {row.getValue("status")}
+            {row.getValue("Estado")}
           </Badge>
         </div>
       );

@@ -8,7 +8,7 @@ export type User = {
   verified: boolean;
   status: string;
 };
-export const users: User[] = [
+/* export const users: User[] = [
   {
     id: 1,
     name: 'Candice Schiner',
@@ -89,9 +89,9 @@ export const users: User[] = [
     verified: false,
     status: 'Active'
   }
-];
+]; */
 
-export type Employee = {
+/* export type Employee = {
   id: number;
   first_name: string;
   last_name: string;
@@ -114,9 +114,9 @@ export type Employee = {
   direccion: string;
   alerta: string;
   estado: string; 
-};
+}; */
 
-export type Product = {
+/* export type Product = {
   photo_url: string;
   name: string;
   description: string;
@@ -125,7 +125,7 @@ export type Product = {
   id: number;
   category: string;
   updated_at: string;
-};
+}; */
 
 export const navItems: NavItem[] = [
   {
@@ -137,18 +137,18 @@ export const navItems: NavItem[] = [
     items: [] // Empty array as there are no child items for Dashboard
   },
   {
-    title: 'Servicios',
-    url: '/dashboard/servicios',
-    icon: 'handPlatter',
-    shortcut: ['e', 'e'],
-    isActive: false,
-    items: [] // No child items
-  },
-  {
     title: 'Servidores',
     url: '/dashboard/servidores',
     icon: 'servericon',
     shortcut: ['p', 'p'],
+    isActive: false,
+    items: [] // No child items
+  },
+  {
+    title: 'Servicios',
+    url: '/dashboard/servicios',
+    icon: 'handPlatter',
+    shortcut: ['e', 'e'],
     isActive: false,
     items: [] // No child items
   },
@@ -190,25 +190,64 @@ export const navAdminItems: NavItem[] = [
         title: 'Usuarios',
         url: '/dashboard/admin/users',
         icon: 'pizza',
-        shortcut: ['m', 'm']
+        shortcut: ['u', 'u']
       },
       {
         title: 'Pantallas',
         url: '/dashboard/admin/pantallas',
         icon: 'moon',
-        shortcut: ['m', 'm']
+        shortcut: ['p', 'p']
       },
       {
         title: 'Roles',
         url: '/dashboard/admin/roles',
         icon: 'laptop',
-        shortcut: ['m', 'm']
+        shortcut: ['r', 'r']
       },
       {
         title: 'Permisos',
-        shortcut: ['l', 'l'],
+        shortcut: ['e', 'e'],
         url: '/dashboard/admin/permisos',
         icon: 'logout'
+      }
+    ]
+  },
+  {
+    title: 'Errores',
+    url: '#', // Placeholder as there is no direct link for the parent
+    icon: 'Bug',
+    isActive: false,
+
+    items: [
+      {
+        title: 'Unauthorized',
+        url: '/401',
+        icon: 'Lock',
+        shortcut: ['u', 'u']
+      },
+      {
+        title: 'Forbidden',
+        url: '/403',
+        icon: 'UserRoundX',
+        shortcut: ['f', 'f']
+      },
+      {
+        title: 'Not Found',
+        url: '/404',
+        icon: 'Ban',
+        shortcut: ['n', 'n']
+      },
+      {
+        title: 'Internal Server Error',
+        shortcut: ['i', 'i'],
+        url: '/500',
+        icon: 'ServerOff'
+      },
+      {
+        title: 'Maintenance Error',
+        shortcut: ['m', 'm'],
+        url: '/503',
+        icon: 'Construction'
       }
     ]
   },

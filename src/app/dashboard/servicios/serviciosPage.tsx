@@ -7,51 +7,36 @@ import { Main } from "@/components/layout/main";
 import { UsersActionDialog } from "./components/users-action-dialog";
 import { columns } from "./components/users-columns";
 import { UsersDeleteDialog } from "./components/users-delete-dialog";
-import { getUsers } from "@/actions/admin/users/get-users";
 import { UsersTable } from "./components/users-table";
 import UsersContextProvider, {
   type UsersDialogType,
 } from "./context/users-context";
-import { Service } from "./data/schema";
+import { Servicio } from "./data/schema";
 import PageContainer from "@/components/layout/page-container";
+import { GetServicios } from "@/actions/dashboard/servicios/get-servicios";
+import { toast } from "sonner";
 
-/* async function getData(): Promise<Service[]> {
-  const { users = [] } = await getUsers();
+async function getData(): Promise<Servicio[]> {
+  const { servicios = [], ok, message } = await GetServicios();
 
+  if (!ok) {
+    toast.error("Mensaje", {
+      description: message,
+    });
+  }
   // Fetch data from your API here.
-  return users;
-} */
+  return servicios;
+}
 
-export default function ServicesPage() {
-  /* const [data, setData] = useState<Service[]>([]);
+export default function ServiciosPage() {
+  const [data, setData] = useState<Servicio[]>([]);
 
   useEffect(() => {
     getData().then(setData);
-  }, []); */
-
-  const data: Service[] = [
-    {
-      id_servicio: "123456789",
-      id_servidor: "123456789",
-      nombre_servicio: "API_Service",
-      descripcion: "Servicio de ventas",
-      status: "active",
-      created: null,
-      updated: null,
-    },
-    {
-      id_servicio: "123456789",
-      id_servidor: "123456789",
-      nombre_servicio: "Icommerce_Service",
-      descripcion: "Servicio de ventas",
-      status: "inactive",
-      created: null,
-      updated: null,
-    },
-  ];
+  }, []);
 
   // Dialog states
-  const [currentRow, setCurrentRow] = useState<Service | null>(null);
+  const [currentRow, setCurrentRow] = useState<Servicio | null>(null);
   const [open, setOpen] = useDialogState<UsersDialogType>(null);
 
   return (
@@ -62,11 +47,9 @@ export default function ServicesPage() {
         <Main>
           <div className="mb-2 flex items-center justify-between space-y-2 flex-wrap">
             <div>
-              <h2 className="text-2xl font-bold tracking-tight">
-                Servicios
-              </h2>
+              <h2 className="text-2xl font-bold tracking-tight">Servicios</h2>
               <p className="text-muted-foreground">
-                Administra aquí tus servicios.
+                Administra aquí a tus servicios.
               </p>
             </div>
             <div className="flex gap-2">
@@ -89,7 +72,7 @@ export default function ServicesPage() {
         {currentRow && (
           <>
             <UsersActionDialog
-              key={`user-edit-${currentRow.id_servicio}`}
+              key={`user-edit-${currentRow.Id_Servicio}`}
               open={open === "edit"}
               onOpenChange={() => {
                 setOpen("edit");
@@ -101,7 +84,7 @@ export default function ServicesPage() {
             />
 
             <UsersDeleteDialog
-              key={`user-delete-${currentRow.id_servicio}`}
+              key={`user-delete-${currentRow.Id_Servicio}`}
               open={open === "delete"}
               onOpenChange={() => {
                 setOpen("delete");

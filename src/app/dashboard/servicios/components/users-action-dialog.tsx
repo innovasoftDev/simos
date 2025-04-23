@@ -3,7 +3,6 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-/* import { toast } from '@/hooks/use-toast' */
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,64 +25,69 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { PasswordInput } from "@/components/password-input";
 import { SelectDropdown } from "@/components/select-dropdown";
-import { userTypes } from "../data/data";
-import { Service } from "../data/schema";
-import { AddOrUpdateUser } from "@/actions/admin/users/add-update-user";
+import { servicioStatus, Servers } from "../data/data";
+import { Servicio } from "../data/schema";
+import { AddOrUpdateServicio } from "@/actions/dashboard/servicios/add-update-servicio";
+
+/* Id_Servicio: "",
+    Nombre_Servicio: "",
+    Descripcion: "",
+    Estado: "",
+    ServidorId: "",
+    Servidor: {
+      Nombre_Servicio: "",
+    },
+    isEdit: false,
+}; */
 
 const formSchema = z
   .object({
-    firstName: z.string().min(1, { message: "First Name is required." }),
-    lastName: z.string().min(1, { message: "Last Name is required." }),
-    username: z.string().min(1, { message: "Username is required." }),
-    phoneNumber: z.string().min(1, { message: "Phone number is required." }),
-    email: z
+    Id_Servicio: z.string(),
+    Nombre_Servicio: z
       .string()
-      .min(1, { message: "Email is required." })
-      .email({ message: "Email is invalid." }),
-    password: z.string().transform((pwd) => pwd.trim()),
-    tbl_usr_roles_id_rol: z.string().min(1, { message: "Role is required." }),
-    confirmPassword: z.string().transform((pwd) => pwd.trim()),
+      .min(1, { message: "Nombre del servidor es requerido." }),
+    Descripcion: z.nullable(z.string()),
+    Estado: z.string().min(1, { message: "Estado es requerido." }),
+    ServidorId: z.string(),
+    Servidor: z.object({
+      Nombre_Servidor: z
+        .string()
+        .min(1, { message: "Grupo Servidor es requerido." }),
+    }),
     isEdit: z.boolean(),
   })
-  .superRefine(({ isEdit, password, confirmPassword }, ctx) => {
-    if (!isEdit || (isEdit && password !== "")) {
-      if (password === "") {
+  .superRefine(({ isEdit, Nombre_Servicio }, ctx) => {
+    if (!isEdit || (isEdit && Nombre_Servicio !== "")) {
+      if (Nombre_Servicio === "") {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Password is required.",
-          path: ["password"],
+          message: "Nombre Servidor is required.",
+          path: ["Nombre_Servicio"],
         });
       }
 
-      if (password.length < 8) {
+      if (Nombre_Servicio.length < 8) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Password must be at least 8 characters long.",
-          path: ["password"],
+          message: "Nombre Servidor must be at least 8 characters long.",
+          path: ["Nombre_Servicio"],
         });
       }
 
-      if (!password.match(/[a-z]/)) {
+      if (!Nombre_Servicio.match(/[a-z]/)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Password must contain at least one lowercase letter.",
-          path: ["password"],
+          message:
+            "Nombre Servidor must contain at least one lowercase letter.",
+          path: ["Nombre_Servicio"],
         });
       }
 
-      if (!password.match(/\d/)) {
+      if (!Nombre_Servicio.match(/\d/)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Password must contain at least one number.",
-          path: ["password"],
-        });
-      }
-
-      if (password !== confirmPassword) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Passwords don't match.",
-          path: ["confirmPassword"],
+          message: "Nombre Servidor must contain at least one number.",
+          path: ["Nombre_Servicio"],
         });
       }
     }
@@ -91,67 +95,47 @@ const formSchema = z
 type UserForm = z.infer<typeof formSchema>;
 
 interface Props {
-  currentRow?: Service;
+  currentRow?: Servicio;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
 export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
+  const servidores = Servers();
   const isEdit = !!currentRow;
   const form = useForm<UserForm>({
     resolver: zodResolver(formSchema),
     defaultValues: isEdit
       ? {
           ...currentRow,
-          password: "",
-          confirmPassword: "",
           isEdit,
         }
       : {
-          firstName: "",
-          lastName: "",
-          username: "",
-          email: "",
-          tbl_usr_roles_id_rol: "",
-          phoneNumber: "",
-          password: "",
-          confirmPassword: "",
+          Id_Servicio: "",
+          Nombre_Servicio: "",
+          Descripcion: "",
+          Estado: "",
+          ServidorId: "",
+          Servidor: {
+            Nombre_Servidor: "",
+          },
           isEdit,
         },
   });
 
   const onSubmit = async (values: UserForm) => {
-    const result = await AddOrUpdateUser(values);
-
-    const { isEdit } = values;
+    const result = await AddOrUpdateServicio(values);
 
     if (result.ok) {
-      if (isEdit) {
-        toast.error("Editar", {
-          description: "¡Se ha editado el usuario!",
-        });
-      } else {
-        toast.error("Crear", {
-          description: "¡Se ha creado el usuario!",
-        });
-      }
+      location.reload();
     } else {
-      if (isEdit) {
-        toast.error("Editar", {
-          description: "¡Ocurrió un error!",
-        });
-      } else {
-        toast.error("Crear", {
-          description: "¡Ocurrió un error!",
-        });
-      }
+      toast.error(result.message);
     }
-    
     form.reset();
     onOpenChange(false);
   };
 
-  const isPasswordTouched = !!form.formState.dirtyFields.password;
+  //const isPasswordTouched = !!form.formState.dirtyFields.password;
 
   return (
     <Dialog
@@ -164,12 +148,12 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
       <DialogContent className="sm:max-w-lg">
         <DialogHeader className="text-left">
           <DialogTitle>
-            {isEdit ? "Editar Usuario" : "Agregar Nuevo Usuario"}
+            {isEdit ? "Editar Servidor" : "Agregar Nuevo Servidor"}
           </DialogTitle>
           <DialogDescription>
             {isEdit
-              ? "Actualiza al usuario aquí. "
-              : "Crea un nuevo usuario aquí. "}
+              ? "Actualiza el nuevo servidor aquí. "
+              : "Crea un nuevo servidor aquí. "}
             Haga clic en guardar cuando haya terminado.
           </DialogDescription>
         </DialogHeader>
@@ -182,55 +166,15 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
             >
               <FormField
                 control={form.control}
-                name="firstName"
+                name="Nombre_Servicio"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
                     <FormLabel className="col-span-2 text-right">
-                      Nombre
+                      Servidor
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="John"
-                        className="col-span-4"
-                        autoComplete="off"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="col-span-4 col-start-3" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
-                    <FormLabel className="col-span-2 text-right">
-                      Apellido
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Doe"
-                        className="col-span-4"
-                        autoComplete="off"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="col-span-4 col-start-3" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
-                    <FormLabel className="col-span-2 text-right">
-                      Usuario
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="john_doe"
+                        placeholder="Nombre de servidor"
                         className="col-span-4"
                         {...field}
                       />
@@ -239,58 +183,42 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
-                name="email"
+                name="Descripcion"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
                     <FormLabel className="col-span-2 text-right">
-                      Email
+                      Descripción
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="john.doe@gmail.com"
+                        placeholder="Descripción de servidor"
                         className="col-span-4"
                         {...field}
+                        value={field.value?.toString()}
                       />
                     </FormControl>
                     <FormMessage className="col-span-4 col-start-3" />
                   </FormItem>
                 )}
               />
+              
               <FormField
                 control={form.control}
-                name="phoneNumber"
+                name="Estado"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
                     <FormLabel className="col-span-2 text-right">
-                      Teléfono
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="+123456789"
-                        className="col-span-4"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="col-span-4 col-start-3" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="tbl_usr_roles_id_rol"
-                render={({ field }) => (
-                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
-                    <FormLabel className="col-span-2 text-right">
-                      Role
+                      Estado
                     </FormLabel>
                     <SelectDropdown
                       defaultValue={field.value}
                       onValueChange={field.onChange}
-                      placeholder="Seleccionar un rol"
+                      placeholder="Seleccionar un estado"
                       className="col-span-4"
-                      items={userTypes.map(({ label, value }) => ({
+                      items={servicioStatus.map(({ label, value }) => ({
                         label,
                         value,
                       }))}
@@ -299,41 +227,25 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
-                name="password"
+                name="Servidor.Nombre_Servidor"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
                     <FormLabel className="col-span-2 text-right">
-                      Contraseña
+                      Grupo Servidor
                     </FormLabel>
-                    <FormControl>
-                      <PasswordInput
-                        placeholder="e.g., S3cur3P@ssw0rd"
-                        className="col-span-4"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="col-span-4 col-start-3" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
-                    <FormLabel className="col-span-2 text-right">
-                      Confirmar Contraseña
-                    </FormLabel>
-                    <FormControl>
-                      <PasswordInput
-                        disabled={!isPasswordTouched}
-                        placeholder="e.g., S3cur3P@ssw0rd"
-                        className="col-span-4"
-                        {...field}
-                      />
-                    </FormControl>
+                    <SelectDropdown
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
+                      placeholder="Seleccionar un grupo"
+                      className="col-span-4"
+                      items={servidores.map(({ Nombre_Servidor }) => ({
+                        label: Nombre_Servidor ? Nombre_Servidor : "",
+                        value: Nombre_Servidor ? Nombre_Servidor : "",
+                      }))}
+                    />
                     <FormMessage className="col-span-4 col-start-3" />
                   </FormItem>
                 )}

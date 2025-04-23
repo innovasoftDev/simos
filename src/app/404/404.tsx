@@ -12,9 +12,7 @@ export default function NotFound() {
       <span className="bg-gradient-to-b from-foreground to-transparent bg-clip-text text-[10rem] font-extrabold leading-none text-transparent">
         404
       </span>
-      <h2 className="font-heading my-2 text-2xl font-bold">
-        Algo falta.
-      </h2>
+      <h2 className="font-heading my-2 text-2xl font-bold">Algo falta.</h2>
       <p>
         Lo sentimos, la página que estás buscando no existe o ha sido movida.
       </p>

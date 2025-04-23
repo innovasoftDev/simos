@@ -5,6 +5,8 @@ import { auth } from "@/auth.config";
 //import { PrismaClient, Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { GetServerByName } from "../servidores/get-group-by-id";
+import { getIdByObjeto } from "@/actions/admin/pantallas/getIdByObject";
+import { getIdByRole } from "@/actions/admin/roles/getRoleById";
 
 export const AddOrUpdateServer = async (values: {
   Id_Servidor: string;
@@ -24,11 +26,41 @@ export const AddOrUpdateServer = async (values: {
 }) => {
   const session = await auth();
 
-  if (session?.user.role !== "admin") {
-    return {
-      ok: false,
-      message: "Debe de estar autenticado como admin",
-    };
+  //? Obteniendo id del role que tiene el usuario
+  const role_user = session?.user.role;
+  const id_rol = await getIdByRole(role_user);
+
+  //console.log(id_rol);
+
+  //? Obteniendo id del objeto actual
+  const nombreObjeto = "Servidores";
+  const permisos = await getIdByObjeto(nombreObjeto, id_rol);
+
+  //console.log(permisos);
+  if (values.isEdit) {
+    const Permiso_Actualiza = permisos?.Permiso_Actualiza;
+
+    if (!Permiso_Actualiza) {
+      //console.log("Su usuario no tiene permisos para consultar esta pantalla.");
+
+      return {
+        ok: false,
+        message:
+          "Su usuario no tiene permisos para actualizar un servidor.",
+      };
+    }
+  } else {
+    const Permiso_Inserta = permisos?.Permiso_Inserta;
+
+    if (!Permiso_Inserta) {
+      //console.log("Su usuario no tiene permisos para consultar esta pantalla.");
+
+      return {
+        ok: false,
+        message:
+          "Su usuario no tiene permisos para agregar nuevo servidor.",
+      };
+    }
   }
 
   try {
@@ -39,7 +71,6 @@ export const AddOrUpdateServer = async (values: {
     if (!newServer.isEdit) {
       await prisma.servidor.create({
         data: {
-          Id_Servidor: newServer.Id_Servidor,
           Nombre_Servidor: newServer.Nombre_Servidor,
           Descripcion: newServer.Descripcion,
           CPU: newServer.CPU,

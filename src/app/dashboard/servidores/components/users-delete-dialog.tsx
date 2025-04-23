@@ -22,6 +22,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
 
   const handleDelete = async () => {
     if (value.trim() !== currentRow.Nombre_Servidor) return;
+    
     const result = await DeleteServer(currentRow.Id_Servidor);
 
     if (result.ok) {

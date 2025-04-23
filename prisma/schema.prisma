@@ -92,7 +92,7 @@ model Servidor {
   created         DateTime
   updated         DateTime?
 
-  Grup_Servidor   Grup_Servidor @relation(fields: [Grup_ServidorId], references: [Id_Grup_Servidor])
+  Grup_Servidor   Grup_Servidor @relation(fields: [Grup_ServidorId], references: [Id_Grup_Servidor], onDelete: Cascade)
   Grup_ServidorId String
 
   Servicios        Servicio[]

@@ -12,3 +12,12 @@ export const GetServerByName = async (name?: string) => {
 
   return idGroupServer?.Id_Grup_Servidor ?? "";
 };
+
+export async function getIdFromServers(serverName: string): Promise<string> {
+  const idServer = await prisma.servidor.findUnique({
+    where: { Nombre_Servidor: serverName },
+    select: { Id_Servidor: true },
+  });
+
+  return idServer?.Id_Servidor ?? "";
+}

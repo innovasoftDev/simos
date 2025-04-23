@@ -13,7 +13,7 @@ export type Server = {
   Grup_ServidorId: string;
   Grup_Servidor: {
     Nombre_Grupo_Servidores: string;
-  };
+  } ;
 };
 
 export type ServerGroup = {

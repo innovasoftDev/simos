@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { getIdByObjeto } from "@/actions/admin/pantallas/getIdByObject";
 import { getIdByRole } from "@/actions/admin/roles/getRoleById";
 
-export const DeleteServer = async (id_server: string) => {
+export const DeleteServicio= async (id_service: string) => {
   const session = await auth();
 
   //? Obteniendo id del role que tiene el usuario
@@ -15,7 +15,7 @@ export const DeleteServer = async (id_server: string) => {
   //console.log(id_rol);
 
   //? Obteniendo id del objeto actual
-  const nombreObjeto = "Servidores";
+  const nombreObjeto = "Servicios";
   const permisos = await getIdByObjeto(nombreObjeto, id_rol);
 
   //console.log(permisos);
@@ -32,9 +32,9 @@ export const DeleteServer = async (id_server: string) => {
   }
 
   try {
-    await prisma.servidor.delete({
+    await prisma.servicio.delete({
       where: {
-        Id_Servidor: id_server,
+        Id_Servicio: id_service,
       },
     });
 
@@ -47,7 +47,7 @@ export const DeleteServer = async (id_server: string) => {
     console.log(error);
     return {
       ok: false,
-      message: "No se pudo eliminar el servidor, revisar logs",
+      message: "No se pudo eliminar el servicio, revisar logs",
     };
   }
 };

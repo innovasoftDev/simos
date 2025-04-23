@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 
-export async function getIdByRole(role: string): Promise<string> {
+export async function getIdByRole(role?: string): Promise<string> {
   const idRole = await prisma.tBL_USR_ROLES.findUnique({
     where: { rol: role },
     select: { id_rol: true },

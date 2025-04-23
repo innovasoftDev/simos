@@ -116,7 +116,7 @@ async function main() {
   //! Para la vista servicios
   //? Creando dos servicios de ejemplo
   CreateServicio("API_ICOMMERCE_TGU", "API de ventas TGU.", "active", "ICOMMERCE_TGU");
-  CreateServicio("API_ICOMMERCE_sps", "API de ventas SPS.", "inactive", "ICOMMERCE_SPS");
+  CreateServicio("API_ICOMMERCE_SPS", "API de ventas SPS.", "inactive", "ICOMMERCE_SPS");
   
 
   console.log("Seed ejecutado correctamente");

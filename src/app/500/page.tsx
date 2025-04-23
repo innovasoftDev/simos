@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth.config";
-import ServiciosPage from "./serviciosPage";
+import InternalServerError from "./500";
 
 export const metadata = {
-  title: "Dashboard : Servicios",
+  title: "Administración : 403",
 };
 
 export default async function page() {
@@ -11,6 +11,6 @@ export default async function page() {
   if (!session?.user) {
     redirect("/auth/login?returnTo=/perfil");
   } else {
-    return <ServiciosPage />;
+    return <InternalServerError/>;
   }
 }
