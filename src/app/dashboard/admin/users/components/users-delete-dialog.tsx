@@ -20,7 +20,6 @@ interface Props {
 
 export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   const [value, setValue] = useState("");
-  const { mutate } = useSWR("/dashboard/admin/users", fetch);
 
   const handleDelete = async () => {
     if (value.trim() !== currentRow.username) return;

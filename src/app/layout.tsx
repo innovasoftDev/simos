@@ -32,7 +32,7 @@ export default async function RootLayout({
       className={`${lato.className}`}
       suppressHydrationWarning={true}
     >
-      <body className={'overflow-hidden'}>
+      <body className={'overflow-hidden'} suppressHydrationWarning >
         <NextTopLoader showSpinner={false} />
         <Providers session={session}>
           <Toaster />

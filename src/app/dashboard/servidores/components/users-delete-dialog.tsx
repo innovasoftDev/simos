@@ -7,10 +7,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ConfirmDialog } from "@/components/confirm-dialog";
-import { Server } from '../data/schema';
+import { Server } from "../data/schema";
 import { toast } from "sonner";
-import { DeleteUser } from "@/actions/admin/users/delete-user";
-import useSWR from 'swr'
+import { DeleteServer } from "@/actions/dashboard/servidores/delete-server";
 
 interface Props {
   open: boolean;
@@ -20,23 +19,16 @@ interface Props {
 
 export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   const [value, setValue] = useState("");
-  const { mutate } = useSWR("/dashboard/admin/users", fetch);
 
   const handleDelete = async () => {
-    if (value.trim() !== currentRow.id_servidor) return;
-    /* const result = await DeleteUser(value.trim());
+    if (value.trim() !== currentRow.Nombre_Servidor) return;
+    const result = await DeleteServer(currentRow.Id_Servidor);
 
     if (result.ok) {
-      mutate();
-      toast.error("Eliminar", {
-        description: "¡Se ha eliminado el usuario!",
-      });
+      location.reload();
     } else {
-      toast.error("Eliminar", {
-        description: "¡Ocurrió un error!",
-      });
-    } */
-
+      toast.error(result.message);
+    }
     onOpenChange(false);
   };
 
@@ -45,7 +37,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={value.trim() !== currentRow.id_servidor}
+      disabled={value.trim() !== currentRow.Nombre_Servidor}
       title={
         <span className="text-destructive">
           <TriangleAlert
@@ -60,17 +52,15 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
           <p className="mb-2">
             ¿Estás seguro de que quieres eliminar este servidor?
             <br />
-            Esta acción eliminará permanentemente el servidor {" "}
-            <span className="font-bold">
-              {currentRow.id_servidor}
-            </span>{" "}
-            del sistema. 
+            Esta acción eliminará permanentemente el servidor{" "}
+            <span className="font-bold">{currentRow.Nombre_Servidor}</span> del
+            sistema.
             <br />
             Esto no se puede deshacer.
           </p>
 
           <Label className="my-2">
-            Nombre de usuario:
+            Nombre del servidor:
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}

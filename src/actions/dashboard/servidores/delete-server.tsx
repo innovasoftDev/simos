@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/auth.config";
 import { revalidatePath } from "next/cache";
 
-export const DeleteUser = async (id_user: string) => {
+export const DeleteServer = async (id_server: string) => {
   const session = await auth();
 
   if (session?.user.role !== "admin") {
@@ -14,11 +14,11 @@ export const DeleteUser = async (id_user: string) => {
   }
 
   try {
-    await prisma.user.delete({
+    await prisma.servidor.delete({
       where: {
-        id_user: id_user,
+        Id_Servidor: id_server,
       },
-    })
+    });
 
     revalidatePath("/admin/users");
 
@@ -29,7 +29,7 @@ export const DeleteUser = async (id_user: string) => {
     console.log(error);
     return {
       ok: false,
-      message: "No se pudo eliminar el usuario, revisar logs",
+      message: "No se pudo eliminar el servidor, revisar logs",
     };
   }
 };

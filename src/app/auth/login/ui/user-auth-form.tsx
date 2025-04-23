@@ -98,6 +98,7 @@ export default function UserAuthForm() {
                     maxLength={30}
                     {...field}
                     onChange={(e) => handleChange(e, field.name)}
+                    suppressHydrationWarning
                   />
                 </FormControl>
                 {charWarning.email && (
@@ -129,6 +130,7 @@ export default function UserAuthForm() {
                     placeholder="Ingrese su contraseña..."
                     {...field}
                     onChange={(e) => handleChange(e, field.name)}
+                    suppressHydrationWarning
                   />
                 </FormControl>
                 {charWarning.password && (

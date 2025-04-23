@@ -3,7 +3,6 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-/* import { toast } from '@/hooks/use-toast' */
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,64 +25,64 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { PasswordInput } from "@/components/password-input";
 import { SelectDropdown } from "@/components/select-dropdown";
-import { userTypes } from "../data/data";
+import { serverStatus, ServerGroups } from "../data/data";
 import { Server } from "../data/schema";
-import { AddOrUpdateUser } from "@/actions/admin/users/add-update-user";
+import { AddOrUpdateServer } from "@/actions/dashboard/servidores/add-update-server";
 
 const formSchema = z
   .object({
-    firstName: z.string().min(1, { message: "nombre del servidor es requerido." }),
-    lastName: z.string().min(1, { message: "descripcion del servidor es requerido." }),
-    username: z.string().min(1, { message: "Username is required." }),
-    phoneNumber: z.string().min(1, { message: "Id del servidor es requerido." }),
-    email: z
+    Id_Servidor: z.string(),
+    Nombre_Servidor: z
       .string()
-      .min(1, { message: "Email is required." })
-      .email({ message: "Email is invalid." }),
-    password: z.string().transform((pwd) => pwd.trim()),
-    tbl_usr_roles_id_rol: z.string().min(1, { message: "Role is required." }),
-    confirmPassword: z.string().transform((pwd) => pwd.trim()),
+      .min(1, { message: "Nombre del servidor es requerido." }),
+    Descripcion: z.nullable(z.string()),
+    CPU: z.nullable(z.string()),
+    Memoria: z.nullable(z.string()),
+    Tipo_Sevidor: z.nullable(z.string()),
+    Nombre_AD: z.nullable(z.string()),
+    URL: z.nullable(z.string()),
+    Estado: z.string().min(1, { message: "Estado es requerido." }),
+    Grup_ServidorId: z
+      .string(),
+    Grup_Servidor: z.object({
+      Nombre_Grupo_Servidores: z
+        .string()
+        .min(1, { message: "Grupo Servidor es requerido." }),
+    }),
     isEdit: z.boolean(),
   })
-  .superRefine(({ isEdit, password, confirmPassword }, ctx) => {
-    if (!isEdit || (isEdit && password !== "")) {
-      if (password === "") {
+  .superRefine(({ isEdit, Nombre_Servidor }, ctx) => {
+    if (!isEdit || (isEdit && Nombre_Servidor !== "")) {
+      if (Nombre_Servidor === "") {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Password is required.",
-          path: ["password"],
+          message: "Nombre Servidor is required.",
+          path: ["Nombre_Servidor"],
         });
       }
 
-      if (password.length < 8) {
+      if (Nombre_Servidor.length < 8) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Password must be at least 8 characters long.",
-          path: ["password"],
+          message: "Nombre Servidor must be at least 8 characters long.",
+          path: ["Nombre_Servidor"],
         });
       }
 
-      if (!password.match(/[a-z]/)) {
+      if (!Nombre_Servidor.match(/[a-z]/)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Password must contain at least one lowercase letter.",
-          path: ["password"],
+          message:
+            "Nombre Servidor must contain at least one lowercase letter.",
+          path: ["Nombre_Servidor"],
         });
       }
 
-      if (!password.match(/\d/)) {
+      if (!Nombre_Servidor.match(/\d/)) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Password must contain at least one number.",
-          path: ["password"],
-        });
-      }
-
-      if (password !== confirmPassword) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Passwords don't match.",
-          path: ["confirmPassword"],
+          message: "Nombre Servidor must contain at least one number.",
+          path: ["Nombre_Servidor"],
         });
       }
     }
@@ -97,61 +96,46 @@ interface Props {
 }
 
 export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
+  const groupServers = ServerGroups();
   const isEdit = !!currentRow;
   const form = useForm<UserForm>({
     resolver: zodResolver(formSchema),
     defaultValues: isEdit
       ? {
-        ...currentRow,
-        password: "",
-        confirmPassword: "",
-        isEdit,
-      }
+          ...currentRow,
+          isEdit,
+        }
       : {
-        firstName: "",
-        lastName: "",
-        username: "",
-        email: "",
-        tbl_usr_roles_id_rol: "",
-        phoneNumber: "",
-        password: "",
-        confirmPassword: "",
-        isEdit,
-      },
+          Id_Servidor: "",
+          Nombre_Servidor: "",
+          Descripcion: "",
+          CPU: "",
+          Memoria: "",
+          Tipo_Sevidor: "",
+          Nombre_AD: "",
+          URL: "",
+          Estado: "",
+          Grup_ServidorId: "",
+          Grup_Servidor: {
+            Nombre_Grupo_Servidores: "",
+          },
+          isEdit,
+        },
   });
 
   const onSubmit = async (values: UserForm) => {
-    //const result = await AddOrUpdateUser(values);
+    const result = await AddOrUpdateServer(values);
 
-    const { isEdit } = values;
-
-    /* if (result.ok) {
-      if (isEdit) {
-        toast.error("Editar", {
-          description: "¡Se ha editado el servidor!",
-        });
-      } else {
-        toast.error("Crear", {
-          description: "¡Se ha creado el servidor!",
-        });
-      }
+    if (result.ok) {
+      location.reload();
     } else {
-      if (isEdit) {
-        toast.error("Editar", {
-          description: "¡Ocurrió un error!",
-        });
-      } else {
-        toast.error("Crear", {
-          description: "¡Ocurrió un error!",
-        });
-      }
-    } */
-
+      toast.error(result.message);
+    }
     form.reset();
     onOpenChange(false);
   };
 
-  const isPasswordTouched = !!form.formState.dirtyFields.password;
+  //const isPasswordTouched = !!form.formState.dirtyFields.password;
 
   return (
     <Dialog
@@ -180,10 +164,9 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-4 p-0.5"
             >
-
               <FormField
                 control={form.control}
-                name="firstName"
+                name="Nombre_Servidor"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
                     <FormLabel className="col-span-2 text-right">
@@ -191,7 +174,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="nombre de servidor"
+                        placeholder="Nombre de servidor"
                         className="col-span-4"
                         {...field}
                       />
@@ -203,26 +186,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
 
               <FormField
                 control={form.control}
-                name="phoneNumber"
-                render={({ field }) => (
-                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
-                    <FormLabel className="col-span-2 text-right">
-                      ID Servidor
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="id servidor "
-                        className="col-span-4"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="col-span-4 col-start-3" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="lastName"
+                name="Descripcion"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
                     <FormLabel className="col-span-2 text-right">
@@ -230,9 +194,68 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="descripción del servidor"
+                        placeholder="Descripción de servidor"
                         className="col-span-4"
                         {...field}
+                        value={field.value?.toString()}
+                      />
+                    </FormControl>
+                    <FormMessage className="col-span-4 col-start-3" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="CPU"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
+                    <FormLabel className="col-span-2 text-right">CPU</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Nucleos en uso del servidor"
+                        className="col-span-4"
+                        {...field}
+                        value={field.value?.toString()}
+                      />
+                    </FormControl>
+                    <FormMessage className="col-span-4 col-start-3" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="Memoria"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
+                    <FormLabel className="col-span-2 text-right">
+                      Memoria
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Memoria que utiliza del servidor"
+                        className="col-span-4"
+                        {...field}
+                        value={field.value?.toString()}
+                      />
+                    </FormControl>
+                    <FormMessage className="col-span-4 col-start-3" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="Tipo_Sevidor"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
+                    <FormLabel className="col-span-2 text-right">
+                      Tipo de Servidor
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Tipo de servicio brinda el server"
+                        className="col-span-4"
+                        {...field}
+                        value={field.value?.toString()}
                       />
                     </FormControl>
                     <FormMessage className="col-span-4 col-start-3" />
@@ -240,6 +263,97 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                 )}
               />
 
+              <FormField
+                control={form.control}
+                name="Nombre_AD"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
+                    <FormLabel className="col-span-2 text-right">
+                      Nombre Equipo
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Nombre del servidor en el AD"
+                        className="col-span-4"
+                        {...field}
+                        value={field.value?.toString()}
+                      />
+                    </FormControl>
+                    <FormMessage className="col-span-4 col-start-3" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="URL"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
+                    <FormLabel className="col-span-2 text-right">URL</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="URL del servidor"
+                        className="col-span-4"
+                        {...field}
+                        value={field.value?.toString()}
+                      />
+                    </FormControl>
+                    <FormMessage className="col-span-4 col-start-3" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="Estado"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
+                    <FormLabel className="col-span-2 text-right">
+                      Estado
+                    </FormLabel>
+                    <SelectDropdown
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
+                      placeholder="Seleccionar un estado"
+                      className="col-span-4"
+                      items={serverStatus.map(({ label, value }) => ({
+                        label,
+                        value,
+                      }))}
+                    />
+                    <FormMessage className="col-span-4 col-start-3" />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="Grup_Servidor.Nombre_Grupo_Servidores"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
+                    <FormLabel className="col-span-2 text-right">
+                      Grupo Servidor
+                    </FormLabel>
+                    <SelectDropdown
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
+                      placeholder="Seleccionar un grupo"
+                      className="col-span-4"
+                      items={groupServers.map(
+                        ({ Nombre_Grupo_Servidores }) => ({
+                          label: Nombre_Grupo_Servidores
+                            ? Nombre_Grupo_Servidores
+                            : "",
+                          value: Nombre_Grupo_Servidores
+                            ? Nombre_Grupo_Servidores
+                            : "",
+                        })
+                      )}
+                    />
+                    <FormMessage className="col-span-4 col-start-3" />
+                  </FormItem>
+                )}
+              />
             </form>
           </Form>
         </ScrollArea>

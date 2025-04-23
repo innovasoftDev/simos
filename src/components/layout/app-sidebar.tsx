@@ -36,7 +36,7 @@ export const company = {
 export default function AppSidebar() {
   const { data: session } = useSession();
   const pathname = usePathname();
-  const isAuthenticated = !!session?.user;
+  //const isAuthenticated = !!session?.user;
   const isAdmin = session?.user.role === "admin";
 
   return (
