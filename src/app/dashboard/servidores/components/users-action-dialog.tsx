@@ -148,7 +148,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
       <DialogContent className="sm:max-w-lg">
         <DialogHeader className="text-left">
           <DialogTitle>
-            {isEdit ? "Editar Servidor" : "Agregar Nuevo Servidor"}
+            {isEdit ? "Editar Servidor" : "Agregar Nuevo Servicio"}
           </DialogTitle>
           <DialogDescription>
             {isEdit

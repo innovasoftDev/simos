@@ -58,7 +58,7 @@ export const AddOrUpdateServer = async (values: {
       return {
         ok: false,
         message:
-          "Su usuario no tiene permisos para agregar nuevo servidor.",
+          "Su usuario no tiene permisos para agregar nuevo servicio.",
       };
     }
   }
