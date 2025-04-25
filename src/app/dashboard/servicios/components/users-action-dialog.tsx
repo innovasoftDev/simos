@@ -148,7 +148,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
       <DialogContent className="sm:max-w-lg">
         <DialogHeader className="text-left">
           <DialogTitle>
-            {isEdit ? "Editar Servidor" : "Agregar Nuevo Servidor"}
+            {isEdit ? "Editar Servidor" : "Agregar Nuevo Servicio"}
           </DialogTitle>
           <DialogDescription>
             {isEdit
@@ -170,11 +170,11 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
                     <FormLabel className="col-span-2 text-right">
-                      Servidor
+                      Servicio
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Nombre de servidor"
+                        placeholder="Nombre de servicio"
                         className="col-span-4"
                         {...field}
                       />
@@ -194,7 +194,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Descripción de servidor"
+                        placeholder="Descripción de servicio"
                         className="col-span-4"
                         {...field}
                         value={field.value?.toString()}
@@ -234,7 +234,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
                     <FormLabel className="col-span-2 text-right">
-                      Grupo Servidor
+                      Grupo Servicio
                     </FormLabel>
                     <SelectDropdown
                       defaultValue={field.value}
