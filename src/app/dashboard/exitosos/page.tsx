@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth.config";
-import AlertasPage from "./alertasPage";
+import ExitososPage from "./exitososPage";
 
 export const metadata = {
-  title: "Dashboard : Alertas",
+  title: "Dashboard : Exitosos",
 };
 
 export default async function page() {
@@ -11,6 +11,6 @@ export default async function page() {
   if (!session?.user) {
     redirect("/auth/login?returnTo=/perfil");
   } else {
-    return <AlertasPage />;
+    return <ExitososPage />;
   }
 }

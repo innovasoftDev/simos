@@ -1,13 +1,13 @@
 import React from 'react'
-import { User } from '../data/schema'
+import { Alerta } from '../data/schema'
 
 export type UsersDialogType = 'add' | 'edit' | 'delete'
 
 interface UsersContextType {
   open: UsersDialogType | null
   setOpen: (str: UsersDialogType | null) => void
-  currentRow: User | null
-  setCurrentRow: React.Dispatch<React.SetStateAction<User | null>>
+  currentRow: Alerta | null
+  setCurrentRow: React.Dispatch<React.SetStateAction<Alerta | null>>
 }
 
 const UsersContext = React.createContext<UsersContextType | null>(null)

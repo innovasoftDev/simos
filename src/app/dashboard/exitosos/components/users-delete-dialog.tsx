@@ -7,23 +7,23 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ConfirmDialog } from "@/components/confirm-dialog";
-import { Errors } from "../data/schema";
+import { Exito } from "../data/schema";
 import { toast } from "sonner";
-import { DeleteRegistro } from "@/actions/dashboard/errores/delete-registro";
+import { DeleteRegistro } from "@/actions/dashboard/exitos/delete-registro";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  currentRow: Errors;
+  currentRow: Exito;
 }
 
 export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   const [value, setValue] = useState("");
 
   const handleDelete = async () => {
-    if (value.trim() !== currentRow.Codigo_Error) return;
+    if (value.trim() !== currentRow.Codigo_Exito) return;
     
-    const result = await DeleteRegistro(currentRow.Id_Error_Servicio);
+    const result = await DeleteRegistro(currentRow.Id_Exito_Servicio);
 
     if (result.ok) {
       location.reload();
@@ -38,7 +38,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={value.trim() !== currentRow.Codigo_Error}
+      disabled={value.trim() !== currentRow.Codigo_Exito}
       title={
         <span className="text-destructive">
           <TriangleAlert
@@ -54,7 +54,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
             ¿Estás seguro de que quieres eliminar este registro?
             <br />
             Esta acción eliminará permanentemente el registro{" "}
-            <span className="font-bold">{currentRow.Codigo_Error}</span> del
+            <span className="font-bold">{currentRow.Codigo_Exito}</span> del
             sistema.
             <br />
             Esto no se puede deshacer.

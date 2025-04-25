@@ -1,15 +1,18 @@
 import { z } from "zod";
 
-export type Service = {
-  id_servicio: string;
-  id_servidor: string;
-  nombre_servicio: string;
-  descripcion: string | null;
-  status: string;
-  created: Date | null;
-  updated: Date | null;
+export type Alerta = {
+  Id_Alerta_Servicio: string;
+  Estado: string;
+  Codigo_Alerta: string;
+  Descripcion_Alerta: string | null;
+  ServicioId: string;
+  created: Date;
+  Servicio: {
+    Nombre_Servicio: string;
+    ServidorId: string;
+  };
 };
 
-const serviceStatusSchema = z.union([z.string(), z.string()]);
+const exitosoStatusSchema = z.union([z.string(), z.string()]);
 
-export type ServiceStatus = z.infer<typeof serviceStatusSchema>;
+export type ExitosoStatus = z.infer<typeof exitosoStatusSchema>;

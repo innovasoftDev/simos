@@ -21,10 +21,10 @@ export function DataTableToolbar<TData>({
         <Input
           placeholder='Filtrar registros...'
           value={
-            (table.getColumn('Codigo_Error')?.getFilterValue() as string) ?? ''
+            (table.getColumn('Codigo_Exito')?.getFilterValue() as string) ?? ''
           }
           onChange={(event) =>
-            table.getColumn('Codigo_Error')?.setFilterValue(event.target.value)
+            table.getColumn('Codigo_Exito')?.setFilterValue(event.target.value)
           }
           className='h-8 w-[150px] lg:w-[250px]'
         />

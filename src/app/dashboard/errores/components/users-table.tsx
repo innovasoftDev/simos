@@ -22,9 +22,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Service } from "../data/schema";
+import { Errors } from "../data/schema";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 declare module "@tanstack/react-table" {
   /* // eslint-disable-next-line @typescript-eslint/no-unused-vars */
@@ -34,8 +35,8 @@ declare module "@tanstack/react-table" {
 }
 
 interface DataTableProps {
-  columns: ColumnDef<Service>[];
-  data: Service[];
+  columns: ColumnDef<Errors>[];
+  data: Errors[];
 }
 
 export function UsersTable({ columns, data }: DataTableProps) {

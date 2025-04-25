@@ -22,7 +22,7 @@ async function getIdByRole(role: string): Promise<string> {
   }
 }
 
-async function getIdFromObject(objectName : string): Promise<string> {
+async function getIdFromObject(objectName: string): Promise<string> {
   const idObject = await prisma.objeto.findUnique({
     where: { Nombre_Objeto: objectName },
     select: { Id_Objeto: true },
@@ -56,6 +56,15 @@ async function getIdFromServers(serverName: string): Promise<string> {
   });
 
   return idServer?.Id_Servidor ?? "";
+}
+
+async function GetServicebyName(serviceName: string): Promise<string> {
+  const idService = await prisma.servicio.findUnique({
+    where: { Nombre_Servicio: serviceName },
+    select: { Id_Servicio: true },
+  });
+
+  return idService?.Id_Servicio ?? "";
 }
 
 export async function CreateUser(
@@ -148,14 +157,6 @@ export async function CreateGrupoServers(
   }
 }
 
-/* const users = await prisma.servidor.findMany({
-  where: {
-    email: {
-      endsWith: 'prisma.io',
-    },
-  },
-}) */
-
 export async function CreateServer(
   Nombre_Servidor: string,
   Descripcion: string | null,
@@ -192,6 +193,69 @@ export async function CreateServicio(
         created: new Date(),
         Nombre_Servicio: Nombre_Servicio,
         ServidorId: (await getIdFromServers(Servidor)).toString(),
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function CreateExito(
+    Estado: string,
+    Codigo_Exito: string,
+    Descripcion_Exito: string | null,
+    ServicioId: string,
+) {
+  try {
+    await prisma.exito_Servicio.create({
+      data: {
+        Estado: Estado,
+        Codigo_Exito: Codigo_Exito,
+        Descripcion_Exito: Descripcion_Exito,
+        ServicioId: (await GetServicebyName(ServicioId)).toString(),
+        created: new Date(),
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function CreateAlerta(
+  Estado: string,
+  Codigo_Alerta: string,
+  Descripcion_Alerta: string | null,
+  ServicioId: string
+) {
+  try {
+    await prisma.alerta_Servicio.create({
+      data: {
+        Estado: Estado,
+        Codigo_Alerta: Codigo_Alerta,
+        Descripcion_Alerta: Descripcion_Alerta,
+        ServicioId: (await GetServicebyName(ServicioId)).toString(),
+        created: new Date(),
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function CreateError(
+  Estado: string,
+  Codigo_Error: string,
+  Descripcion_Error: string | null,
+  ServicioId: string,
+) {
+  try {
+    await prisma.error_Servicio.create({
+      data: {
+        Estado: Estado,
+        Codigo_Error: Codigo_Error,
+        Descripcion_Error: Descripcion_Error,
+        ServicioId: (await GetServicebyName(ServicioId)).toString(),
+        created: new Date(),
       },
     });
   } catch (error) {

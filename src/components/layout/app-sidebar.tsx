@@ -30,7 +30,7 @@ import { Icons } from "../icons";
 export const company = {
   name: "SIMOS",
   logo: GalleryVerticalEnd,
-  plan: "Farinter",
+  plan: "Grupo Farinter",
 };
 
 export default function AppSidebar() {

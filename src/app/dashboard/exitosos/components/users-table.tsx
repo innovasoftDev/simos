@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Alerta } from "../data/schema";
+import { Exito } from "../data/schema";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -35,8 +35,8 @@ declare module "@tanstack/react-table" {
 }
 
 interface DataTableProps {
-  columns: ColumnDef<Alerta>[];
-  data: Alerta[];
+  columns: ColumnDef<Exito>[];
+  data: Exito[];
 }
 
 export function UsersTable({ columns, data }: DataTableProps) {

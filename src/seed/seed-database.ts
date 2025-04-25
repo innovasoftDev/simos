@@ -1,5 +1,15 @@
 import { initialRolesData } from "./seed";
-import { CreateUser, CreatePantallas, CreatePermiso, CreateGrupoServers, CreateServer, CreateServicio } from "./actions";
+import {
+  CreateUser,
+  CreatePantallas,
+  CreatePermiso,
+  CreateGrupoServers,
+  CreateServer,
+  CreateServicio,
+  CreateAlerta,
+  CreateError,
+  CreateExito,
+} from "./actions";
 import prisma from "../lib/prisma";
 
 async function main() {
@@ -11,7 +21,10 @@ async function main() {
   await prisma.servicio.deleteMany();
   await prisma.servidor.deleteMany();
   await prisma.grup_Servidor.deleteMany();
-  
+  await prisma.exito_Servicio.deleteMany();
+  await prisma.alerta_Servicio.deleteMany();
+  await prisma.error_Servicio.deleteMany();
+
   //! Para vista roles
   //? Creando roles admin y user
   const { roles } = initialRolesData;
@@ -43,7 +56,7 @@ async function main() {
     "inactive"
   );
   await delay(100);
-  
+
   //! Creando las pantallas actuales en gestion de pantallas
   //? Dashboard
   CreatePantallas(
@@ -66,17 +79,24 @@ async function main() {
     "Pantalla",
     "active"
   );
+  //? Exitosos
+  CreatePantallas(
+    "Exitosos",
+    "Lista de registros de errores detectados en los servicios y servidores.",
+    "Pantalla",
+    "active"
+  );
   //? Alertas
   CreatePantallas(
     "Alertas",
-    "Lista las alertas generadas por el sistema cuando se detectan problemas o anomalías.",
+    "Lista de registros de alertas generadas por el sistema cuando se detectan problemas o anomalías.",
     "Pantalla",
     "active"
   );
   //? Errores
   CreatePantallas(
     "Errores",
-    "Muestra registros de errores detectados en los servicios y servidores.",
+    "Lista de registros de errores detectados en los servicios y servidores.",
     "Pantalla",
     "active"
   );
@@ -92,12 +112,22 @@ async function main() {
 
   //! Para vista Permisos
   //? Creando permiso para Dashboard
-  CreatePermiso(true, false, true, false, "Dashboard", "admin");
+  // Para Admin
+  CreatePermiso(true, true, true, true, "Dashboard", "admin");
   CreatePermiso(true, true, true, true, "Servicios", "admin");
   CreatePermiso(true, true, true, true, "Servidores", "admin");
   CreatePermiso(true, true, true, true, "Alertas", "admin");
-  CreatePermiso(true, true, true, true, "Errores", "admin");  
-  CreatePermiso(true, false, true, false, "AcercaDe", "admin");
+  CreatePermiso(true, true, true, true, "Errores", "admin");
+  CreatePermiso(true, true, true, true, "AcercaDe", "admin");
+  CreatePermiso(true, true, true, true, "Exitosos", "admin");
+  // Para Usuario
+  CreatePermiso(false, false, false, true, "Servicios", "user");
+  CreatePermiso(false, false, false, true, "Servidores", "user");
+  CreatePermiso(false, false, false, true, "Dashboard", "user");
+  CreatePermiso(false, false, false, true, "Alertas", "user");
+  CreatePermiso(false, false, false, true, "Errores", "user");
+  CreatePermiso(false, false, false, true, "AcercaDe", "user");
+  CreatePermiso(false, false, false, true, "Exitosos", "user");
 
   await delay(100);
 
@@ -115,9 +145,102 @@ async function main() {
 
   //! Para la vista servicios
   //? Creando dos servicios de ejemplo
-  CreateServicio("API_ICOMMERCE_TGU", "API de ventas TGU.", "active", "ICOMMERCE_TGU");
-  CreateServicio("API_ICOMMERCE_SPS", "API de ventas SPS.", "inactive", "ICOMMERCE_SPS");
-  
+  CreateServicio(
+    "API_ICOMMERCE_TGU",
+    "API de ventas TGU.",
+    "active",
+    "ICOMMERCE_TGU"
+  );
+  CreateServicio(
+    "API_ICOMMERCE_SPS",
+    "API de ventas SPS.",
+    "inactive",
+    "ICOMMERCE_SPS"
+  );
+
+  await delay(100);
+  //! Para la vista exitosas
+  //? Creando dos servicios de ejemplo
+  CreateExito(
+    "active",
+    "200 OK",
+    "La solicitud ha tenido éxito. El significado de un éxito varía dependiendo del método HTTP.",
+    "API_ICOMMERCE_TGU"
+  );
+  CreateExito(
+    "active",
+    "201 Created",
+    "La solicitud ha tenido éxito y se ha creado un nuevo recurso como resultado de ello.",
+    "API_ICOMMERCE_TGU"
+  );
+  CreateExito(
+    "active",
+    "202 Accepted",
+    "La solicitud se ha recibido, pero aún no se ha actuado. Es una petición (sin compromiso).",
+    "API_ICOMMERCE_TGU"
+  );
+  CreateExito(
+    "active",
+    "204 No Content",
+    "La petición se ha completado con éxito, pero su contenido no se ha obtenido de la fuente originalmente solicitada, sino que se recoge de una copia local o de un tercero.",
+    "API_ICOMMERCE_TGU"
+  );
+
+  await delay(100);
+  //! Para la vista alertas
+  //? Creando dos servicios de ejemplo
+  CreateAlerta(
+    "active",
+    "100 Continue",
+    "Esta respuesta provisional indica que todo hasta ahora está bien y que el cliente debe continuar con la solicitud o ignorarla si ya está terminada.",
+    "API_ICOMMERCE_TGU"
+  );
+  CreateAlerta(
+    "active",
+    "101 Switching Protocol",
+    "Envía en respuesta a un encabezado de solicitud Upgrade por el cliente e indica que el servidor acepta el cambio de protocolo propuesto por el agente de usuario.",
+    "API_ICOMMERCE_TGU"
+  );
+  CreateAlerta(
+    "active",
+    "102 Processing",
+    "Este código indica que el servidor ha recibido la solicitud y aún se encuentra procesandola, por lo que no hay respuesta disponible.",
+    "API_ICOMMERCE_TGU"
+  );
+  CreateAlerta(
+    "active",
+    "103 Early Hints",
+    "Este código de estado es usado con el encabezado Link, permitiendo que el agente de usuario empiece a pre-cargar recursos mientras el servidor prepara una respuesta.",
+    "API_ICOMMERCE_TGU"
+  );
+
+  await delay(100);
+  //! Para la vista errores
+  //? Creando dos servicios de ejemplo
+  CreateError(
+    "active",
+    "400 Bad Request",
+    "Esta respuesta significa que el servidor no pudo interpretar la solicitud dada una sintaxis inválida.",
+    "API_ICOMMERCE_TGU"
+  );
+  CreateError(
+    "active",
+    "401 Unauthorized",
+    "Es necesario autenticar para obtener la respuesta solicitada. Esta es similar a 403, pero en este caso, la autenticación es posible.",
+    "API_ICOMMERCE_TGU"
+  );
+  CreateError(
+    "active",
+    "403 Forbidden",
+    "El cliente no posee los permisos necesarios para cierto contenido, por lo que el servidor está rechazando otorgar una respuesta apropiada.",
+    "API_ICOMMERCE_TGU"
+  );
+  CreateError(
+    "active",
+    "404 Not Found",
+    "El servidor no pudo encontrar el contenido solicitado. Este código de respuesta es uno de los más famosos dada su alta ocurrencia en la web.",
+    "API_ICOMMERCE_TGU"
+  );
 
   console.log("Seed ejecutado correctamente");
 }

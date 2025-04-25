@@ -1,10 +1,10 @@
 import { z } from "zod";
 
-export type Errors = {
-  Id_Error_Servicio: string;
+export type Exito = {
+  Id_Exito_Servicio: string;
   Estado: string;
-  Codigo_Error: string;
-  Descripcion_Error: string | null;
+  Codigo_Exito: string;
+  Descripcion_Exito: string | null;
   ServicioId: string;
   created: Date;
   Servicio: {

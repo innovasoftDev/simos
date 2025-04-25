@@ -1,57 +1,42 @@
 "use client";
 import { useEffect, useState } from "react";
-import { UserPlus } from "lucide-react";
+//import { UserPlus } from "lucide-react";
 import useDialogState from "@/hooks/use-dialog-state";
-import { Button } from "@/components/ui/button";
+//import { Button } from "@/components/ui/button";
 import { Main } from "@/components/layout/main";
-import { UsersActionDialog } from "./components/users-action-dialog";
+//import { UsersActionDialog } from "./components/users-action-dialog";
 import { columns } from "./components/users-columns";
 import { UsersDeleteDialog } from "./components/users-delete-dialog";
-import { getUsers } from "@/actions/admin/users/get-users";
 import { UsersTable } from "./components/users-table";
 import UsersContextProvider, {
   type UsersDialogType,
 } from "./context/users-context";
-import { Service } from "./data/schema";
+import { Errors } from "./data/schema";
 import PageContainer from "@/components/layout/page-container";
+import { toast } from "sonner";
+import { GetErrores } from "@/actions/dashboard/errores/get-errores";
 
-/* async function getData(): Promise<Service[]> {
-  const { users = [] } = await getUsers();
+async function getData(): Promise<Errors[]> {
+  const { errores = [], ok, message } = await GetErrores();
 
+  if (!ok) {
+    toast.error("Mensaje", {
+      description: message,
+    });
+  }
   // Fetch data from your API here.
-  return users;
-} */
+  return errores;
+}
 
-export default function AlertsPage() {
-  /* const [data, setData] = useState<Service[]>([]);
+export default function ErroresPage() {
+  const [data, setData] = useState<Errors[]>([]);
 
   useEffect(() => {
     getData().then(setData);
-  }, []); */
-
-  const data: Service[] = [
-    {
-      id_servicio: "123456789",
-      id_servidor: "1234",
-      nombre_servicio: "API_Service",
-      descripcion: "El servicio esta activo!",
-      status: "active",
-      created: null,
-      updated: null,
-    },
-    {
-      id_servicio: "123456789",
-      id_servidor: "1234",
-      nombre_servicio: "Icommerce_Service",
-      descripcion: "El servicio esta caido!",
-      status: "inactive",
-      created: null,
-      updated: null,
-    },
-  ];
+  }, []);
 
   // Dialog states
-  const [currentRow, setCurrentRow] = useState<Service | null>(null);
+  const [currentRow, setCurrentRow] = useState<Errors | null>(null);
   const [open, setOpen] = useDialogState<UsersDialogType>(null);
 
   return (
@@ -62,16 +47,14 @@ export default function AlertsPage() {
         <Main>
           <div className="mb-2 flex items-center justify-between space-y-2 flex-wrap">
             <div>
-              <h2 className="text-2xl font-bold tracking-tight">
-                Alertas
-              </h2>
+              <h2 className="text-2xl font-bold tracking-tight">Errores</h2>
               <p className="text-muted-foreground">
-                Administra aquí las alertas registradas.
+                Administra aquí a tus registros de errores.
               </p>
             </div>
             {/* <div className="flex gap-2">
               <Button className="space-x-1" onClick={() => setOpen("add")}>
-                <span>Agregar Alerta</span> <UserPlus size={18} />
+                <span>Agregar Servidor</span> <UserPlus size={18} />
               </Button>
             </div> */}
           </div>
@@ -80,16 +63,16 @@ export default function AlertsPage() {
           </div>
         </Main>
 
-        <UsersActionDialog
+        {/* <UsersActionDialog
           key="user-add"
           open={open === "add"}
           onOpenChange={() => setOpen("add")}
-        />
+        /> */}
 
         {currentRow && (
           <>
-            <UsersActionDialog
-              key={`user-edit-${currentRow.id_servicio}`}
+            {/* <UsersActionDialog
+              key={`user-edit-${currentRow.Id_Exito_Servicio}`}
               open={open === "edit"}
               onOpenChange={() => {
                 setOpen("edit");
@@ -98,10 +81,10 @@ export default function AlertsPage() {
                 }, 500);
               }}
               currentRow={currentRow}
-            />
+            /> */}
 
             <UsersDeleteDialog
-              key={`user-delete-${currentRow.id_servicio}`}
+              key={`user-delete-${currentRow.Id_Error_Servicio}`}
               open={open === "delete"}
               onOpenChange={() => {
                 setOpen("delete");

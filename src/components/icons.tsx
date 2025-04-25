@@ -42,7 +42,8 @@ import {
   UserRoundX,
   Ban,
   ServerOff,
-  Construction 
+  Construction,
+  CircleCheck  
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -90,5 +91,6 @@ export const Icons = {
   UserRoundX,
   Ban,
   ServerOff,
-  Construction 
+  Construction,
+  CircleCheck 
 };

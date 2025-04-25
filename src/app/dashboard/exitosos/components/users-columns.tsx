@@ -3,12 +3,12 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import LongText from "@/components/long-text";
-import { Alerta } from "../data/schema";
+import { Exito } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { callTypes } from "../data/data";
 
-export const columns: ColumnDef<Alerta>[] = [
+export const columns: ColumnDef<Exito>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -40,12 +40,12 @@ export const columns: ColumnDef<Alerta>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "Codigo_Alerta",
+    accessorKey: "Codigo_Exito",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Código Alerta" />
+      <DataTableColumnHeader column={column} title="Código Exitoso" />
     ),
     cell: ({ row }) => (
-      <LongText className="max-w-sm">{row.getValue("Codigo_Alerta")}</LongText>
+      <LongText className="max-w-sm">{row.getValue("Codigo_Exito")}</LongText>
     ),
     meta: {
       className: cn(
@@ -57,14 +57,14 @@ export const columns: ColumnDef<Alerta>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "Descripcion_Alerta",
+    accessorKey: "Descripcion_Exito",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Descripción" />
+      <DataTableColumnHeader column={column} title="Descripcion" />
     ),
     cell: ({ row }) => {
       return (
         <LongText className="max-w-sm">
-          {row.getValue("Descripcion_Alerta")}
+          {row.getValue("Descripcion_Exito")}
         </LongText>
       );
     },

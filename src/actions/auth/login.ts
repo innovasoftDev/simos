@@ -1,10 +1,6 @@
 'use server';
 
-
 import { signIn } from '@/auth.config';
-import { sleep } from '@/utils';
- 
-// ...
  
 export async function authenticate(
   prevState: string | undefined,
@@ -27,7 +23,6 @@ export async function authenticate(
 
     return 'CredentialsSignin'
 
-
   }
 }
 
@@ -48,7 +43,6 @@ export const login = async(email:string, password: string) => {
     }
     
   }
-
 
 }
 

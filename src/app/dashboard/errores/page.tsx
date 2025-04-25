@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth.config";
-import ErrorsPage from "./errorsPage";
+import ErroresPage from "./erroresPage";
 
 export const metadata = {
   title: "Dashboard : Errores",
@@ -11,6 +11,6 @@ export default async function page() {
   if (!session?.user) {
     redirect("/auth/login?returnTo=/perfil");
   } else {
-    return <ErrorsPage />;
+    return <ErroresPage />;
   }
 }

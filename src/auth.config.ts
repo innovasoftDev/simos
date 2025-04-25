@@ -2,7 +2,7 @@ import NextAuth, { type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcryptjs from "bcryptjs";
 import { z } from "zod";
-import { getRole } from "./actions/admin/get-role";
+//import { getRole } from "./actions/admin/get-role";
 import prisma from "./lib/prisma";
 
 async function getRoleById(id: string): Promise<string> {
@@ -18,7 +18,7 @@ export const authConfig: NextAuthConfig = {
   pages: {
     signIn: "/auth/login",
     newUser: "/auth/new-account",
-    signOut: "/auth/login?returnTo=/perfil"
+    signOut: "/auth/login"
   },
 
   callbacks: {
@@ -50,6 +50,7 @@ export const authConfig: NextAuthConfig = {
       const role = (await getRoleById(token.data.tbl_usr_roles_id_rol)).toString();
 
       session.user.role = role;
+      session.user.name = token.data.username;
 
       /* console.log(role); */
 
