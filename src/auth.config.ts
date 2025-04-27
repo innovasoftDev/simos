@@ -75,7 +75,7 @@ export const authConfig: NextAuthConfig = {
       session.user.role = roleUsuario as string;
       session.user.name = nombreUsuario as string;
 
-      console.log(session);
+      //console.log(session);
 
       return session;
     },
