@@ -1,7 +1,5 @@
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
-/* import Link from "next/link";
-import { IoCartOutline } from "react-icons/io5"; */
 
 export default async function EmptyPage() {
   const session = await auth();

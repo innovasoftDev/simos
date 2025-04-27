@@ -51,7 +51,6 @@ export default function UserAuthForm() {
 
   const form = useForm<UserFormValue>({
     resolver: zodResolver(formSchema),
-    defaultValues,
     mode: "onChange",
   });
 
