@@ -1,6 +1,7 @@
 import { auth } from "@/auth.config";
 import { redirect } from "next/navigation";
 import { FaUserAlt, FaEnvelope, FaIdBadge, FaRegCheckCircle, FaRegTimesCircle, FaEdit } from "react-icons/fa";
+import Image from 'next/image'
 
 interface UserProfile {
   id: string;
@@ -40,7 +41,7 @@ export default async function ProfilePage() {
 
       <div className="flex flex-col items-center text-center mb-6 mt-6 font-inter">
         {user.image ? (
-          <img
+          <Image 
             src={user.image}
             alt="Foto de perfil"
             className="w-28 h-28 rounded-full shadow-lg mb-2 border-4 border-blue-500 transform transition duration-300 hover:scale-110"

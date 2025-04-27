@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { IconUserPlus } from '@tabler/icons-react'
 import { Button } from '@/components/ui/button'
-import { UsersActionDialog } from './users-action-dialog'
+//import { UsersActionDialog } from './users-action-dialog'
 
 export function UserPrimaryActions() {
   const [open, setOpen] = useState(false)
@@ -14,7 +14,7 @@ export function UserPrimaryActions() {
         </Button>
       </div>
 
-      <UsersActionDialog key='user-add' open={open} onOpenChange={setOpen} />
+      {/* <UsersActionDialog key='user-add' open={open} onOpenChange={setOpen} /> */}
     </>
   )
 }

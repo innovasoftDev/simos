@@ -18,8 +18,8 @@ model User {
   password             String
   image                String?
   status               String
-  created              DateTime
-  updated              DateTime?
+  created              DateTime      @default(now())
+  updated              DateTime      @updatedAt
   rol                  TBL_USR_ROLES @relation(fields: [tbl_usr_roles_id_rol], references: [id_rol], onDelete: Cascade)
   tbl_usr_roles_id_rol String
 
@@ -30,8 +30,8 @@ model TBL_USR_ROLES {
   id_rol      String    @id @default(uuid())
   rol         String    @unique
   descripcion String?   @db.VarChar(70)
-  created     DateTime
-  updated     DateTime?
+  created     DateTime  @default(now())
+  updated     DateTime  @updatedAt
   user        User[]
   Permisos    Permiso[]
 
@@ -44,21 +44,21 @@ model Objeto {
   Descripcion   String?
   Tipo_Objeto   String
   Estado        String
-  created       DateTime
-  updated       DateTime?
+  created       DateTime  @default(now())
+  updated       DateTime  @updatedAt
   Permisos      Permiso[]
 
   @@map("Objeto")
 }
 
 model Permiso {
-  Id_Permiso        String    @id @default(uuid())
+  Id_Permiso        String   @id @default(uuid())
   Permiso_Inserta   Boolean
   Permiso_Actualiza Boolean
   Permiso_Elimina   Boolean
   Permiso_Consulta  Boolean
-  created           DateTime
-  updated           DateTime?
+  created           DateTime @default(now())
+  updated           DateTime @updatedAt
 
   Objeto          Objeto        @relation(fields: [ObjetoId], references: [Id_Objeto], onDelete: Cascade)
   ObjetoId        String
@@ -72,16 +72,16 @@ model Grup_Servidor {
   Id_Grup_Servidor        String     @id @default(uuid())
   Nombre_Grupo_Servidores String     @unique
   Descripcion             String?
-  created                 DateTime
-  updated                 DateTime?
+  created                 DateTime   @default(now())
+  updated                 DateTime   @updatedAt
   Servidores              Servidor[]
 
   @@map("Grup_Servidores")
 }
 
 model Servidor {
-  Id_Servidor     String    @id @default(uuid())
-  Nombre_Servidor String    @unique
+  Id_Servidor     String   @id @default(uuid())
+  Nombre_Servidor String   @unique
   Descripcion     String?
   CPU             String?
   Memoria         String?
@@ -89,8 +89,8 @@ model Servidor {
   Nombre_AD       String?
   URL             String?
   Estado          String
-  created         DateTime
-  updated         DateTime?
+  created         DateTime @default(now())
+  updated         DateTime @updatedAt
 
   Grup_Servidor   Grup_Servidor @relation(fields: [Grup_ServidorId], references: [Id_Grup_Servidor], onDelete: Cascade)
   Grup_ServidorId String
@@ -105,8 +105,8 @@ model Servicio {
   Id_Servicio       String            @id @default(uuid())
   Nombre_Servicio   String            @unique
   Descripcion       String?
-  created           DateTime
-  updated           DateTime?
+  created           DateTime          @default(now())
+  updated           DateTime          @updatedAt
   Estado            String
   Servidor          Servidor          @relation(fields: [ServidorId], references: [Id_Servidor], onDelete: Cascade)
   ServidorId        String
@@ -118,52 +118,52 @@ model Servicio {
 }
 
 model Error_Servidor {
-  Id_Error_Servidor String    @id @default(uuid())
-  Codigo_Error      String    @unique
+  Id_Error_Servidor String   @id @default(uuid())
+  Codigo_Error      String   @unique
   Descripcion_Error String?
-  created           DateTime
-  updated           DateTime?
+  created           DateTime @default(now())
+  updated           DateTime @updatedAt
   Estado            String
-  Servidor          Servidor  @relation(fields: [ServidorId], references: [Id_Servidor], onDelete: Cascade)
+  Servidor          Servidor @relation(fields: [ServidorId], references: [Id_Servidor], onDelete: Cascade)
   ServidorId        String
 
   @@map("Errores_Servidor")
 }
 
 model Error_Servicio {
-  Id_Error_Servicio String    @id @default(uuid())
-  Codigo_Error      String    @unique
+  Id_Error_Servicio String   @id @default(uuid())
+  Codigo_Error      String   @unique
   Descripcion_Error String?
-  created           DateTime
-  updated           DateTime?
+  created           DateTime @default(now())
+  updated           DateTime @updatedAt
   Estado            String
-  Servicio          Servicio  @relation(fields: [ServicioId], references: [Id_Servicio], onDelete: Cascade)
+  Servicio          Servicio @relation(fields: [ServicioId], references: [Id_Servicio], onDelete: Cascade)
   ServicioId        String
 
   @@map("Errores_Servicio")
 }
 
 model Alerta_Servicio {
-  Id_Alerta_Servicio String    @id @default(uuid())
-  Codigo_Alerta      String    @unique
+  Id_Alerta_Servicio String   @id @default(uuid())
+  Codigo_Alerta      String   @unique
   Descripcion_Alerta String?
-  created            DateTime
-  updated            DateTime?
+  created            DateTime @default(now())
+  updated            DateTime @updatedAt
   Estado             String
-  Servicio           Servicio  @relation(fields: [ServicioId], references: [Id_Servicio], onDelete: Cascade)
+  Servicio           Servicio @relation(fields: [ServicioId], references: [Id_Servicio], onDelete: Cascade)
   ServicioId         String
 
   @@map("Alertas_Servicio")
 }
 
 model Exito_Servicio {
-  Id_Exito_Servicio String    @id @default(uuid())
-  Codigo_Exito      String    @unique
+  Id_Exito_Servicio String   @id @default(uuid())
+  Codigo_Exito      String   @unique
   Descripcion_Exito String?
-  created           DateTime
-  updated           DateTime?
+  created           DateTime @default(now())
+  updated           DateTime @updatedAt
   Estado            String
-  Servicio          Servicio  @relation(fields: [ServicioId], references: [Id_Servicio], onDelete: Cascade)
+  Servicio          Servicio @relation(fields: [ServicioId], references: [Id_Servicio], onDelete: Cascade)
   ServicioId        String
 
   @@map("Exitosas_Servicio")

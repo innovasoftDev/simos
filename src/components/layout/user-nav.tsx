@@ -53,7 +53,7 @@ export function UserNav() {
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOut()}>
+          <DropdownMenuItem onClick={() => signOut({callbackUrl: "/auth/login?returnTo=/perfil"})}>
             Cerrar Sesión
             <DropdownMenuShortcut></DropdownMenuShortcut>
           </DropdownMenuItem>

@@ -15,11 +15,12 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+//import { toast } from "sonner";
 import * as z from "zod";
 import clsx from "clsx";
 import { PasswordInput } from "../../../../components/password-input";
 import Link from "next/link";
+import { Info } from 'lucide-react';
 
 // Validación SOLO para email
 const formSchema = z.object({
@@ -28,7 +29,9 @@ const formSchema = z.object({
     .min(1, { message: "Por favor ingresa tu correo electrónico." })
     .max(20, { message: "Máximo 30 caracteres." })
     .email({ message: "Dirección de correo electrónico no válida" })
-    .regex(/^[a-zA-Z0-9._%+-]+@*[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, { message: "Correo inválido." }),
+    .regex(/^[a-zA-Z0-9._%+-]+@*[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {
+      message: "Correo inválido.",
+    }),
   password: z.string(), // Sin validaciones
 });
 
@@ -43,7 +46,7 @@ export default function UserAuthForm() {
 
   const defaultValues = {
     email: "admin@google.com",
-    password: "12345678", 
+    password: "12345678",
   };
 
   const form = useForm<UserFormValue>({
@@ -68,7 +71,6 @@ export default function UserAuthForm() {
       return;
     }
 
-    
     setCharWarning((prev) => ({ ...prev, [fieldName]: "" }));
 
     setValue(fieldName, value, { shouldDirty: true, shouldValidate: true });
@@ -138,10 +140,26 @@ export default function UserAuthForm() {
                     {charWarning.password}
                   </p>
                 )}
+                
                 <FormMessage className="text-red-700 text-sm font-medium" />
               </FormItem>
             )}
           />
+
+          <div
+            className="flex h-8 items-end space-x-1"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {state === "CredentialsSignin" && (
+              <div className="flex flex-row mb-2">
+                <Info className="h-5 w-5 text-red-500" />
+                <p className="text-sm text-red-500">
+                   Credenciales no son correctas
+                </p>
+              </div>
+            )}
+          </div>
 
           <LoginButton />
         </form>

@@ -327,7 +327,6 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
     const resp = await registerUser(data);
 
     const { email, password, confirmPassword } = data;
-    //const result = await AddOrUpdatePermiso(values);
 
     if (!resp.ok) {
       setErrorMessage(resp.message);
@@ -335,7 +334,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
       return;
     }
 
-    await login(email.toLowerCase(), confirmPassword);
+    await login(email.toLowerCase(), password);
 
     setTimeout(() => {
       setIsLoading(false);
@@ -441,34 +440,6 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
             />
 
             {/* EMAIL */}
-            {/* <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem className="space-y-1">
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="name@example.com"
-                      {...field}
-                      value={field.value || ""}
-                      onChange={(e) => {
-                        const filtered = handleInput(
-                          e.target.value,
-                          emailRegex,
-                          setEmailError
-                        );
-                        field.onChange(filtered);
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                  {emailError && (
-                    <p className="text-sm text-red-500">{emailError}</p>
-                  )}
-                </FormItem>
-              )}
-            /> */}
             <FormField
               control={form.control}
               name="email"
@@ -544,6 +515,8 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
                 </FormItem>
               )}
             />
+
+            {/* CONFIRM PASSWORD */}
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -565,6 +538,7 @@ export function SignUpForm({ className, ...props }: SignUpFormProps) {
               )}
             />
 
+            {/* SI HUBO UN ERROR A LA HORA DE CREAR UN USUARIO */}
             {errorMessage && (
               <div className="text-red-500 text-sm text-center">
                 {errorMessage}

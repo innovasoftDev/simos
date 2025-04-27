@@ -6,7 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 
 export default function ForgotPassword() {
   return (
-    <div className="container grid h-svh flex-col items-center justify-center lg:max-w-none lg:px-0">
+    <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="mx-auto flex w-full flex-col justify-center space-y-2 sm:w-[480px] lg:p-8">
         <div className="mb-4 flex items-center justify-center">
           <h1 className="text-xl font-medium">SIMOS</h1>

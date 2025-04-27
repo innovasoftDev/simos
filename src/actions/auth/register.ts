@@ -21,7 +21,7 @@ export const registerUser = async (values: {
   phoneNumber: string | null;
   email: string;
   password: string;
-  confirmPassword: string;  
+  confirmPassword: string;
 }) => {
   try {
     const newUser = { ...values };
@@ -37,7 +37,6 @@ export const registerUser = async (values: {
         password: bcryptjs.hashSync(newUser.password),
         phoneNumber: newUser.phoneNumber,
         status: "active",
-        created: new Date(),
         tbl_usr_roles_id_rol: (await getIdByRole("user")).toString(),
       },
     });
@@ -45,14 +44,14 @@ export const registerUser = async (values: {
     return {
       ok: true,
       user: newUser,
-      message: "Usuario creado",
+      message: "¡Usuario creado!",
     };
   } catch (error) {
     console.log(error);
 
     return {
       ok: false,
-      message: "No se pudo crear el usuario",
+      message: "¡No se pudo crear el usuario!",
     };
   }
 };

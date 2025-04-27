@@ -86,7 +86,6 @@ export async function CreateUser(
         password: bcryptjs.hashSync(password),
         status: status,
         tbl_usr_roles_id_rol: (await getIdByRole(role)).toString(),
-        created: new Date(),
       },
     });
   } catch (error) {
@@ -107,7 +106,6 @@ export async function CreatePantallas(
         Descripcion: description,
         Tipo_Objeto: type_obj,
         Estado: status,
-        created: new Date(),
       },
     });
   } catch (error) {
@@ -132,7 +130,6 @@ export async function CreatePermiso(
         Permiso_Consulta: Permiso_Consulta,
         ObjetoId: (await getIdFromObject(Pantalla)).toString(),
         TBL_USR_ROLESId: (await getIdFromRole(Rol)).toString(),
-        created: new Date(),
       },
     });
   } catch (error) {
@@ -149,7 +146,6 @@ export async function CreateGrupoServers(
       data: {
         Descripcion: Descripcion,
         Nombre_Grupo_Servidores: Nombre_Grupo_Servidores,
-        created: new Date(),
       },
     });
   } catch (error) {
@@ -166,7 +162,6 @@ export async function CreateServer(
     await prisma.servidor.create({
       data: {
         Descripcion: Descripcion,
-        created: new Date(),
         Nombre_Servidor: Nombre_Servidor,
         Estado: "active",
         Grup_ServidorId: (
@@ -190,7 +185,6 @@ export async function CreateServicio(
       data: {
         Descripcion: Descripcion,
         Estado: Estado,
-        created: new Date(),
         Nombre_Servicio: Nombre_Servicio,
         ServidorId: (await getIdFromServers(Servidor)).toString(),
       },
@@ -201,10 +195,10 @@ export async function CreateServicio(
 }
 
 export async function CreateExito(
-    Estado: string,
-    Codigo_Exito: string,
-    Descripcion_Exito: string | null,
-    ServicioId: string,
+  Estado: string,
+  Codigo_Exito: string,
+  Descripcion_Exito: string | null,
+  ServicioId: string
 ) {
   try {
     await prisma.exito_Servicio.create({
@@ -213,7 +207,6 @@ export async function CreateExito(
         Codigo_Exito: Codigo_Exito,
         Descripcion_Exito: Descripcion_Exito,
         ServicioId: (await GetServicebyName(ServicioId)).toString(),
-        created: new Date(),
       },
     });
   } catch (error) {
@@ -234,7 +227,6 @@ export async function CreateAlerta(
         Codigo_Alerta: Codigo_Alerta,
         Descripcion_Alerta: Descripcion_Alerta,
         ServicioId: (await GetServicebyName(ServicioId)).toString(),
-        created: new Date(),
       },
     });
   } catch (error) {
@@ -246,7 +238,7 @@ export async function CreateError(
   Estado: string,
   Codigo_Error: string,
   Descripcion_Error: string | null,
-  ServicioId: string,
+  ServicioId: string
 ) {
   try {
     await prisma.error_Servicio.create({
@@ -255,7 +247,6 @@ export async function CreateError(
         Codigo_Error: Codigo_Error,
         Descripcion_Error: Descripcion_Error,
         ServicioId: (await GetServicebyName(ServicioId)).toString(),
-        created: new Date(),
       },
     });
   } catch (error) {

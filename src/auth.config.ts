@@ -2,8 +2,8 @@ import NextAuth, { type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcryptjs from "bcryptjs";
 import { z } from "zod";
-//import { getRole } from "./actions/admin/get-role";
 import prisma from "./lib/prisma";
+import { Role } from "./app/dashboard/admin/roles/data/schema";
 
 async function getRoleById(id: string): Promise<string> {
   const role = await prisma.tBL_USR_ROLES.findUnique({
@@ -14,11 +14,23 @@ async function getRoleById(id: string): Promise<string> {
   return role?.rol ?? "";
 }
 
+export const GetUserById = async (email?: string) => {
+  const idRoleUser = await prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+    include: {
+      rol: true, // ← trae el rol relacionado
+    },
+  });
+
+  return idRoleUser;
+};
+
 export const authConfig: NextAuthConfig = {
   pages: {
     signIn: "/auth/login",
     newUser: "/auth/new-account",
-    signOut: "/auth/login"
   },
 
   callbacks: {
@@ -47,12 +59,23 @@ export const authConfig: NextAuthConfig = {
     async session({ session, token, user }) {
       session.user = token.data as any;
 
-      const role = (await getRoleById(token.data.tbl_usr_roles_id_rol)).toString();
+      //! Validar que el usuario esté activo
+      const usuario = await GetUserById(session.user.email);
+      //const estadoUsuario = usuario?.status;
+      const roleUsuario = usuario?.rol.rol;
+      const nombreUsuario = usuario?.username;
 
-      session.user.role = role;
-      session.user.name = token.data.username;
+      /* if (estadoUsuario?.toLowerCase() === "active") {
+        session.user.role = roleUsuario as string;
+        session.user.name = nombreUsuario as string;
 
-      /* console.log(role); */
+        return session;  
+      }  */
+
+      session.user.role = roleUsuario as string;
+      session.user.name = nombreUsuario as string;
+
+      console.log(session);
 
       return session;
     },
@@ -85,6 +108,6 @@ export const authConfig: NextAuthConfig = {
       },
     }),
   ],
-};
+} satisfies NextAuthConfig;
 
 export const { signIn, signOut, auth, handlers } = NextAuth(authConfig);
