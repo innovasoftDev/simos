@@ -20,14 +20,14 @@ import * as z from "zod";
 import clsx from "clsx";
 import { PasswordInput } from "../../../../components/password-input";
 import Link from "next/link";
-import { Info } from 'lucide-react';
+import { Info } from "lucide-react";
 
 // Validación SOLO para email
 const formSchema = z.object({
   email: z
     .string()
     .min(1, { message: "Por favor ingresa tu correo electrónico." })
-    .max(20, { message: "Máximo 30 caracteres." })
+    .max(320, { message: "Máximo 320 caracteres." })
     .email({ message: "Dirección de correo electrónico no válida" })
     .regex(/^[a-zA-Z0-9._%+-]+@*[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {
       message: "Correo inválido.",
@@ -44,10 +44,10 @@ export default function UserAuthForm() {
   const [loading, startTransition] = useTransition();
   const [charWarning, setCharWarning] = useState({ email: "", password: "" });
 
-  const defaultValues = {
+ /*  const defaultValues = {
     email: "admin@google.com",
     password: "12345678",
-  };
+  }; */
 
   const form = useForm<UserFormValue>({
     resolver: zodResolver(formSchema),
@@ -139,7 +139,7 @@ export default function UserAuthForm() {
                     {charWarning.password}
                   </p>
                 )}
-                
+
                 <FormMessage className="text-red-700 text-sm font-medium" />
               </FormItem>
             )}
@@ -154,7 +154,7 @@ export default function UserAuthForm() {
               <div className="flex flex-row mb-2">
                 <Info className="h-5 w-5 text-red-500" />
                 <p className="text-sm text-red-500">
-                   Credenciales no son correctas
+                  Credenciales no son correctas
                 </p>
               </div>
             )}

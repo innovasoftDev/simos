@@ -3,16 +3,6 @@ import Credentials from "next-auth/providers/credentials";
 import bcryptjs from "bcryptjs";
 import { z } from "zod";
 import prisma from "./lib/prisma";
-import { Role } from "./app/dashboard/admin/roles/data/schema";
-
-async function getRoleById(id: string): Promise<string> {
-  const role = await prisma.tBL_USR_ROLES.findUnique({
-    where: { id_rol: id },
-    select: { rol: true },
-  });
-
-  return role?.rol ?? "";
-}
 
 export const GetUserById = async (email?: string) => {
   const idRoleUser = await prisma.user.findUnique({
@@ -100,6 +90,8 @@ export const authConfig: NextAuthConfig = {
 
         // Comparar las contraseñas
         if (!bcryptjs.compareSync(password, user.password)) return null;
+
+        if (user.status !== "active") return null;
 
         // Regresar el usuario sin el password
         const { password: _, ...rest } = user;

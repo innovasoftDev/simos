@@ -11,7 +11,8 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { logout } from "@/actions/auth/logout";
 import { useRouter } from 'next/navigation';
 export function UserNav() {
   const { data: session } = useSession();
@@ -53,7 +54,7 @@ export function UserNav() {
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOut({callbackUrl: "/auth/login?returnTo=/perfil"})}>
+          <DropdownMenuItem onClick={() => logout()}>
             Cerrar Sesión
             <DropdownMenuShortcut></DropdownMenuShortcut>
           </DropdownMenuItem>
