@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authenticate } from "@/actions";
-import { useSearchParams } from "next/navigation";
+//import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
@@ -24,13 +24,12 @@ import { Info } from "lucide-react";
 
 // Validación SOLO para email
 const formSchema = z.object({
-  email: z
+  username: z
     .string()
-    .min(1, { message: "Por favor ingresa tu correo electrónico." })
-    .max(320, { message: "Máximo 320 caracteres." })
-    .email({ message: "Dirección de correo electrónico no válida" })
-    .regex(/^[a-zA-Z0-9._%+-]+@*[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {
-      message: "Correo inválido.",
+    .min(1, { message: "Usuario requerido." })
+    .max(30, { message: "Máximo 30 caracteres." })
+    .regex(/^[a-zA-Z0-9_]+$/, {
+      message: "Solo letras, números y guion bajo.",
     }),
   password: z.string(), // Sin validaciones
 });
@@ -39,12 +38,17 @@ type UserFormValue = z.infer<typeof formSchema>;
 
 export default function UserAuthForm() {
   const [state, dispatch] = useFormState(authenticate, undefined);
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
+  console.log();
+  //const searchParams = useSearchParams();
+  //const callbackUrl = searchParams.get("callbackUrl");
   const [loading, startTransition] = useTransition();
-  const [charWarning, setCharWarning] = useState({ email: "", password: "" });
+  //const [charWarning, setCharWarning] = useState({ email: "", password: "" });
+  const [specialCharError, setSpecialCharError] = useState({
+    username: "",
+    password: "",
+  });
 
- /*  const defaultValues = {
+  /*  const defaultValues = {
     email: "admin@google.com",
     password: "12345678",
   }; */
@@ -54,26 +58,69 @@ export default function UserAuthForm() {
     mode: "onChange",
   });
 
-  const { setValue, handleSubmit, control } = form;
+  //const { setValue, handleSubmit, control } = form;
 
-  const handleChange = (
+  /*  const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     fieldName: keyof UserFormValue
   ) => {
     const value = e.target.value;
 
-    if (/[^a-zA-Z0-9.@]/.test(value) && fieldName === "email") {
-      setCharWarning((prev) => ({
-        ...prev,
-        [fieldName]: "¡No se permiten caracteres especiales!",
-      }));
-      return;
+    // Validación para el username (solo letras, números, guion bajo)
+    if (fieldName === "username") {
+      if (/[^a-zA-Z0-9_]/.test(value)) {
+        e.preventDefault();
+        setSpecialCharError((prev) => ({
+          ...prev,
+          [fieldName]: "Solo letras, números y guion bajo.",
+        }));
+        return;
+      }
     }
 
     setCharWarning((prev) => ({ ...prev, [fieldName]: "" }));
 
     setValue(fieldName, value, { shouldDirty: true, shouldValidate: true });
-  };
+  }; */
+
+  const handleInputChange =
+    (fieldName: keyof typeof specialCharError) => (e: any) => {
+      const value = e.target.value;
+
+      // Validación para el username (solo letras, números, guion bajo)
+      if (fieldName === "username") {
+        if (/[^a-zA-Z0-9_]/.test(value)) {
+          e.preventDefault();
+          setSpecialCharError((prev) => ({
+            ...prev,
+            [fieldName]: "Solo letras, números y guion bajo.",
+          }));
+          return;
+        }
+      }
+
+      setSpecialCharError((prev) => ({
+        ...prev,
+        [fieldName]: "",
+      }));
+
+      form.setValue(fieldName as any, value);
+    };
+
+  const preventSpecialChars =
+    (fieldName: keyof typeof specialCharError) => (e: any) => {
+      const key = e.key;
+
+      if (fieldName === "username") {
+        if (/[^a-zA-Z0-9_]/.test(key) && key !== "Backspace") {
+          e.preventDefault();
+          setSpecialCharError((prev) => ({
+            ...prev,
+            [fieldName]: "Solo letras, números y guion bajo.",
+          }));
+        }
+      }
+    };
 
   useEffect(() => {
     if (state === "Success") {
@@ -84,27 +131,28 @@ export default function UserAuthForm() {
   return (
     <>
       <Form {...form}>
-        <form action={dispatch} className="w-full space-y-2">
+        <form action={dispatch} className="w-full space-y-3">
           <FormField
             control={form.control}
-            name="email"
+            name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-white">Email</FormLabel>
+                <FormLabel className="text-white">Nombre de usuario</FormLabel>
                 <FormControl>
                   <Input
-                    type="email"
-                    placeholder="Ingrese su email..."
+                    type="username"
+                    placeholder="Ingrese su usuario..."
                     disabled={loading}
                     maxLength={30}
                     {...field}
-                    onChange={(e) => handleChange(e, field.name)}
+                    onChange={handleInputChange("username")}
+                    onKeyDown={preventSpecialChars("username")}
                     suppressHydrationWarning
                   />
                 </FormControl>
-                {charWarning.email && (
-                  <p className="text-red-700 text-sm font-medium">
-                    {charWarning.email}
+                {specialCharError.username && (
+                  <p className="text-red-500 col-span-4 col-start-3 text-sm">
+                    {specialCharError.username}
                   </p>
                 )}
                 <FormMessage className="text-red-700 text-sm font-medium" />
@@ -119,28 +167,20 @@ export default function UserAuthForm() {
               <FormItem>
                 <div className="flex items-center justify-between">
                   <FormLabel className="text-white">Contraseña</FormLabel>
-                  <Link
+                  {/* <Link
                     href="/auth/forgot-password"
                     className="text-sm font-medium text-muted-foreground hover:opacity-75"
                   >
                     ¿Olvidaste tu contraseña?
-                  </Link>
+                  </Link> */}
                 </div>
                 <FormControl>
                   <PasswordInput
                     placeholder="Ingrese su contraseña..."
                     {...field}
-                    onChange={(e) => handleChange(e, field.name)}
                     suppressHydrationWarning
                   />
                 </FormControl>
-                {charWarning.password && (
-                  <p className="text-red-700 text-sm font-medium">
-                    {charWarning.password}
-                  </p>
-                )}
-
-                <FormMessage className="text-red-700 text-sm font-medium" />
               </FormItem>
             )}
           />
@@ -168,7 +208,7 @@ export default function UserAuthForm() {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">Or</span>
+          <span className="bg-background px-2 text-muted-foreground"></span>
         </div>
       </div>
     </>

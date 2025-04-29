@@ -41,7 +41,7 @@ async function main() {
     "Usuario",
     "Administrador",
     "admin@google.com",
-    "12345678",
+    "$123456789Tn",
     "admin",
     "active"
   );
@@ -97,6 +97,13 @@ async function main() {
   CreatePantallas(
     "Errores",
     "Lista de registros de errores detectados en los servicios y servidores.",
+    "Pantalla",
+    "active"
+  );
+  //? Grupo Servidores
+  CreatePantallas(
+    "GrupoServidores",
+    "Lista de grupo de servidores cuales dan referencia acerca del país donde se encuentran.",
     "Pantalla",
     "active"
   );

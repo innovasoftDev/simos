@@ -54,17 +54,20 @@ export default function SignInViewPage() {
             <h1 className="text-2xl font-semibold tracking-tight">
               BIENVENIDOS
             </h1>
-            <p className="text-sm text-muted-foreground">
-              Introduzca su usuario para ingresar a su cuenta
+            <p className="text-sm text-muted-foreground tracking-tight">
+              Introduzca su usuario para poder ingresar a su cuenta.
             </p>
           </div>
           <UserAuthForm />
-          <Link
+          <p className="text-sm text-muted-foreground text-center tracking-tight">
+            Si necesita un usuario nuevo u olvidó su contraseña debe comunicarse con el administrador del sistema.
+          </p>
+          {/* <Link
             href={"/auth/new-account"}
             className={buttonVariants({ variant: "secondary", size: "lg" })}
           >
             Crear nueva cuenta
-          </Link>          
+          </Link>   */}
         </div>
       </div>
     </div>

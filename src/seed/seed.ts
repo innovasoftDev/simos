@@ -20,7 +20,7 @@ export const initialRolesData: SeedRoles = {
     },
     {
       rol: "user",
-      descripcion: "Usuario Normal",
+      descripcion: "Usuario Normal de prueba",
       created: new Date(),
     },
   ],

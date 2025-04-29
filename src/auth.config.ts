@@ -25,7 +25,7 @@ export const authConfig: NextAuthConfig = {
 
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
-      console.log({ auth });
+      //console.log({ auth });
       const isLoggedIn = !!auth?.user;
 
       const isOnDashboard = nextUrl.pathname.startsWith("/dashboard/overview");
@@ -75,23 +75,23 @@ export const authConfig: NextAuthConfig = {
     Credentials({
       async authorize(credentials) {
         const parsedCredentials = z
-          .object({ email: z.string().email(), password: z.string().min(6) })
+          .object({ username: z.string().min(1), password: z.string().min(6) })
           .safeParse(credentials);
 
-        if (!parsedCredentials.success) return null;
+        if (!parsedCredentials.success) throw new Error("Credentials error.");
 
-        const { email, password } = parsedCredentials.data;
+        const { username, password } = parsedCredentials.data;
 
         // Buscar el correo
         const user = await prisma.user.findUnique({
-          where: { email: email.toLowerCase() },
+          where: { username: username.toLowerCase() },
         });
-        if (!user) return null;
+        if (!user) throw new Error("No user found.");
 
         // Comparar las contraseñas
-        if (!bcryptjs.compareSync(password, user.password)) return null;
+        if (!bcryptjs.compareSync(password, user.password)) throw new Error("Wrong password.");
 
-        if (user.status !== "active") return null;
+        if (user.status !== "active") throw new Error("Access denied.");
 
         // Regresar el usuario sin el password
         const { password: _, ...rest } = user;

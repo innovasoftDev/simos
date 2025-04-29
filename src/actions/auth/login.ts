@@ -1,6 +1,7 @@
 "use server";
 
 import { signIn } from "@/auth.config";
+import { AuthError } from 'next-auth';
 
 export async function authenticate(
   prevState: string | undefined,
@@ -9,15 +10,21 @@ export async function authenticate(
   try {
     // await sleep(2);
 
-    await signIn("credentials", {
+    const res = await signIn("credentials", {
       ...Object.fromEntries(formData),
       redirect: false,
     });
 
+    //console.log(res);
+
     return "Success";
   } catch (error) {
-    console.log(error);
-
+    if(error instanceof AuthError){
+      //console.log(error.cause);
+      console.error(error.cause);
+      
+    }
+    
     return "CredentialsSignin";
   }
 }
