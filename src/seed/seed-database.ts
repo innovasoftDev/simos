@@ -51,7 +51,7 @@ async function main() {
     "Usuario",
     "Normal",
     "user@google.com",
-    "12345678",
+    "$123456789Tn",
     "user",
     "inactive"
   );
