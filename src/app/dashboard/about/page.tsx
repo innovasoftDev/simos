@@ -31,7 +31,9 @@ export default function AboutPage() {
             { name: "Samuel Enrique Godoy Pineda", email: "samuel.godoy@unah.hn" },
             { name: "Diego Noé Espinal Ponce", email: "diego.espinal@unah.hn" },
             { name: "Luis Armando Cruz Sánchez", email: "lacruzs@unah.hn" },
-            { name: "Allan Eduardo Suazo Alvarenga", email: "aesuazoa@unah.hn" }
+            { name: "Allan Eduardo Suazo Alvarenga", email: "aesuazoa@unah.hn" },
+            { name: "Darwin Alejandro Sánchez Soriano", email: "dasanchez@unah.hn" }
+            
           ].map((member, index) => (
             <li 
               key={index} 
