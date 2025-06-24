@@ -166,13 +166,7 @@ export default function UserAuthForm() {
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center justify-between">
-                  <FormLabel className="text-white">Contraseña</FormLabel>
-                  {/* <Link
-                    href="/auth/forgot-password"
-                    className="text-sm font-medium text-muted-foreground hover:opacity-75"
-                  >
-                    ¿Olvidaste tu contraseña?
-                  </Link> */}
+                  <FormLabel className="text-white">Contraseña</FormLabel>                  
                 </div>
                 <FormControl>
                   <PasswordInput
@@ -181,12 +175,18 @@ export default function UserAuthForm() {
                     suppressHydrationWarning
                   />
                 </FormControl>
+                <Link
+                    href="/auth/forgot-password"
+                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                  >
+                    ¿Olvidaste tu contraseña?
+                  </Link>
               </FormItem>
             )}
           />
 
           <div
-            className="flex h-8 items-end space-x-1"
+            className=""
             aria-live="polite"
             aria-atomic="true"
           >

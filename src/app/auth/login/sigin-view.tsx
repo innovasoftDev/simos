@@ -41,7 +41,7 @@ export default function SignInViewPage() {
         </div>
 
         <Image
-          src="/imgs/LogoGrupoFarinter.png" 
+          src="/imgs/LogoGrupoFarinter.png"
           alt="logo"
           width={1000}
           height={500}
@@ -60,7 +60,8 @@ export default function SignInViewPage() {
           </div>
           <UserAuthForm />
           <p className="text-sm text-muted-foreground text-center tracking-tight">
-            Si necesita un usuario nuevo u olvidó su contraseña debe comunicarse con el administrador del sistema.
+            Si necesita un usuario nuevo, debe comunicarse
+            con el administrador del sistema.
           </p>
           {/* <Link
             href={"/auth/new-account"}
