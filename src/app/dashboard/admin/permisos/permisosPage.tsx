@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { DoorOpen } from 'lucide-react';
+import { DoorOpen } from "lucide-react";
 import useDialogState from "@/hooks/use-dialog-state";
 import { Button } from "@/components/ui/button";
 import { Main } from "@/components/layout/main";
 import { UsersActionDialog } from "./components/users-action-dialog";
+import { UsersConsultDialog } from "./components/users-consult-dialog";
 import { columns } from "./components/users-columns";
 import { UsersDeleteDialog } from "./components/users-delete-dialog";
 import { PantallasTable } from "./components/pantallas-table";
@@ -83,6 +84,18 @@ export default function PermisosPage() {
               open={open === "delete"}
               onOpenChange={() => {
                 setOpen("delete");
+                setTimeout(() => {
+                  setCurrentRow(null);
+                }, 500);
+              }}
+              currentRow={currentRow}
+            />
+
+            <UsersConsultDialog
+              key={`user-consult-${currentRow.Id_Permiso}`}
+              open={open === "consult"}
+              onOpenChange={() => {
+                setOpen("consult");
                 setTimeout(() => {
                   setCurrentRow(null);
                 }, 500);

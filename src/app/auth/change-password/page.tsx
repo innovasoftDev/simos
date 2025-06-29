@@ -1,3 +1,5 @@
+//import { titleFont } from "@/config/fonts";
+import { ChangePasswordForm } from "./ui/change-password-form";
 import Link from "next/link";
 import {
   Card,
@@ -6,11 +8,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-//import AuthLayout from '../auth-layout'
-import { ForgotForm } from "./components/forgot-password-form";
 import { buttonVariants } from "@/components/ui/button";
+import PageContainer from "../../../components/layout/page-container";
 
-export default function ForgotPassword() {
+export default function NewAccountPage() {
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="mx-auto flex w-full flex-col justify-center space-y-2 sm:w-[480px] lg:p-8">
@@ -20,15 +21,13 @@ export default function ForgotPassword() {
         <div>
           <Card className="mx-auto max-w-sm">
             <CardHeader>
-              <CardTitle className="text-2xl">Cambiar Contraseña</CardTitle>
+              <CardTitle className="text-2xl">Restablecer Contraseña</CardTitle>
               <CardDescription>
-                Ingresa tu email registrado y te enviaremos un enlace para
-                restablecer tu contraseña.
+                Ingrese su nueva contraseña para restablecer su contraseña.
               </CardDescription>
             </CardHeader>
-
             <CardContent>
-              <ForgotForm />
+              <ChangePasswordForm />
             </CardContent>
           </Card>
         </div>

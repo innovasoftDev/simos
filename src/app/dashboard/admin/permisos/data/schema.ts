@@ -7,6 +7,8 @@ export type Pantalla = {
   Permiso_Elimina: boolean;
   Permiso_Consulta: boolean;
   ObjetoId: string;
+  created: Date;
+  updated: Date;
   TBL_USR_ROLESId: string;
   Objeto: {
     Nombre_Objeto: string;

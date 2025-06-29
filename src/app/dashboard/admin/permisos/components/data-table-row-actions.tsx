@@ -1,6 +1,6 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { Row } from '@tanstack/react-table'
-import { Pencil , Trash2 } from 'lucide-react';
+import { Pencil , Trash2, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -35,6 +35,20 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
           <DropdownMenuItem
             onClick={() => {
               setCurrentRow(row.original)
+              setOpen('consult')
+            }}
+          >
+            Consultar
+            <DropdownMenuShortcut>
+              <Eye  size={16} />
+            </DropdownMenuShortcut>
+          </DropdownMenuItem>          
+
+          <DropdownMenuSeparator />
+          
+          <DropdownMenuItem
+            onClick={() => {
+              setCurrentRow(row.original)
               setOpen('edit')
             }}
           >
@@ -43,7 +57,9 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
               <Pencil  size={16} />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
+
           <DropdownMenuSeparator />
+
           <DropdownMenuItem
             onClick={() => {
               setCurrentRow(row.original)

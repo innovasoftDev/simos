@@ -343,12 +343,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
   const onSubmit = async (values: UserForm) => {
     const result = await AddOrUpdateUser(values);
 
-    /* if (result.ok) {
-      toast.success(isEdit ? "Usuario editado" : "Usuario creado");
-    } else {
-      toast.error("¡Ya existe un usuario con ese mismo nombre, porfavor ingresar uno diferente!");
-    } */
-
     if (result.ok) {
       location.reload();
     } else {
@@ -415,7 +409,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="John"
                         className="col-span-4"
                         autoComplete="off"
                         {...field}
@@ -445,7 +438,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Doe"
                         className="col-span-4"
                         autoComplete="off"
                         {...field}
@@ -475,7 +467,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="john_doe"
                         className="col-span-4"
                         {...field}
                         value={field.value}
@@ -504,7 +495,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="john.doe@gmail.com"
                         className="col-span-4"
                         {...field}
                         value={field.value}
@@ -533,7 +523,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="12345678"
                         className="col-span-4"
                         {...field}
                         value={field.value?.toString()}
@@ -606,7 +595,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     </FormLabel>
                     <FormControl>
                       <PasswordInput
-                        placeholder="e.g., S3cur3P@ssw0rd"
                         className="col-span-4"
                         {...field}
                       />
@@ -626,7 +614,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     <FormControl>
                       <PasswordInput
                         disabled={!isPasswordTouched}
-                        placeholder="e.g., S3cur3P@ssw0rd"
                         className="col-span-4"
                         {...field}
                       />

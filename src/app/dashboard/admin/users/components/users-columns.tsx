@@ -7,24 +7,6 @@ import { callTypes, userTypes } from "../data/data";
 import { User } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
-/* import { getRoleById } from "@/actions/admin/roles/getRoleById";
-import { useEffect, useState } from "react";
-
-async function getRole(id: string): Promise<string> {
-  const rol = await getRoleById(id);
-
-  return rol;
-}
-
-function ObternerRol(id: string): string {
-  const [data, setData] = useState<string>("");
-
-  useEffect(() => {
-    getRole(id).then(setData);
-  }, [id]);
-
-  return data;
-} */
 
 export const columns: ColumnDef<User>[] = [
   {

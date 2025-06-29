@@ -7,6 +7,7 @@ import { Main } from "@/components/layout/main";
 import { UsersActionDialog } from "./components/users-action-dialog";
 import { columns } from "./components/users-columns";
 import { UsersDeleteDialog } from "./components/users-delete-dialog";
+import { UsersConsultDialog } from "./components/users-consult-dialog";
 import { UsersTable } from "./components/users-table";
 import UsersContextProvider, {
   type UsersDialogType,
@@ -88,6 +89,18 @@ export default function ServiciosPage() {
               open={open === "delete"}
               onOpenChange={() => {
                 setOpen("delete");
+                setTimeout(() => {
+                  setCurrentRow(null);
+                }, 500);
+              }}
+              currentRow={currentRow}
+            />
+
+            <UsersConsultDialog
+              key={`user-consult-${currentRow.Id_Servicio}`}
+              open={open === "consult"}
+              onOpenChange={() => {
+                setOpen("consult");
                 setTimeout(() => {
                   setCurrentRow(null);
                 }, 500);

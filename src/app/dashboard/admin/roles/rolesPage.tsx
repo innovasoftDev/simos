@@ -1,12 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
-import { ShieldPlus } from 'lucide-react';
+import { ShieldPlus } from "lucide-react";
 import useDialogState from "@/hooks/use-dialog-state";
 import { Button } from "@/components/ui/button";
 import { Main } from "@/components/layout/main";
 import { UsersActionDialog } from "./components/users-action-dialog";
 import { columns } from "./components/users-columns";
 import { UsersDeleteDialog } from "./components/users-delete-dialog";
+import { UsersConsultDialog } from "./components/users-consult-dialog";
 import { RolesTable } from "./components/roles-table";
 import UsersContextProvider, {
   type UsersDialogType,
@@ -25,7 +26,6 @@ async function getData(): Promise<Role[]> {
 
 export default function RolesPage() {
   const [data, setData] = useState<Role[]>([]);
-  const router = useRouter();
 
   useEffect(() => {
     getData().then(setData);
@@ -43,9 +43,7 @@ export default function RolesPage() {
         <Main>
           <div className="mb-2 flex items-center justify-between space-y-2 flex-wrap">
             <div>
-              <h2 className="text-2xl font-bold tracking-tight">
-                Roles
-              </h2>
+              <h2 className="text-2xl font-bold tracking-tight">Roles</h2>
               <p className="text-muted-foreground">
                 Administra aquí a sus roles.
               </p>
@@ -86,6 +84,18 @@ export default function RolesPage() {
               open={open === "delete"}
               onOpenChange={() => {
                 setOpen("delete");
+                setTimeout(() => {
+                  setCurrentRow(null);
+                }, 500);
+              }}
+              currentRow={currentRow}
+            />
+
+            <UsersConsultDialog
+              key={`user-consult-${currentRow.id_rol}`}
+              open={open === "consult"}
+              onOpenChange={() => {
+                setOpen("consult");
                 setTimeout(() => {
                   setCurrentRow(null);
                 }, 500);
