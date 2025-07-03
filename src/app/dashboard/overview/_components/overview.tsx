@@ -19,37 +19,37 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuItem
+} from '@/components/ui/dropdown-menu';
+import { Download } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 
 export default function OverViewPage() {
   const printRef = useRef<HTMLDivElement>(null);
   const [isPrinting, setIsPrinting] = useState(false);
+  const { data: session } = useSession();
+  const userRole = session?.user?.role ?? 'user';
 
   const handleDownloadPdf = async () => {
     if (!printRef.current) return;
 
     setIsPrinting(true);
-
     const element = printRef.current;
-
-    // Captura SIN ocultar nada, porque html2canvas no captura elementos con display:none
     const canvas = await html2canvas(element, { scale: 2 });
     const imgData = canvas.toDataURL('image/png');
-
-    const pdf = new jsPDF('l', 'pt', 'a4'); // landscape
-
+    const pdf = new jsPDF('l', 'pt', 'a4');
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();
-
-    const margin = 20; // margen en puntos
-
+    const margin = 20;
     const maxWidth = pdfWidth - margin * 2;
     const maxHeight = pdfHeight - margin * 2;
-
     const imgWidth = canvas.width;
     const imgHeight = canvas.height;
-
     const imgRatio = imgWidth / imgHeight;
-
     let renderWidth = maxWidth;
     let renderHeight = maxWidth / imgRatio;
 
@@ -62,24 +62,56 @@ export default function OverViewPage() {
     const y = (pdfHeight - renderHeight) / 2;
 
     pdf.addImage(imgData, 'PNG', x, y, renderWidth, renderHeight);
-
     pdf.save('Reportes.pdf');
-
     setIsPrinting(false);
+  };
+
+  const handleManualDownload = (manual: string) => {
+    const link = document.createElement('a');
+    link.href = `/manuales/${manual}.pdf`;
+    link.download = `${manual}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
     <PageContainer scrollable>
       <div className="space-y-2">
         <div className="flex items-center justify-between space-y-2">
-          <h2 className="text-2xl font-bold tracking-tight">
-            Hola, bienvenido de nuevo 👋
-          </h2>
+          <h2 className="text-2xl font-bold tracking-tight">Hola, bienvenido de nuevo 👋</h2>
           <div className="hidden items-center space-x-2 md:flex">
             <CalendarDateRangePicker />
             <Button onClick={handleDownloadPdf} disabled={isPrinting}>
-              {isPrinting ? 'Generando PDF...' : 'Descargar Reporte'}
+              {isPrinting ? 'Generando Reporte...' : 'Descargar Reporte'}
             </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="default">
+                  <Download className="mr-2 h-4 w-4" />
+                  Centro de Ayuda
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {userRole === 'admin' ? (
+                  <>
+                    <DropdownMenuItem onClick={() => handleManualDownload('Manual de Instalación')}>
+                      Manual de Instalación
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleManualDownload('Manual Técnico')}>
+                      Manual Técnico
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleManualDownload('Manual de Usuario')}>
+                      Manual de Usuario
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <DropdownMenuItem onClick={() => handleManualDownload('Manual de Usuario')}>
+                    Manual de Usuario
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 
@@ -116,6 +148,7 @@ export default function OverViewPage() {
                     <p className="text-xs text-muted-foreground">+19 del mes pasado</p>
                   </CardContent>
                 </Card>
+
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Servicios Inactivos</CardTitle>
@@ -139,6 +172,7 @@ export default function OverViewPage() {
                     <p className="text-xs text-muted-foreground">+1 desde la última hora</p>
                   </CardContent>
                 </Card>
+
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Alertas</CardTitle>
@@ -164,6 +198,7 @@ export default function OverViewPage() {
                     <p className="text-xs text-muted-foreground">+4 del mes pasado</p>
                   </CardContent>
                 </Card>
+
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Errores</CardTitle>
@@ -190,6 +225,7 @@ export default function OverViewPage() {
                   </CardContent>
                 </Card>
               </div>
+
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-7">
                 <div className="col-span-4">
                   <BarGraph />
@@ -219,4 +255,3 @@ export default function OverViewPage() {
     </PageContainer>
   );
 }
-
