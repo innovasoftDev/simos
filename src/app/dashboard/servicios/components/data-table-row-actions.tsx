@@ -66,6 +66,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
               setOpen("delete");
             }}
             className="!text-red-500"
+            disabled={true}
           >
             Eliminar
             <DropdownMenuShortcut>

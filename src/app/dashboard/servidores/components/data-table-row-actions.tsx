@@ -19,7 +19,7 @@ interface DataTableRowActionsProps {
 
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const { setOpen, setCurrentRow } = useUsersContext();
-  return (
+    return (
     <>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
@@ -66,6 +66,7 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
               setOpen("delete");
             }}
             className="!text-red-500"
+            disabled={row.original.Estado==="active"}
           >
             Eliminar
             <DropdownMenuShortcut>
