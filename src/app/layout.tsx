@@ -1,3 +1,4 @@
+
 import { auth } from "@/auth.config";
 import Providers from '@/components/layout/providers';
 import { Toaster } from '@/components/ui/sonner';
@@ -5,13 +6,12 @@ import type { Metadata } from 'next';
 import { Lato } from 'next/font/google';
 import NextTopLoader from 'nextjs-toploader';
 import './globals.css';
-
 export const metadata: Metadata = {
   title: {
     template: "%s - SIMOS | Grupo Farinter",
     default: "Home - SIMOS | Grupo Farinter",
   },
-  description: "Sistema Monitereo De Servicios",
+  description: "Sistema Monitoreo De Servicios",
 };
 
 const lato = Lato({
@@ -54,6 +54,7 @@ import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from '@/components/ui/sonner';
 import { auth } from "@/auth.config";
 import { redirect } from 'next/navigation';
+import { useAutoLogout } from '../hooks/use-autoLogout';
 
 export const metadata: Metadata = {
   title: {
