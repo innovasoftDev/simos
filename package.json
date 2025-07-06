@@ -42,6 +42,7 @@
     "cmdk": "^1.0.4",
     "date-fns": "^3.6.0",
     "eslint-plugin-react-hooks": "^6.1.0-canary-143d3e1b-20250425",
+    "jspdf": "^3.0.1",
     "kbar": "^0.1.0-beta.45",
     "lucide-react": "^0.475.0",
     "match-sorter": "^8.0.0",
