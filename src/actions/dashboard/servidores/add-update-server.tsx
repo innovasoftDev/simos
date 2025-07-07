@@ -1,12 +1,11 @@
 "use server";
 import prisma from "@/lib/prisma";
-import bcryptjs from "bcryptjs";
 import { auth } from "@/auth.config";
-//import { PrismaClient, Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { GetServerByName } from "../servidores/get-group-by-id";
 import { getIdByObjeto } from "@/actions/admin/pantallas/getIdByObject";
 import { getIdByRole } from "@/actions/admin/roles/getRoleById";
+import { registrarBitacora } from "@/lib/logBitacora";
 
 export const AddOrUpdateServer = async (values: {
   Id_Servidor: string;
@@ -26,23 +25,29 @@ export const AddOrUpdateServer = async (values: {
 }) => {
   const session = await auth();
 
-  //? Obteniendo id del role que tiene el usuario
-  const role_user = session?.user.role;
+  if (!session || !session.user) {
+    return {
+      ok: false,
+      message: "No autenticado. Por favor, inicie sesión.",
+    };
+  }
+
+  const adminUserId = session.user.id;
+  const adminUsername = session.user.name || session.user.email || 'Usuario del Sistema';
+
+
+  const role_user = session.user.role;
   const id_rol = await getIdByRole(role_user);
 
-  //console.log(id_rol);
 
-  //? Obteniendo id del objeto actual
   const nombreObjeto = "Servidores";
   const permisos = await getIdByObjeto(nombreObjeto, id_rol);
 
-  //console.log(permisos);
+
   if (values.isEdit) {
     const Permiso_Actualiza = permisos?.Permiso_Actualiza;
 
     if (!Permiso_Actualiza) {
-      //console.log("Su usuario no tiene permisos para consultar esta pantalla.");
-
       return {
         ok: false,
         message:
@@ -53,12 +58,11 @@ export const AddOrUpdateServer = async (values: {
     const Permiso_Inserta = permisos?.Permiso_Inserta;
 
     if (!Permiso_Inserta) {
-      //console.log("Su usuario no tiene permisos para consultar esta pantalla.");
 
       return {
         ok: false,
         message:
-          "Su usuario no tiene permisos para agregar nuevo servicio.",
+          "Su usuario no tiene permisos para agregar nuevo servidor.",
       };
     }
   }
@@ -66,7 +70,16 @@ export const AddOrUpdateServer = async (values: {
   try {
     const newServer = { ...values };
 
-    //console.log(newServer);
+    let grupoServidorIdReal: string;
+    try {
+      grupoServidorIdReal = (await GetServerByName(newServer.Grup_Servidor.Nombre_Grupo_Servidores)).toString();
+    } catch (error) {
+      console.error("Error al obtener ID del grupo de servidor:", error);
+      return {
+        ok: false,
+        message: "No se pudo encontrar el grupo de servidor especificado.",
+      };
+    }
 
     if (!newServer.isEdit) {
       await prisma.servidor.create({
@@ -79,14 +92,20 @@ export const AddOrUpdateServer = async (values: {
           Nombre_AD: newServer.Nombre_AD,
           URL: newServer.URL,
           Estado: newServer.Estado,
-          Grup_ServidorId: (
-            await GetServerByName(
-              newServer.Grup_Servidor.Nombre_Grupo_Servidores
-            )
-          ).toString(),
+          Grup_ServidorId: grupoServidorIdReal,
           created: new Date(),
         },
       });
+
+      await registrarBitacora({
+        id_user: adminUserId,
+        username: adminUsername,
+        accion: 'CREAR_SERVIDOR',
+        entidad: 'Servidor',
+        descripcion: `Servidor "${newServer.Nombre_Servidor}" creado.`,
+        fechaHora: new Date(),
+      });
+
     } else {
       await prisma.servidor.update({
         where: {
@@ -101,27 +120,40 @@ export const AddOrUpdateServer = async (values: {
           Nombre_AD: newServer.Nombre_AD,
           URL: newServer.URL,
           Estado: newServer.Estado,
-          Grup_ServidorId: (
-            await GetServerByName(
-              newServer.Grup_Servidor.Nombre_Grupo_Servidores
-            )
-          ).toString(),
+          Grup_ServidorId: grupoServidorIdReal,
           updated: new Date(),
         },
       });
+
+      await registrarBitacora({
+        id_user: adminUserId,
+        username: adminUsername,
+        accion: 'ACTUALIZAR_SERVIDOR',
+        entidad: 'Servidor',
+        descripcion: `Servidor "${newServer.Nombre_Servidor}" actualizado.`,
+        fechaHora: new Date(),
+      });
     }
 
-    revalidatePath("/admin/users");
+    revalidatePath("/dashboard/servidores");
 
     return {
       ok: true,
+      message: `Servidor "${newServer.Nombre_Servidor}" ${newServer.isEdit ? 'actualizado' : 'creado'} exitosamente.`,
     };
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    console.error("Error en AddOrUpdateServer:", error);
+
+    if (error.code === 'P2002' && error.meta?.target?.includes('Nombre_Servidor')) {
+      return {
+        ok: false,
+        message: "Ya existe un servidor con ese nombre. Por favor, ingrese uno diferente.",
+      };
+    }
+
     return {
       ok: false,
-      message:
-        "No se pudo ingresar, ya existe un server con ese mismo nombre, porfavor ingrese uno diferente.",
+      message: error.message || "No se pudo agregar o actualizar el servidor. Por favor, revisar los logs.",
     };
   }
 };

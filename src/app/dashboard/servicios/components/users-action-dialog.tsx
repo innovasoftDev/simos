@@ -107,20 +107,20 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
     resolver: zodResolver(formSchema),
     defaultValues: isEdit
       ? {
-          ...currentRow,
-          isEdit,
-        }
+        ...currentRow,
+        isEdit,
+      }
       : {
-          Id_Servicio: "",
-          Nombre_Servicio: "",
-          Descripcion: "",
-          Estado: "",
-          ServidorId: "",
-          Servidor: {
-            Nombre_Servidor: "",
-          },
-          isEdit,
+        Id_Servicio: "",
+        Nombre_Servicio: "",
+        Descripcion: "",
+        Estado: "",
+        ServidorId: "",
+        Servidor: {
+          Nombre_Servidor: "",
         },
+        isEdit,
+      },
   });
 
   const onSubmit = async (values: UserForm) => {
@@ -134,8 +134,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
     form.reset();
     onOpenChange(false);
   };
-
-  //const isPasswordTouched = !!form.formState.dirtyFields.password;
 
   return (
     <Dialog
@@ -183,7 +181,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="Descripcion"
@@ -204,7 +201,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="Estado"
@@ -227,7 +224,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="Servidor.Nombre_Servidor"
