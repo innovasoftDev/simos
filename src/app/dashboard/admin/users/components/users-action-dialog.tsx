@@ -116,7 +116,6 @@ const formSchema = z
   })
 
   .superRefine(({ isEdit, password, confirmPassword }, ctx) => {
-    // Validación de contraseña mínima
     if (!isEdit || (isEdit && password !== "")) {
       if (password === "") {
         ctx.addIssue({
@@ -146,7 +145,6 @@ const formSchema = z
           path: ["password"],
         });
       }
-      // Validación de confirmación de contraseña
       if (password !== confirmPassword) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -191,36 +189,35 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
     resolver: zodResolver(formSchema),
     defaultValues: isEdit
       ? {
-          ...currentRow,
-          password: "",
-          confirmPassword: "",
-          isEdit,
-        }
+        ...currentRow,
+        password: "",
+        confirmPassword: "",
+        isEdit,
+      }
       : {
-          id_user: "",
-          firstName: "",
-          lastName: "",
-          username: "",
-          email: "",
-          tbl_usr_roles_id_rol: "",
-          rol: {
-            rol: "",
-            id_rol: "",
-            descripcion: "",
-          },
-          phoneNumber: "",
-          password: "",
-          confirmPassword: "",
-          status: "active",
-          isEdit,
+        id_user: "",
+        firstName: "",
+        lastName: "",
+        username: "",
+        email: "",
+        tbl_usr_roles_id_rol: "",
+        rol: {
+          rol: "",
+          id_rol: "",
+          descripcion: "",
         },
+        phoneNumber: "",
+        password: "",
+        confirmPassword: "",
+        status: "active",
+        isEdit,
+      },
   });
 
   const handleInputChange =
     (fieldName: keyof typeof specialCharError) => (e: any) => {
       const value = e.target.value;
 
-      // Validación de caracteres especiales
       if (fieldName === "firstName" || fieldName === "lastName") {
         if (/[^a-zA-Z0-9_]/.test(value)) {
           e.preventDefault();
@@ -232,7 +229,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
         }
       }
 
-      // Validación para el username (solo letras, números, guion bajo)
       if (fieldName === "username") {
         if (/[^a-zA-Z0-9_]/.test(value)) {
           e.preventDefault();
@@ -244,7 +240,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
         }
       }
 
-      // Validación para teléfono (solo números y máximo 8 caracteres)
       if (fieldName === "phoneNumber") {
         if (/[^0-9]/.test(value)) {
           e.preventDefault();
@@ -254,7 +249,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           }));
           return;
         }
-        // Bloquear la entrada si el valor tiene más de 8 caracteres
         if (value.length > 8) {
           e.preventDefault();
           setSpecialCharError((prev) => ({
@@ -264,8 +258,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           return;
         }
       }
-
-      // Validación para email (permitir @, _, . y letras/números)
       if (fieldName === "email") {
         if (/[^a-zA-Z0-9@._]/.test(value)) {
           e.preventDefault();
@@ -276,8 +268,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           return;
         }
       }
-
-      // Validación de longitud
       if (value.length > 30) {
         e.preventDefault();
         setSpecialCharError((prev) => ({
@@ -413,6 +403,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                         autoComplete="off"
                         {...field}
                         value={field.value?.toString()}
+                        placeholder="Nombre"
                         onChange={handleInputChange("firstName")}
                         onKeyDown={preventSpecialChars("firstName")}
                       />
@@ -442,6 +433,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                         autoComplete="off"
                         {...field}
                         value={field.value?.toString()}
+                        placeholder="Apellido"
                         onChange={handleInputChange("lastName")}
                         onKeyDown={preventSpecialChars("lastName")}
                       />
@@ -470,6 +462,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                         className="col-span-4"
                         {...field}
                         value={field.value}
+                        placeholder="Usuario"
                         onChange={handleInputChange("username")}
                         onKeyDown={preventSpecialChars("username")}
                       />
@@ -498,6 +491,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                         className="col-span-4"
                         {...field}
                         value={field.value}
+                        placeholder="Email"
                         onChange={handleInputChange("email")}
                         onKeyDown={preventSpecialChars("email")}
                       />
@@ -526,6 +520,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                         className="col-span-4"
                         {...field}
                         value={field.value?.toString()}
+                        placeholder="Teléfono"
                         onChange={handleInputChange("phoneNumber")}
                         onKeyDown={preventSpecialChars("phoneNumber")}
                       />
@@ -554,10 +549,10 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                       className="col-span-4"
                       items={
                         userRoles.map(({ rol }) => ({
-                        label: rol? rol : "",
-                        value: rol? rol : "",
-                      }))
-                    }
+                          label: rol ? rol : "",
+                          value: rol ? rol : "",
+                        }))
+                      }
                     />
                     <FormMessage className="col-span-4 col-start-3" />
                   </FormItem>
@@ -595,6 +590,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     </FormLabel>
                     <FormControl>
                       <PasswordInput
+                        placeholder="Contraseña"
                         className="col-span-4"
                         {...field}
                       />
@@ -613,6 +609,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                     </FormLabel>
                     <FormControl>
                       <PasswordInput
+                        placeholder="Confirmar contraseña"
                         disabled={!isPasswordTouched}
                         className="col-span-4"
                         {...field}

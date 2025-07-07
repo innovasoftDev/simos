@@ -175,8 +175,8 @@ async function main() {
   await delay(100);
 
   //? Creando dos servidores de ejemplo
-  CreateServer("ICOMMERCE_TGU", "Serveridor de ventas TGU.", "Servers_HN");
-  CreateServer("ICOMMERCE_SPS", "Serveridor de ventas SPS.", "Servers_HN");
+  CreateServer("ICOMMERCE_TGU", "Servidor de ventas TGU.", "Servers_HN");
+  CreateServer("ICOMMERCE_SPS", "Servidor de ventas SPS.", "Servers_HN");
 
   await delay(100);
 

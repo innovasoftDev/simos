@@ -77,6 +77,25 @@ export const columns: ColumnDef<User>[] = [
       <div className="w-fit text-nowrap">{row.getValue("email")}</div>
     ),
   },
+   {
+  accessorKey: "created",
+  header: ({ column }) => (
+    <DataTableColumnHeader column={column} title="Fecha Creación" />
+  ),
+  cell: ({ row }) => {
+    const rawDate = row.getValue("created") as string;
+
+    const formattedDate = rawDate
+      ? new Date(rawDate).toLocaleDateString("es-ES", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })
+      : "";
+
+    return <div className="w-fit text-nowrap">{formattedDate}</div>;
+  },
+},
   {
     accessorKey: "status",
     header: ({ column }) => (

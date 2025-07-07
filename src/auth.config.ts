@@ -100,6 +100,9 @@ export const authConfig: NextAuthConfig = {
       },
     }),
   ],
+    jwt: {
+      maxAge: 3600,
+    },
 } satisfies NextAuthConfig;
 
 export const { signIn, signOut, auth, handlers } = NextAuth(authConfig);

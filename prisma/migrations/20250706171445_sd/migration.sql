@@ -150,6 +150,19 @@ CREATE TABLE "Exitosas_Servicio" (
     CONSTRAINT "Exitosas_Servicio_pkey" PRIMARY KEY ("Id_Exito_Servicio")
 );
 
+-- CreateTable
+CREATE TABLE "Bitacora" (
+    "id_bitacora" TEXT NOT NULL,
+    "id_user" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
+    "fechaHora" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "accion" TEXT NOT NULL,
+    "descripcion" TEXT,
+    "entidad" TEXT NOT NULL,
+
+    CONSTRAINT "Bitacora_pkey" PRIMARY KEY ("id_bitacora")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Users_username_key" ON "Users"("username");
 

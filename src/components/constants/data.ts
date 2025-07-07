@@ -132,4 +132,12 @@ export const navAdminItems: NavItem[] = [
       }
     ]
   },
+  {
+    title: 'Bitacora',
+    url: '/dashboard/admin/Bitacora',
+    icon: 'post',
+    isActive: false,
+    shortcut: ['b', 'b'],
+    items: [] 
+  },
 ];

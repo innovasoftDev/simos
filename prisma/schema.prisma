@@ -71,6 +71,7 @@ model Permiso {
 model Grup_Servidor {
   Id_Grup_Servidor        String     @id @default(uuid())
   Nombre_Grupo_Servidores String     @unique
+
   Descripcion             String?
   created                 DateTime   @default(now())
   updated                 DateTime   @updatedAt
@@ -167,4 +168,16 @@ model Exito_Servicio {
   ServicioId        String
 
   @@map("Exitosas_Servicio")
+}
+
+model Bitacora {
+  id_bitacora String   @id @default(uuid())
+  id_user     String
+  username    String
+  fechaHora   DateTime @default(now())
+  accion      String   // Ej: "CREAR_USUARIO", "INACTIVAR_SERVICIO", etc.
+  descripcion String?  // Detalle de lo que ocurrió
+  entidad     String   // Ej: "User", "Servidor", "Servicio"
+
+  @@map("Bitacora")
 }
