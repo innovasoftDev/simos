@@ -21,4 +21,6 @@
 4. Levantar la base de datos ```docker compose up -d```
 5. Correr las migraciones de Primsa ```npx prisma migrate deploy```
 6. Ejecutar seed ```npm run seed```
-7. Correr el proyecto ```npm run start```
+7. Cambiar a ```NODE_ENV=production``` en el .env
+8. Crear build de producción ```npm run build```
+9. Correr el proyecto con pm2```pm2 start npm -- start```
