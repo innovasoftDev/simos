@@ -14,13 +14,9 @@ interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   currentRow: Server;
-  admin: {
-    id_user: string;
-    username: string;
-  };
 }
 
-export function UsersDeleteDialog({ open, onOpenChange, currentRow, admin }: Props) {
+export function UsersDeleteDialog({ open, onOpenChange, currentRow}: Props) {
   const [value, setValue] = useState("");
 
   const handleDelete = async () => {
