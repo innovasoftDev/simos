@@ -55,7 +55,7 @@ export function ForgotForm({ className, ...props }: ForgotFormProps) {
 
     if (result.ok) {
       try {
-        const forgetUrl = `http://localhost:3000/auth/change-password?email=${data.email}`;
+        const forgetUrl = `http://www.innovasoftdev.online/auth/change-password?email=${data.email}`;
 
         const dataBody = {
           email: data.email,
