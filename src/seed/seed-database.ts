@@ -40,7 +40,7 @@ async function main() {
     "admin",
     "Usuario",
     "Administrador",
-    "admin@google.com",
+    "innovasoft.dev.2024@gmail.com",
     "$123456789Tn",
     "admin",
     "active"
@@ -50,10 +50,10 @@ async function main() {
     "user",
     "Usuario",
     "Normal",
-    "user@google.com",
+    "samuel009godoy@gmail.com",
     "$123456789Tn",
     "user",
-    "inactive"
+    "active"
   );
   await delay(100);
 

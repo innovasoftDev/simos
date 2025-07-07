@@ -1,6 +1,5 @@
 //import { titleFont } from "@/config/fonts";
 import { ChangePasswordForm } from "./ui/change-password-form";
-import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -8,10 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { buttonVariants } from "@/components/ui/button";
-import PageContainer from "../../../components/layout/page-container";
 
-export default function NewAccountPage() {
+export default function ChangePasswordPage() {
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="mx-auto flex w-full flex-col justify-center space-y-2 sm:w-[480px] lg:p-8">
@@ -23,7 +20,7 @@ export default function NewAccountPage() {
             <CardHeader>
               <CardTitle className="text-2xl">Restablecer Contraseña</CardTitle>
               <CardDescription>
-                Ingrese su nueva contraseña para restablecer su contraseña.
+                Ingrese su nueva contraseña.
               </CardDescription>
             </CardHeader>
             <CardContent>

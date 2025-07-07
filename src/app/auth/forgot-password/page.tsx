@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/card";
 //import AuthLayout from '../auth-layout'
 import { ForgotForm } from "./components/forgot-password-form";
-import { buttonVariants } from "@/components/ui/button";
 
 export default function ForgotPassword() {
   return (

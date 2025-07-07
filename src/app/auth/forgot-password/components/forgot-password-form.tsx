@@ -3,6 +3,7 @@ import { HTMLAttributes, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
   Form,
@@ -14,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { ValidarCorreo } from "@/actions/auth/forgot-password";
 
 type ForgotFormProps = HTMLAttributes<HTMLDivElement>;
 
@@ -28,39 +30,69 @@ const formSchema = z.object({
     }),
 });
 
+async function getData(email: string) {
+  const result = await ValidarCorreo(email);
+
+  // Fetch data from your API here.
+  return result;
+}
+
 export function ForgotForm({ className, ...props }: ForgotFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [charWarning, setCharWarning] = useState("");
+  const [value, setValue] = useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: { email: "" },
   });
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value;
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    const result = await getData(data.email);
 
-    if (/[^a-zA-Z0-9.@+-]/.test(value)) {
-      setCharWarning("¡No se permiten caracteres especiales!");
-      return;
-    }
-    if (value.length > 30) {
-      setCharWarning("Máximo 30 caracteres permitidos.");
-      return;
-    }
-    setCharWarning("");
-    form.setValue("email", value, { shouldDirty: true, shouldValidate: true });
-  }
-
-  function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    console.log(data);
+    //console.log(result + " " + data.email);
+
+    if (result.ok) {
+      try {
+        const forgetUrl = `http://localhost:3000/auth/change-password?email=${data.email}`;
+
+        const dataBody = {
+          email: data.email,
+          forgetUrl: forgetUrl,
+        };
+
+        //Enviar correo
+        const res = await fetch("/api/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataBody),
+        });
+        const result = await res.json();
+        //console.log(result);
+
+        if (result.error == null) {
+          toast.success("Se ha enviado correo a: " + data.email); 
+        }else{
+          toast.error("Error al enviar correo, revisar log");
+          console.log(result);
+        }        
+      } catch (error) {
+        toast.error("Error al enviar correo, revisar log");
+        console.log(error);
+      }
+    } else {
+      toast.error(result.message);
+    }
 
     setTimeout(() => {
       setIsLoading(false);
+      if (result.ok) {
+        location.replace("/auth/login?returnTo=/perfil");
+      }
     }, 2000);
-
-    window.location.replace("/auth/otp");
   }
 
   return (
@@ -72,14 +104,10 @@ export function ForgotForm({ className, ...props }: ForgotFormProps) {
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem className="space-y-1">
-                  <FormLabel>Email</FormLabel>
+                <FormItem className="space-y-2">
+                  <FormLabel>Correo</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="nombre@ejemplo.com"
-                      {...field}
-                      onChange={handleChange}
-                    />
+                    <Input placeholder="ejemplo@gmail.com" {...field} />
                   </FormControl>
                   {charWarning && (
                     <p className="text-red-700 text-sm font-medium">
@@ -90,7 +118,7 @@ export function ForgotForm({ className, ...props }: ForgotFormProps) {
                 </FormItem>
               )}
             />
-            <Button className="mt-2" disabled={isLoading}>
+            <Button className="mt-4" disabled={isLoading}>
               Enviar
             </Button>
           </div>
