@@ -26,7 +26,7 @@ export const DeleteRole = async (rol: string) => {
       ok: true,
     };
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return {
       ok: false,
       message: "No se pudo eliminar el role, revisar logs",

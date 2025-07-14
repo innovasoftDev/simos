@@ -50,7 +50,7 @@ export const AddOrUpdateRole = async (values: {
       ok: true,
     };
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return {
       ok: false,
       message: "No se pudo actualizar el role, revisar logs",

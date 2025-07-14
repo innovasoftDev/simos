@@ -74,7 +74,7 @@ export const AddOrUpdateServer = async (values: {
     try {
       grupoServidorIdReal = (await GetServerByName(newServer.Grup_Servidor.Nombre_Grupo_Servidores)).toString();
     } catch (error) {
-      console.error("Error al obtener ID del grupo de servidor:", error);
+      //console.error("Error al obtener ID del grupo de servidor:", error);
       return {
         ok: false,
         message: "No se pudo encontrar el grupo de servidor especificado.",
@@ -142,7 +142,7 @@ export const AddOrUpdateServer = async (values: {
       message: `Servidor "${newServer.Nombre_Servidor}" ${newServer.isEdit ? 'actualizado' : 'creado'} exitosamente.`,
     };
   } catch (error: any) {
-    console.error("Error en AddOrUpdateServer:", error);
+    //console.error("Error en AddOrUpdateServer:", error);
 
     if (error.code === 'P2002' && error.meta?.target?.includes('Nombre_Servidor')) {
       return {

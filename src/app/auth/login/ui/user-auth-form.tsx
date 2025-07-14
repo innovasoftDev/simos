@@ -38,7 +38,7 @@ type UserFormValue = z.infer<typeof formSchema>;
 
 export default function UserAuthForm() {
   const [state, dispatch] = useFormState(authenticate, undefined);
-  console.log();
+  //console.log();
   //const searchParams = useSearchParams();
   //const callbackUrl = searchParams.get("callbackUrl");
   const [loading, startTransition] = useTransition();

@@ -28,7 +28,7 @@ export const DeletePantalla = async (id_objeto: string) => {
       ok: true,
     };
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return {
       ok: false,
       message: "No se pudo Eliminar el Objeto, revisar logs",

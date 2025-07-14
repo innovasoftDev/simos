@@ -26,7 +26,7 @@ export const DeleteUser = async (id_user: string) => {
       ok: true,
     };
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return {
       ok: false,
       message: "No se pudo eliminar el usuario, revisar logs",

@@ -53,7 +53,7 @@ export const AddOrUpdatePantalla = async (values: {
       ok: true,
     };
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return {
       ok: false,
       message: "No se pudo ingresar, ya existe una pantalla con ese mismo nombre, porfavor ingrese uno diferente.",

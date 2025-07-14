@@ -61,7 +61,7 @@ export const DeleteServer = async (id_server: string) => {
     };
   } catch (error: any) {
 
-    console.error("Error en DeleteServer:", error);
+    //console.error("Error en DeleteServer:", error);
     if (error.code === 'P2003') {
       return {
         ok: false,

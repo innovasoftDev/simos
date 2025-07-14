@@ -11,7 +11,7 @@ export const getRoles = async () => {
       ...roles,
     };
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     throw new Error('Error al obtener roles.');
   }
 };

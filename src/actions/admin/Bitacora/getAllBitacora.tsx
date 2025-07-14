@@ -42,7 +42,7 @@ export const getAllBitacora = async (): Promise<GetAllBitacoraResult> => {
       bitacora: mappedBitacora,
     };
   } catch (error) {
-    console.error("Error al obtener la bitácora:", error);
+    //console.error("Error al obtener la bitácora:", error);
     return {
       ok: false,
       message: "No se pudo cargar la información de la bitácora desde la base de datos.",

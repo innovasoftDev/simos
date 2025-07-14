@@ -77,11 +77,11 @@ export function ForgotForm({ className, ...props }: ForgotFormProps) {
           toast.success("Se ha enviado correo a: " + data.email); 
         }else{
           toast.error("Error al enviar correo, revisar log");
-          console.log(result);
+          //console.log(result);
         }        
       } catch (error) {
         toast.error("Error al enviar correo, revisar log");
-        console.log(error);
+        //console.log(error);
       }
     } else {
       toast.error(result.message);

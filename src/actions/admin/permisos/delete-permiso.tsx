@@ -26,7 +26,7 @@ export const DeletePermiso = async (id_permiso: string) => {
       ok: true,
     };
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     return {
       ok: false,
       message: "No se pudo Eliminar el Objeto, revisar logs",

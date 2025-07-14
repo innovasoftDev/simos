@@ -9,7 +9,7 @@ async function getIdByRole(role: string): Promise<string> {
     select: { id_rol: true },
   });
 
-  console.log(admin?.id_rol);
+  //console.log(admin?.id_rol);
 
   return admin?.id_rol ?? "";
 }
@@ -26,7 +26,7 @@ export const registerUser = async (values: {
   try {
     const newUser = { ...values };
 
-    console.log(newUser);
+    //console.log(newUser);
 
     await prisma.user.create({
       data: {
@@ -47,7 +47,7 @@ export const registerUser = async (values: {
       message: "¡Usuario creado!",
     };
   } catch (error) {
-    console.log(error);
+    //console.log(error);
 
     return {
       ok: false,

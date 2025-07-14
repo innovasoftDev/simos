@@ -35,7 +35,7 @@ export const getRoleByUserId = async (id_user: string) => {
       role,
     };
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     throw new Error("Error al obtener rol");
   }
 };

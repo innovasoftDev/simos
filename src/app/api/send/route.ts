@@ -8,8 +8,8 @@ export async function POST(request: NextRequest) {
   try {
     const { email, forgetUrl } = await request.json();
     // Process the JSON body
-    console.log(email);
-    console.log(forgetUrl);
+    //console.log(email);
+    //console.log(forgetUrl);
 
     const { data, error } = await resend.emails.send({
       from: "SIMOS <noreply@innovasoftdev.online>",

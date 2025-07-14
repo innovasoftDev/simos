@@ -10,7 +10,7 @@ export async function getBitacora() {
 
     return logs;
   } catch (error) {
-    console.error("Error al obtener la bitácora", error);
+    //console.error("Error al obtener la bitácora", error);
     return [];
   }
 }

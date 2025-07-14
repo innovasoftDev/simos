@@ -29,7 +29,7 @@ export const CambiarContrasenia = async (email: string, newPassword: string) => 
         message: "Se ha establecido la nueva contraseña exitosamente.",
       };
     } catch (error) {
-      console.log(error);
+      //console.log(error);
 
       return {
       ok: false,

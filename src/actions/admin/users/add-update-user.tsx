@@ -95,7 +95,7 @@ export const AddOrUpdateUser = async (values: {
       ok: true,
     };
   } catch (error: any) {
-    console.error("Error en AddOrUpdateUser:", error);
+    //console.error("Error en AddOrUpdateUser:", error);
     if (error.code === 'P2002') {
       if (error.meta?.target?.includes('username')) {
         return {
