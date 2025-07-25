@@ -150,7 +150,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           </DialogTitle>
           <DialogDescription>
             {isEdit
-              ? "Actualiza el nuevo servidor aquí. "
+              ? "Actualiza el nuevo servicio aquí. "
               : "Crea un nuevo servidor aquí. "}
             Haga clic en guardar cuando haya terminado.
           </DialogDescription>
