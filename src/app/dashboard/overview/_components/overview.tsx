@@ -117,12 +117,12 @@ export default function OverViewPage() {
 
         <div ref={printRef}>
           <Tabs defaultValue="overview" className="space-y-4">
-            <TabsList>
+            {/* <TabsList>
               <TabsTrigger value="overview">Analítica</TabsTrigger>
               <TabsTrigger value="analytics" disabled>
                 Rendimiento
               </TabsTrigger>
-            </TabsList>
+            </TabsList> */}
             <TabsContent value="overview" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
