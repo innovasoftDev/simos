@@ -1,0 +1,408 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "timestamp": "2025-07-30T05:51:03.282Z",
+    "database": "simos_db",
+    "tables": [
+      "TBL_USR_ROLES",
+      "User",
+      "Objeto",
+      "Permiso",
+      "Grup_Servidor",
+      "Servidor",
+      "Servicio",
+      "Error_Servidor",
+      "Error_Servicio",
+      "Alerta_Servicio",
+      "Exito_Servicio",
+      "Bitacora"
+    ],
+    "recordCount": 37
+  },
+  "data": {
+    "TBL_USR_ROLES": [
+      {
+        "id_rol": "d7f36761-6bf0-4c6c-8fbc-230e903eb834",
+        "rol": "admin",
+        "descripcion": "Usuario Administrador",
+        "created": "2025-07-06T22:08:14.536Z",
+        "updated": "2025-07-06T22:08:15.168Z"
+      },
+      {
+        "id_rol": "c5f4e628-1f74-4c70-b67b-6491d4d0b0bc",
+        "rol": "user",
+        "descripcion": "Usuario Normal de prueba",
+        "created": "2025-07-06T22:08:14.536Z",
+        "updated": "2025-07-06T22:08:15.168Z"
+      }
+    ],
+    "User": [
+      {
+        "id_user": "9161c877-d533-4836-9f26-f3869b208d08",
+        "firstName": "Usuario",
+        "lastName": "Normal",
+        "username": "user",
+        "email": "user@google.com",
+        "emailVerified": null,
+        "phoneNumber": null,
+        "password": "$2a$10$a7ZRoaVjS5WzKu8jT2lcN.Erv1j9GzYF9IohPKlXzDT2Iwf2VLVoe",
+        "image": null,
+        "status": "inactive",
+        "created": "2025-07-06T22:08:15.516Z",
+        "updated": "2025-07-06T22:08:15.516Z",
+        "tbl_usr_roles_id_rol": "c5f4e628-1f74-4c70-b67b-6491d4d0b0bc"
+      },
+      {
+        "id_user": "f9ab3aaa-3002-4b26-b188-4afd9d76ed55",
+        "firstName": "Usuario",
+        "lastName": "Administrador",
+        "username": "admin",
+        "email": "admin@google.com",
+        "emailVerified": null,
+        "phoneNumber": null,
+        "password": "$2a$10$mf4j4ycFzzuOKoFvKD/oZuBgDs30rjxkKYGDfQd2seZC1fPN5IJDi",
+        "image": null,
+        "status": "active",
+        "created": "2025-07-06T22:08:15.516Z",
+        "updated": "2025-07-06T22:08:15.516Z",
+        "tbl_usr_roles_id_rol": "d7f36761-6bf0-4c6c-8fbc-230e903eb834"
+      }
+    ],
+    "Objeto": [
+      {
+        "Id_Objeto": "c4e754df-343f-4950-af66-9008d0d46c0e",
+        "Nombre_Objeto": "Servidores",
+        "Descripcion": "Presenta información detallada sobre los servidores que ejecutan los servicios.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-06T22:08:15.611Z",
+        "updated": "2025-07-06T22:08:15.611Z"
+      },
+      {
+        "Id_Objeto": "7397273e-7239-45cc-8d05-71f529d7df46",
+        "Nombre_Objeto": "Exitosos",
+        "Descripcion": "Lista de registros de errores detectados en los servicios y servidores.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-06T22:08:15.611Z",
+        "updated": "2025-07-06T22:08:15.611Z"
+      },
+      {
+        "Id_Objeto": "3537334c-e4db-4129-baf7-1da18052cf5f",
+        "Nombre_Objeto": "Servicios",
+        "Descripcion": "Indica métricas como tiempo de respuesta, latencia, uso de recursos y número de peticiones procesadas.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-06T22:08:15.611Z",
+        "updated": "2025-07-06T22:08:15.611Z"
+      },
+      {
+        "Id_Objeto": "58b39830-9ae3-44c1-a984-aa0d83b6bce2",
+        "Nombre_Objeto": "Dashboard",
+        "Descripcion": "Es la pantalla principal del sistema de monitoreo, proporcionando una visión general del estado de los servicios, servidores y alertas.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-06T22:08:15.611Z",
+        "updated": "2025-07-06T22:08:15.611Z"
+      },
+      {
+        "Id_Objeto": "6f239fad-e585-4d08-8396-479b39e342da",
+        "Nombre_Objeto": "Alertas",
+        "Descripcion": "Lista de registros de alertas generadas por el sistema cuando se detectan problemas o anomalías.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-06T22:08:15.612Z",
+        "updated": "2025-07-06T22:08:15.612Z"
+      },
+      {
+        "Id_Objeto": "6ea3e537-b9e6-4013-b703-7ee50350722b",
+        "Nombre_Objeto": "Errores",
+        "Descripcion": "Lista de registros de errores detectados en los servicios y servidores.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-06T22:08:15.612Z",
+        "updated": "2025-07-06T22:08:15.612Z"
+      },
+      {
+        "Id_Objeto": "92b2cafd-c089-4a61-b647-ed256643acf1",
+        "Nombre_Objeto": "GrupoServidores",
+        "Descripcion": "Lista de grupo de servidores cuales dan referencia acerca del país donde se encuentran.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-06T22:08:15.615Z",
+        "updated": "2025-07-06T22:08:15.615Z"
+      },
+      {
+        "Id_Objeto": "54993477-0e3a-499f-a1bd-1b7de3230e8e",
+        "Nombre_Objeto": "AcercaDe",
+        "Descripcion": "Sobre nosotros el grupo de Innovasoft Dev.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-06T22:08:15.615Z",
+        "updated": "2025-07-06T22:08:15.615Z"
+      }
+    ],
+    "Permiso": [
+      {
+        "Id_Permiso": "12ccfd2b-0325-46e7-9444-dd53296993cb",
+        "Permiso_Inserta": true,
+        "Permiso_Actualiza": true,
+        "Permiso_Elimina": true,
+        "Permiso_Consulta": true,
+        "created": "2025-07-06T22:08:15.737Z",
+        "updated": "2025-07-06T22:08:15.737Z",
+        "ObjetoId": "3537334c-e4db-4129-baf7-1da18052cf5f",
+        "TBL_USR_ROLESId": "d7f36761-6bf0-4c6c-8fbc-230e903eb834"
+      },
+      {
+        "Id_Permiso": "f049a797-8840-4b67-a440-875eb08e10a3",
+        "Permiso_Inserta": true,
+        "Permiso_Actualiza": true,
+        "Permiso_Elimina": true,
+        "Permiso_Consulta": true,
+        "created": "2025-07-06T22:08:15.744Z",
+        "updated": "2025-07-06T22:08:15.744Z",
+        "ObjetoId": "c4e754df-343f-4950-af66-9008d0d46c0e",
+        "TBL_USR_ROLESId": "d7f36761-6bf0-4c6c-8fbc-230e903eb834"
+      },
+      {
+        "Id_Permiso": "ac316952-df18-470a-827c-a548bc1a5b75",
+        "Permiso_Inserta": true,
+        "Permiso_Actualiza": true,
+        "Permiso_Elimina": true,
+        "Permiso_Consulta": true,
+        "created": "2025-07-06T22:08:15.745Z",
+        "updated": "2025-07-06T22:08:15.745Z",
+        "ObjetoId": "54993477-0e3a-499f-a1bd-1b7de3230e8e",
+        "TBL_USR_ROLESId": "d7f36761-6bf0-4c6c-8fbc-230e903eb834"
+      },
+      {
+        "Id_Permiso": "659cdc09-bd95-4c95-9e03-b1b837f7a6d0",
+        "Permiso_Inserta": false,
+        "Permiso_Actualiza": false,
+        "Permiso_Elimina": false,
+        "Permiso_Consulta": true,
+        "created": "2025-07-06T22:08:15.748Z",
+        "updated": "2025-07-06T22:08:15.748Z",
+        "ObjetoId": "3537334c-e4db-4129-baf7-1da18052cf5f",
+        "TBL_USR_ROLESId": "c5f4e628-1f74-4c70-b67b-6491d4d0b0bc"
+      },
+      {
+        "Id_Permiso": "0a01a666-38c6-45d8-b39f-101e116a422f",
+        "Permiso_Inserta": false,
+        "Permiso_Actualiza": false,
+        "Permiso_Elimina": false,
+        "Permiso_Consulta": true,
+        "created": "2025-07-06T22:08:15.750Z",
+        "updated": "2025-07-06T22:08:15.750Z",
+        "ObjetoId": "c4e754df-343f-4950-af66-9008d0d46c0e",
+        "TBL_USR_ROLESId": "c5f4e628-1f74-4c70-b67b-6491d4d0b0bc"
+      },
+      {
+        "Id_Permiso": "7845ec8b-0a02-4056-b5ac-a32c835622f3",
+        "Permiso_Inserta": false,
+        "Permiso_Actualiza": false,
+        "Permiso_Elimina": false,
+        "Permiso_Consulta": true,
+        "created": "2025-07-06T22:08:15.752Z",
+        "updated": "2025-07-06T22:08:15.752Z",
+        "ObjetoId": "54993477-0e3a-499f-a1bd-1b7de3230e8e",
+        "TBL_USR_ROLESId": "c5f4e628-1f74-4c70-b67b-6491d4d0b0bc"
+      }
+    ],
+    "Grup_Servidor": [
+      {
+        "Id_Grup_Servidor": "ea73d4f6-fb32-48ed-aa15-5894b2edffde",
+        "Nombre_Grupo_Servidores": "Servers_HN",
+        "Descripcion": "Servidores para la región de Honduras.",
+        "created": "2025-07-06T22:08:16.062Z",
+        "updated": "2025-07-06T22:08:16.062Z"
+      }
+    ],
+    "Servidor": [
+      {
+        "Id_Servidor": "13a03427-593d-4bb6-9c0d-b05886156594",
+        "Nombre_Servidor": "ICOMMERCE_TGU",
+        "Descripcion": "Serveridor de ventas TGU.",
+        "CPU": null,
+        "Memoria": null,
+        "Tipo_Sevidor": null,
+        "Nombre_AD": null,
+        "URL": null,
+        "Estado": "active",
+        "created": "2025-07-06T22:08:16.174Z",
+        "updated": "2025-07-06T22:08:16.174Z",
+        "Grup_ServidorId": "ea73d4f6-fb32-48ed-aa15-5894b2edffde"
+      },
+      {
+        "Id_Servidor": "b93476b2-e0bb-4d4e-9844-bc3859a3fd97",
+        "Nombre_Servidor": "ICOMMERCE_SPS",
+        "Descripcion": "Serveridor de ventas SPS.",
+        "CPU": null,
+        "Memoria": null,
+        "Tipo_Sevidor": null,
+        "Nombre_AD": null,
+        "URL": null,
+        "Estado": "active",
+        "created": "2025-07-06T22:08:16.174Z",
+        "updated": "2025-07-06T22:08:16.174Z",
+        "Grup_ServidorId": "ea73d4f6-fb32-48ed-aa15-5894b2edffde"
+      }
+    ],
+    "Servicio": [
+      {
+        "Id_Servicio": "a8363264-c8e5-42b1-a330-7ec6b9267435",
+        "Nombre_Servicio": "API_ICOMMERCE_SPS",
+        "Descripcion": "API de ventas SPS.",
+        "created": "2025-07-06T22:08:16.282Z",
+        "updated": "2025-07-06T22:08:16.282Z",
+        "Estado": "inactive",
+        "ServidorId": "b93476b2-e0bb-4d4e-9844-bc3859a3fd97"
+      },
+      {
+        "Id_Servicio": "a0d3dd6b-dae9-44a1-878e-cfbaa24348a8",
+        "Nombre_Servicio": "API_ICOMMERCE_TGU",
+        "Descripcion": "API de ventas TGU.",
+        "created": "2025-07-06T22:08:16.282Z",
+        "updated": "2025-07-06T22:08:16.282Z",
+        "Estado": "active",
+        "ServidorId": "13a03427-593d-4bb6-9c0d-b05886156594"
+      }
+    ],
+    "Error_Servidor": [],
+    "Error_Servicio": [
+      {
+        "Id_Error_Servicio": "e8055f76-0651-4972-a876-f675cb1648cd",
+        "Codigo_Error": "403 Forbidden",
+        "Descripcion_Error": "El cliente no posee los permisos necesarios para cierto contenido, por lo que el servidor está rechazando otorgar una respuesta apropiada.",
+        "created": "2025-07-06T22:08:16.609Z",
+        "updated": "2025-07-06T22:08:16.609Z",
+        "Estado": "active",
+        "ServicioId": "a0d3dd6b-dae9-44a1-878e-cfbaa24348a8"
+      },
+      {
+        "Id_Error_Servicio": "96dc4018-c61a-4a9f-bce9-ee71f62e9664",
+        "Codigo_Error": "404 Not Found",
+        "Descripcion_Error": "El servidor no pudo encontrar el contenido solicitado. Este código de respuesta es uno de los más famosos dada su alta ocurrencia en la web.",
+        "created": "2025-07-06T22:08:16.609Z",
+        "updated": "2025-07-06T22:08:16.609Z",
+        "Estado": "active",
+        "ServicioId": "a0d3dd6b-dae9-44a1-878e-cfbaa24348a8"
+      },
+      {
+        "Id_Error_Servicio": "68e7ec86-8358-44c7-89ec-8bed61bbb0d2",
+        "Codigo_Error": "401 Unauthorized",
+        "Descripcion_Error": "Es necesario autenticar para obtener la respuesta solicitada. Esta es similar a 403, pero en este caso, la autenticación es posible.",
+        "created": "2025-07-06T22:08:16.609Z",
+        "updated": "2025-07-06T22:08:16.609Z",
+        "Estado": "active",
+        "ServicioId": "a0d3dd6b-dae9-44a1-878e-cfbaa24348a8"
+      },
+      {
+        "Id_Error_Servicio": "5f2829dc-433b-4c55-9901-b0a6e9010b25",
+        "Codigo_Error": "400 Bad Request",
+        "Descripcion_Error": "Esta respuesta significa que el servidor no pudo interpretar la solicitud dada una sintaxis inválida.",
+        "created": "2025-07-06T22:08:16.609Z",
+        "updated": "2025-07-06T22:08:16.609Z",
+        "Estado": "active",
+        "ServicioId": "a0d3dd6b-dae9-44a1-878e-cfbaa24348a8"
+      }
+    ],
+    "Alerta_Servicio": [
+      {
+        "Id_Alerta_Servicio": "163f3bdb-d462-4d46-838c-21a25e5f644a",
+        "Codigo_Alerta": "103 Early Hints",
+        "Descripcion_Alerta": "Este código de estado es usado con el encabezado Link, permitiendo que el agente de usuario empiece a pre-cargar recursos mientras el servidor prepara una respuesta.",
+        "created": "2025-07-06T22:08:16.497Z",
+        "updated": "2025-07-06T22:08:16.497Z",
+        "Estado": "active",
+        "ServicioId": "a0d3dd6b-dae9-44a1-878e-cfbaa24348a8"
+      },
+      {
+        "Id_Alerta_Servicio": "80c5dfa8-6cc5-4e5a-b8a2-1e81ae3ddaaa",
+        "Codigo_Alerta": "102 Processing",
+        "Descripcion_Alerta": "Este código indica que el servidor ha recibido la solicitud y aún se encuentra procesandola, por lo que no hay respuesta disponible.",
+        "created": "2025-07-06T22:08:16.497Z",
+        "updated": "2025-07-06T22:08:16.497Z",
+        "Estado": "active",
+        "ServicioId": "a0d3dd6b-dae9-44a1-878e-cfbaa24348a8"
+      },
+      {
+        "Id_Alerta_Servicio": "904377bb-e95e-4f38-a669-64f84cc84d14",
+        "Codigo_Alerta": "101 Switching Protocol",
+        "Descripcion_Alerta": "Envía en respuesta a un encabezado de solicitud Upgrade por el cliente e indica que el servidor acepta el cambio de protocolo propuesto por el agente de usuario.",
+        "created": "2025-07-06T22:08:16.497Z",
+        "updated": "2025-07-06T22:08:16.497Z",
+        "Estado": "active",
+        "ServicioId": "a0d3dd6b-dae9-44a1-878e-cfbaa24348a8"
+      },
+      {
+        "Id_Alerta_Servicio": "eee69735-5221-4d27-822e-2c264ed487da",
+        "Codigo_Alerta": "100 Continue",
+        "Descripcion_Alerta": "Esta respuesta provisional indica que todo hasta ahora está bien y que el cliente debe continuar con la solicitud o ignorarla si ya está terminada.",
+        "created": "2025-07-06T22:08:16.497Z",
+        "updated": "2025-07-06T22:08:16.497Z",
+        "Estado": "active",
+        "ServicioId": "a0d3dd6b-dae9-44a1-878e-cfbaa24348a8"
+      }
+    ],
+    "Exito_Servicio": [
+      {
+        "Id_Exito_Servicio": "10caa7a3-c07f-4bb5-85af-1abb5135eeb5",
+        "Codigo_Exito": "202 Accepted",
+        "Descripcion_Exito": "La solicitud se ha recibido, pero aún no se ha actuado. Es una petición (sin compromiso).",
+        "created": "2025-07-06T22:08:16.391Z",
+        "updated": "2025-07-06T22:08:16.391Z",
+        "Estado": "active",
+        "ServicioId": "a0d3dd6b-dae9-44a1-878e-cfbaa24348a8"
+      },
+      {
+        "Id_Exito_Servicio": "730d9556-83e8-40ae-92d8-63f230d0e4d9",
+        "Codigo_Exito": "200 OK",
+        "Descripcion_Exito": "La solicitud ha tenido éxito. El significado de un éxito varía dependiendo del método HTTP.",
+        "created": "2025-07-06T22:08:16.391Z",
+        "updated": "2025-07-06T22:08:16.391Z",
+        "Estado": "active",
+        "ServicioId": "a0d3dd6b-dae9-44a1-878e-cfbaa24348a8"
+      },
+      {
+        "Id_Exito_Servicio": "a898fead-d313-4437-b192-92213dbee911",
+        "Codigo_Exito": "201 Created",
+        "Descripcion_Exito": "La solicitud ha tenido éxito y se ha creado un nuevo recurso como resultado de ello.",
+        "created": "2025-07-06T22:08:16.391Z",
+        "updated": "2025-07-06T22:08:16.391Z",
+        "Estado": "active",
+        "ServicioId": "a0d3dd6b-dae9-44a1-878e-cfbaa24348a8"
+      },
+      {
+        "Id_Exito_Servicio": "c2245808-b8b0-4317-a1e9-bbc595c708e4",
+        "Codigo_Exito": "204 No Content",
+        "Descripcion_Exito": "La petición se ha completado con éxito, pero su contenido no se ha obtenido de la fuente originalmente solicitada, sino que se recoge de una copia local o de un tercero.",
+        "created": "2025-07-06T22:08:16.391Z",
+        "updated": "2025-07-06T22:08:16.391Z",
+        "Estado": "active",
+        "ServicioId": "a0d3dd6b-dae9-44a1-878e-cfbaa24348a8"
+      }
+    ],
+    "Bitacora": [
+      {
+        "id_bitacora": "72a2ebc6-06ee-461e-8a19-987e4c6af50a",
+        "id_user": "system",
+        "username": "system",
+        "fechaHora": "2025-07-30T05:47:21.683Z",
+        "accion": "CREAR_BACKUP",
+        "descripcion": "Backup creado: backup_simos_2025-07-30T05-47-21-672Z.json con 35 registros",
+        "entidad": "Sistema"
+      },
+      {
+        "id_bitacora": "f82d9202-b78b-4dda-b662-9f0b478e42a5",
+        "id_user": "system",
+        "username": "system",
+        "fechaHora": "2025-07-30T05:47:45.168Z",
+        "accion": "ELIMINAR_BACKUP",
+        "descripcion": "Backup eliminado: backup_simos_2025-07-30T05-47-21-672Z.json (15731 bytes)",
+        "entidad": "Sistema"
+      }
+    ]
+  }
+}

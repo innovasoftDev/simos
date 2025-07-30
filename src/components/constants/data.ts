@@ -140,4 +140,12 @@ export const navAdminItems: NavItem[] = [
     shortcut: ['b', 'b'],
     items: [] 
   },
+    {
+    title: 'Copia de seguridad',
+    url: '/dashboard/admin/CopiaSeguridad',
+    icon: 'post',
+    isActive: false,
+    shortcut: ['b', 'b'],
+    items: [] 
+  },
 ];
