@@ -22,7 +22,8 @@ export default function SignInViewPage() {
       >
         Login
       </Link>
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-black lg:flex dark:border-r background-color: bg-white">
+      <div className="relative hidden h-full flex-col bg-[#05112e] p-10 text-white lg:flex dark:border-r">
+
         {/* <div className="absolute inset-0 bg-zinc-900" />  */}
         <div className="relative z-20 flex items-center text-lg font-medium">
           <svg
@@ -41,7 +42,7 @@ export default function SignInViewPage() {
         </div>
 
         <Image
-          src="/imgs/LogoGrupoFarinter.png"
+          src="/imgs/LogoGrupoFarinterClaro.png"
           alt="logo"
           width={1000}
           height={500}
