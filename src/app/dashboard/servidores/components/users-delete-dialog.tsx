@@ -16,17 +16,20 @@ interface Props {
   currentRow: Server;
 }
 
-export function UsersDeleteDialog({ open, onOpenChange, currentRow}: Props) {
+export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
   const [value, setValue] = useState("");
+  const [reason, setReason] = useState("");
 
   const handleDelete = async () => {
-    if (value.trim() !== currentRow.Nombre_Servidor) return;
+    if (
+      value.trim() !== currentRow.Nombre_Servidor ||
+      reason.trim() === ""
+    )
+      return;
 
     const result = await DeleteServer(currentRow.Id_Servidor);
 
-
     if (result.ok) {
-
       location.reload();
     } else {
       toast.error(result.message);
@@ -34,13 +37,14 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow}: Props) {
     onOpenChange(false);
   };
 
-
   return (
     <ConfirmDialog
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={value.trim() !== currentRow.Nombre_Servidor}
+      disabled={
+        value.trim() !== currentRow.Nombre_Servidor || reason.trim() === ""
+      }
       title={
         <span className="text-destructive">
           <TriangleAlert
@@ -51,7 +55,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow}: Props) {
         </span>
       }
       desc={
-        <div className="space-y-4">
+        <div className="space-y-5">
           <p className="mb-2">
             ¿Estás seguro de que quieres eliminar este servidor?
             <br />
@@ -62,14 +66,25 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow}: Props) {
             Esto no se puede deshacer.
           </p>
 
-          <Label className="my-2">
-            Nombre del servidor:
-            <Input
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              placeholder="Introduzca el nombre de servidor para confirmar la eliminación."
-            />
-          </Label>
+          <div className="space-y-4">
+            <Label className="block">
+              Nombre del servidor:
+              <Input
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                placeholder="Introduzca el nombre de servidor para confirmar la eliminación."
+              />
+            </Label>
+
+            <Label className="block">
+              Motivo de eliminación:
+              <Input
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                placeholder="Explique por qué desea eliminar este servidor."
+              />
+            </Label>
+          </div>
 
           <Alert variant="destructive">
             <AlertTitle>¡Advertencia!</AlertTitle>

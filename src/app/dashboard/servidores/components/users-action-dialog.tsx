@@ -42,8 +42,7 @@ const formSchema = z
     Nombre_AD: z.nullable(z.string()),
     URL: z.nullable(z.string()),
     Estado: z.string().min(1, { message: "Estado es requerido." }),
-    Grup_ServidorId: z
-      .string(),
+    Grup_ServidorId: z.string(),
     Grup_Servidor: z.object({
       Nombre_Grupo_Servidores: z
         .string()
@@ -56,7 +55,7 @@ const formSchema = z
       if (Nombre_Servidor === "") {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Nombre Servidor is required.",
+          message: "Nombre Servidor es requerido.",
           path: ["Nombre_Servidor"],
         });
       }
@@ -64,24 +63,7 @@ const formSchema = z
       if (Nombre_Servidor.length < 8) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Nombre Servidor must be at least 8 characters long.",
-          path: ["Nombre_Servidor"],
-        });
-      }
-
-      if (!Nombre_Servidor.match(/[a-z]/)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message:
-            "Nombre Servidor must contain at least one lowercase letter.",
-          path: ["Nombre_Servidor"],
-        });
-      }
-
-      if (!Nombre_Servidor.match(/\d/)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Nombre Servidor must contain at least one number.",
+          message: "Nombre Servidor debe tener al menos 8 caracteres.",
           path: ["Nombre_Servidor"],
         });
       }
@@ -134,8 +116,6 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
     form.reset();
     onOpenChange(false);
   };
-
-  //const isPasswordTouched = !!form.formState.dirtyFields.password;
 
   return (
     <Dialog

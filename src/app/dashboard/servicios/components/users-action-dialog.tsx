@@ -29,17 +29,6 @@ import { servicioStatus, Servers } from "../data/data";
 import { Servicio } from "../data/schema";
 import { AddOrUpdateServicio } from "@/actions/dashboard/servicios/add-update-servicio";
 
-/* Id_Servicio: "",
-    Nombre_Servicio: "",
-    Descripcion: "",
-    Estado: "",
-    ServidorId: "",
-    Servidor: {
-      Nombre_Servicio: "",
-    },
-    isEdit: false,
-}; */
-
 const formSchema = z
   .object({
     Id_Servicio: z.string(),
@@ -61,7 +50,7 @@ const formSchema = z
       if (Nombre_Servicio === "") {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Nombre Servidor is required.",
+          message: "Nombre Servidor es requerido.",
           path: ["Nombre_Servicio"],
         });
       }
@@ -69,24 +58,7 @@ const formSchema = z
       if (Nombre_Servicio.length < 8) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "Nombre Servidor must be at least 8 characters long.",
-          path: ["Nombre_Servicio"],
-        });
-      }
-
-      if (!Nombre_Servicio.match(/[a-z]/)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message:
-            "Nombre Servidor must contain at least one lowercase letter.",
-          path: ["Nombre_Servicio"],
-        });
-      }
-
-      if (!Nombre_Servicio.match(/\d/)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Nombre Servidor must contain at least one number.",
+          message: "Nombre Servicio debe tener al menos 8 caracteres.",
           path: ["Nombre_Servicio"],
         });
       }
@@ -107,20 +79,20 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
     resolver: zodResolver(formSchema),
     defaultValues: isEdit
       ? {
-        ...currentRow,
-        isEdit,
-      }
+          ...currentRow,
+          isEdit,
+        }
       : {
-        Id_Servicio: "",
-        Nombre_Servicio: "",
-        Descripcion: "",
-        Estado: "",
-        ServidorId: "",
-        Servidor: {
-          Nombre_Servidor: "",
+          Id_Servicio: "",
+          Nombre_Servicio: "",
+          Descripcion: "",
+          Estado: "",
+          ServidorId: "",
+          Servidor: {
+            Nombre_Servidor: "",
+          },
+          isEdit,
         },
-        isEdit,
-      },
   });
 
   const onSubmit = async (values: UserForm) => {
