@@ -23,7 +23,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { PasswordInput } from "@/components/password-input";
 import { SelectDropdown } from "@/components/select-dropdown";
 import { servicioStatus, Servers } from "../data/data";
 import { Servicio } from "../data/schema";
@@ -37,6 +36,7 @@ const formSchema = z
       .min(1, { message: "Nombre del servidor es requerido." }),
     Descripcion: z.nullable(z.string()),
     Estado: z.string().min(1, { message: "Estado es requerido." }),
+    Motivo_Desactivacion: z.string().nullable().optional(), // sigue opcional
     ServidorId: z.string(),
     Servidor: z.object({
       Nombre_Servidor: z
@@ -44,26 +44,8 @@ const formSchema = z
         .min(1, { message: "Grupo Servidor es requerido." }),
     }),
     isEdit: z.boolean(),
-  })
-  .superRefine(({ isEdit, Nombre_Servicio }, ctx) => {
-    if (!isEdit || (isEdit && Nombre_Servicio !== "")) {
-      if (Nombre_Servicio === "") {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Nombre Servidor es requerido.",
-          path: ["Nombre_Servicio"],
-        });
-      }
-
-      if (Nombre_Servicio.length < 8) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Nombre Servicio debe tener al menos 8 caracteres.",
-          path: ["Nombre_Servicio"],
-        });
-      }
-    }
   });
+
 type UserForm = z.infer<typeof formSchema>;
 
 interface Props {
@@ -80,6 +62,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
     defaultValues: isEdit
       ? {
           ...currentRow,
+          Motivo_Desactivacion: (currentRow as any)?.Motivo_Desactivacion || "",
           isEdit,
         }
       : {
@@ -87,6 +70,7 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
           Nombre_Servicio: "",
           Descripcion: "",
           Estado: "",
+          Motivo_Desactivacion: "",
           ServidorId: "",
           Servidor: {
             Nombre_Servidor: "",
@@ -196,6 +180,31 @@ export function UsersActionDialog({ currentRow, open, onOpenChange }: Props) {
                   </FormItem>
                 )}
               />
+
+              {/* Mostrar solo en edición */}
+              {isEdit && (
+                <FormField
+                  control={form.control}
+                  name="Motivo_Desactivacion"
+                  render={({ field }) => (
+                    <FormItem className="grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0">
+                      <FormLabel className="col-span-2 text-right">
+                        Motivo Desactivación
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Obligatorio solo si el estado es Inactivo"
+                          className="col-span-4"
+                          {...field}
+                          value={field.value ?? ""}
+                        />
+                      </FormControl>
+                      <FormMessage className="col-span-4 col-start-3" />
+                    </FormItem>
+                  )}
+                />
+              )}
+
               <FormField
                 control={form.control}
                 name="Servidor.Nombre_Servidor"

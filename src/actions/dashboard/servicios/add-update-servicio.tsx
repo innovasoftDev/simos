@@ -12,6 +12,7 @@ export const AddOrUpdateServicio = async (values: {
   Nombre_Servicio: string;
   Descripcion: string | null;
   Estado: string;
+  Motivo_Desactivacion?: string | null;
   Servidor: {
     Nombre_Servidor: string;
   };
@@ -57,7 +58,6 @@ export const AddOrUpdateServicio = async (values: {
     try {
       servidorIdReal = (await getIdFromServers(newServicio.Servidor.Nombre_Servidor)).toString();
     } catch (error) {
-      //console.error("Error al obtener ID del servidor:", error);
       return {
         ok: false,
         message: "No se pudo encontrar el servidor especificado.",
@@ -105,7 +105,7 @@ export const AddOrUpdateServicio = async (values: {
         username: adminUsername,
         accion: 'ACTUALIZAR_SERVICIO',
         entidad: 'Servicio',
-        descripcion: `Servicio "${newServicio.Nombre_Servicio}" actualizado.`,
+        descripcion: `Servicio "${newServicio.Nombre_Servicio}" actualizado. Motivo de desactivación: ${newServicio.Motivo_Desactivacion || ''}`,
         fechaHora: new Date(),
       });
     }
@@ -117,7 +117,6 @@ export const AddOrUpdateServicio = async (values: {
       message: `Servicio "${newServicio.Nombre_Servicio}" ${newServicio.isEdit ? 'actualizado' : 'creado'} exitosamente.`,
     };
   } catch (error: any) {
-    //console.error("Error en AddOrUpdateServicio:", error);
     if (error.code === 'P2002' && error.meta?.target?.includes('Nombre_Servicio')) {
       return {
         ok: false,
