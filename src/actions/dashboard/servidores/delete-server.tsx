@@ -6,7 +6,8 @@ import { getIdByObjeto } from "@/actions/admin/pantallas/getIdByObject";
 import { getIdByRole } from "@/actions/admin/roles/getRoleById";
 import { registrarBitacora } from "@/lib/logBitacora";
 
-export const DeleteServer = async (id_server: string) => {
+
+export const DeleteServer = async (id_server: string, motivo: string) => {
   const session = await auth();
 
   if (!session || !session.user) {
@@ -25,7 +26,6 @@ export const DeleteServer = async (id_server: string) => {
   const Permiso_Elimina = permisos?.Permiso_Elimina;
 
   if (!Permiso_Elimina) {
-
     return {
       ok: false,
       message: "Su usuario no tiene permisos para eliminar en esta pantalla.",
@@ -44,12 +44,13 @@ export const DeleteServer = async (id_server: string) => {
       },
     });
 
+    
     await registrarBitacora({
       id_user: adminUserId,
       username: adminUsername,
       accion: 'ELIMINAR_SERVIDOR',
       entidad: 'Servidor',
-      descripcion: `Servidor "${serverToDelete?.Nombre_Servidor || id_server}" eliminado.`,
+      descripcion: `Servidor "${serverToDelete?.Nombre_Servidor || id_server}" eliminado. Motivo: ${motivo}`,
       fechaHora: new Date(),
     });
 
@@ -60,8 +61,6 @@ export const DeleteServer = async (id_server: string) => {
       message: `Servidor "${serverToDelete?.Nombre_Servidor || 'desconocido'}" eliminado exitosamente.`,
     };
   } catch (error: any) {
-
-    //console.error("Error en DeleteServer:", error);
     if (error.code === 'P2003') {
       return {
         ok: false,

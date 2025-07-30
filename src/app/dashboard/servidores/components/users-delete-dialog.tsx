@@ -27,7 +27,7 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
     )
       return;
 
-    const result = await DeleteServer(currentRow.Id_Servidor);
+    const result = await DeleteServer(currentRow.Id_Servidor, reason); 
 
     if (result.ok) {
       location.reload();
@@ -50,8 +50,8 @@ export function UsersDeleteDialog({ open, onOpenChange, currentRow }: Props) {
           <TriangleAlert
             className="mr-1 inline-block stroke-destructive"
             size={18}
-          />{" "}
-          Eliminar Servidor
+          />
+          {" "}Eliminar Servidor
         </span>
       }
       desc={
