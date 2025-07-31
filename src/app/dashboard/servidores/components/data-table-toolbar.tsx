@@ -28,6 +28,16 @@ export function DataTableToolbar<TData>({
           }
           className='h-8 w-[150px] lg:w-[250px]'
         />
+        <Input
+          placeholder='Filtrar descripcion...'
+          value={
+            (table.getColumn('Descripcion')?.getFilterValue() as string) ?? ''
+          }
+          onChange={(event) =>
+            table.getColumn('Descripcion')?.setFilterValue(event.target.value)
+          }
+          className='h-8 w-[150px] lg:w-[250px]'
+        />
         <div className='flex gap-x-2'>
           {table.getColumn('Estado') && (
             <DataTableFacetedFilter

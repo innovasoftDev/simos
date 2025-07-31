@@ -51,16 +51,8 @@ export const authConfig: NextAuthConfig = {
 
       //! Validar que el usuario esté activo
       const usuario = await GetUserById(session.user.email);
-      //const estadoUsuario = usuario?.status;
       const roleUsuario = usuario?.rol.rol;
       const nombreUsuario = usuario?.username;
-
-      /* if (estadoUsuario?.toLowerCase() === "active") {
-        session.user.role = roleUsuario as string;
-        session.user.name = nombreUsuario as string;
-
-        return session;  
-      }  */
 
       session.user.role = roleUsuario as string;
       session.user.name = nombreUsuario as string;
@@ -89,7 +81,8 @@ export const authConfig: NextAuthConfig = {
         if (!user) throw new Error("No user found.");
 
         // Comparar las contraseñas
-        if (!bcryptjs.compareSync(password, user.password)) throw new Error("Wrong password.");
+        if (!bcryptjs.compareSync(password, user.password))
+          throw new Error("Wrong password.");
 
         if (user.status !== "active") throw new Error("Access denied.");
 
@@ -100,9 +93,9 @@ export const authConfig: NextAuthConfig = {
       },
     }),
   ],
-    jwt: {
-      maxAge: 3600,
-    },
+  jwt: {
+    maxAge: 600,
+  },
 } satisfies NextAuthConfig;
 
 export const { signIn, signOut, auth, handlers } = NextAuth(authConfig);
