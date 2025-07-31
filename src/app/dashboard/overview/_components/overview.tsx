@@ -104,6 +104,9 @@ export default function OverViewPage() {
                     <DropdownMenuItem onClick={() => handleManualDownload('Manual de Usuario')}>
                       Manual de Usuario
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleManualDownload('Manual de Usuario Administrador')}>
+                      Manual de Usuario Administrador
+                    </DropdownMenuItem>
                   </>
                 ) : (
                   <DropdownMenuItem onClick={() => handleManualDownload('Manual de Usuario')}>
