@@ -19,7 +19,6 @@ import PageContainer from "@/components/layout/page-container";
 async function getData(): Promise<Pantalla[]> {
   const { pantallas = [] } = await getAllPantallas();
 
-  // Fetch data from your API here.
   return pantallas;
 }
 

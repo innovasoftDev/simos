@@ -19,16 +19,12 @@ export function DataTableToolbar<TData>({
     <div className='flex items-center justify-between'>
       <div className='flex flex-1 flex-col-reverse items-start gap-y-2 sm:flex-row sm:items-center sm:space-x-2'>
         <Input
-          placeholder='Filtrar permisos...'
-          value={
-            (table.getColumn('ObjetoId')?.getFilterValue() as string) ?? ''
-          }
-          onChange={(event) =>
-            table.getColumn('ObjetoId')?.setFilterValue(event.target.value)
-          }
-          className='h-8 w-[150px] lg:w-[250px]'
+          placeholder="Buscar en todas las columnas..."
+          value={table.getState().globalFilter ?? ""}
+          onChange={(event) => table.setGlobalFilter(event.target.value)}
+          className="h-8 w-[150px] lg:w-[250px]"
         />
-       {/*  <div className='flex gap-x-2'>
+        {/*  <div className='flex gap-x-2'>
           {table.getColumn('TBL_USR_ROLESId') && (
             <DataTableFacetedFilter
               column={table.getColumn('TBL_USR_ROLESId')}

@@ -27,10 +27,16 @@ import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 
 declare module "@tanstack/react-table" {
-  /* // eslint-disable-next-line @typescript-eslint/no-unused-vars */
   interface ColumnMeta<TData extends RowData, TValue> {
     className: string;
   }
+}
+
+function globalFilterFn<TData extends RowData>(row: any, columnId: string, filterValue: string) {
+  return Object.values(row.original)
+    .some((value) =>
+      String(value).toLowerCase().includes(filterValue.toLowerCase())
+    );
 }
 
 interface DataTableProps {
@@ -43,6 +49,7 @@ export function RolesTable({ columns, data }: DataTableProps) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = useState(""); 
 
   const table = useReactTable({
     data,
@@ -52,12 +59,14 @@ export function RolesTable({ columns, data }: DataTableProps) {
       columnVisibility,
       rowSelection,
       columnFilters,
+      globalFilter,
     },
-    enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn, 
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -69,27 +78,26 @@ export function RolesTable({ columns, data }: DataTableProps) {
   return (
     <div className="space-y-4">
       <DataTableToolbar table={table} />
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="group/row">
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      colSpan={header.colSpan}
-                      className={header.column.columnDef.meta?.className ?? ""}
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    className={header.column.columnDef.meta?.className ?? ""}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>

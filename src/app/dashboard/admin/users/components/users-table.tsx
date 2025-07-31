@@ -25,12 +25,19 @@ import {
 import { User } from "../data/schema";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 declare module "@tanstack/react-table" {
-  /* // eslint-disable-next-line @typescript-eslint/no-unused-vars */
   interface ColumnMeta<TData extends RowData, TValue> {
     className: string;
   }
+}
+
+function globalFilterFn<TData extends RowData>(row: any, columnId: string, filterValue: string) {
+  return Object.values(row.original)
+    .some((value) =>
+      String(value).toLowerCase().includes(filterValue.toLowerCase())
+    );
 }
 
 interface DataTableProps {
@@ -43,7 +50,7 @@ export function UsersTable({ columns, data }: DataTableProps) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
-
+  const [globalFilter, setGlobalFilter] = useState("");
   const table = useReactTable({
     data,
     columns,
@@ -52,12 +59,14 @@ export function UsersTable({ columns, data }: DataTableProps) {
       columnVisibility,
       rowSelection,
       columnFilters,
+      globalFilter,
     },
-    enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -69,13 +78,13 @@ export function UsersTable({ columns, data }: DataTableProps) {
   return (
     <div className="space-y-4">
       <DataTableToolbar table={table} />
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="group/row">
-                {headerGroup.headers.map((header) => {
-                  return (
+      <ScrollArea className="grid w-full h-[calc(100vh-260px)] rounded-md border overflow-auto">
+        <div className="min-w-[800px]">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id} className="group/row">
+                  {headerGroup.headers.map((header) => (
                     <TableHead
                       key={header.id}
                       colSpan={header.colSpan}
@@ -84,49 +93,50 @@ export function UsersTable({ columns, data }: DataTableProps) {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  className="group/row"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={cell.column.columnDef.meta?.className ?? ""}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
                   ))}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    className="group/row"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className={cell.column.columnDef.meta?.className ?? ""}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
       <DataTablePagination table={table} />
     </div>
   );
