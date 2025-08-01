@@ -1,0 +1,681 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "timestamp": "2025-08-01T00:19:27.133Z",
+    "database": "simos_db",
+    "tables": [
+      "TBL_USR_ROLES",
+      "User",
+      "Objeto",
+      "Permiso",
+      "Grup_Servidor",
+      "Servidor",
+      "Servicio",
+      "Error_Servidor",
+      "Error_Servicio",
+      "Alerta_Servicio",
+      "Exito_Servicio",
+      "Bitacora"
+    ],
+    "recordCount": 61
+  },
+  "data": {
+    "TBL_USR_ROLES": [
+      {
+        "id_rol": "77ec072b-80c0-491f-8d13-cefb75bd7bcd",
+        "rol": "admin",
+        "descripcion": "Usuario Administrador",
+        "created": "2025-07-31T01:25:05.693Z",
+        "updated": "2025-07-31T01:25:06.249Z"
+      },
+      {
+        "id_rol": "88efdc62-bf22-4e14-9912-d426fe421929",
+        "rol": "user",
+        "descripcion": "Usuario Normal de prueba",
+        "created": "2025-07-31T01:25:05.693Z",
+        "updated": "2025-07-31T01:25:06.249Z"
+      }
+    ],
+    "User": [
+      {
+        "id_user": "51348c87-862e-4c14-b3b9-55a0efa1ee56",
+        "firstName": "Usuario",
+        "lastName": "Administrador",
+        "username": "admin",
+        "email": "innovasoft.dev.2024@gmail.com",
+        "emailVerified": null,
+        "phoneNumber": null,
+        "password": "$2a$10$DAYK361pijHae9GmNL8S5uSb2spx0eGfkWk3VOq./IvVicoadVpie",
+        "image": null,
+        "status": "active",
+        "created": "2025-07-31T01:25:06.723Z",
+        "updated": "2025-07-31T01:25:06.723Z",
+        "tbl_usr_roles_id_rol": "77ec072b-80c0-491f-8d13-cefb75bd7bcd"
+      },
+      {
+        "id_user": "0c25ade1-b387-4303-b6a0-04af65e66302",
+        "firstName": "Usuario",
+        "lastName": "Normal",
+        "username": "user",
+        "email": "samuel009godoy@gmail.com",
+        "emailVerified": null,
+        "phoneNumber": null,
+        "password": "$2a$10$BxgwDE/OzcEkGGd/ISbVkeBgzNPQMdzrgp7zTUOENlKLTlfWhOknK",
+        "image": null,
+        "status": "active",
+        "created": "2025-07-31T01:25:06.723Z",
+        "updated": "2025-07-31T01:25:06.723Z",
+        "tbl_usr_roles_id_rol": "88efdc62-bf22-4e14-9912-d426fe421929"
+      },
+      {
+        "id_user": "ec61c7dc-f0f7-4eac-95f2-aedd2f47dbb5",
+        "firstName": "Darwin",
+        "lastName": "Sanchez",
+        "username": "darwin_san",
+        "email": "alejandrosanchezs017@gmail.com",
+        "emailVerified": null,
+        "phoneNumber": "93859601",
+        "password": "$2a$10$GF.qvw/HyWWfPxNHpLj78uhOjkL3o96lWVWqEPH5G7wvLkSaY8vme",
+        "image": null,
+        "status": "active",
+        "created": "2025-07-31T02:28:01.376Z",
+        "updated": "2025-07-31T02:28:01.382Z",
+        "tbl_usr_roles_id_rol": "88efdc62-bf22-4e14-9912-d426fe421929"
+      },
+      {
+        "id_user": "4545aea2-3c27-443d-adb5-4a6dc6aeea09",
+        "firstName": "Alejandro",
+        "lastName": "Sanchez",
+        "username": "AlejandroSanchez",
+        "email": "dsd21771@gmail.com",
+        "emailVerified": null,
+        "phoneNumber": "93859601",
+        "password": "$2a$10$iaaDd7KDNlyW0dxpi3rAu.c/Hm8qC.LaAaXZbJnYX5wXWIdCK8AaO",
+        "image": null,
+        "status": "active",
+        "created": "2025-07-31T19:18:35.192Z",
+        "updated": "2025-07-31T19:18:35.196Z",
+        "tbl_usr_roles_id_rol": "88efdc62-bf22-4e14-9912-d426fe421929"
+      }
+    ],
+    "Objeto": [
+      {
+        "Id_Objeto": "5732365d-2dc9-4b7c-b479-ec85cd8ecab1",
+        "Nombre_Objeto": "Servidores",
+        "Descripcion": "Presenta información detallada sobre los servidores que ejecutan los servicios.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-31T01:25:06.828Z",
+        "updated": "2025-07-31T01:25:06.828Z"
+      },
+      {
+        "Id_Objeto": "db051fb3-0a3b-4565-aeaa-7342c26ff657",
+        "Nombre_Objeto": "Dashboard",
+        "Descripcion": "Es la pantalla principal del sistema de monitoreo, proporcionando una visión general del estado de los servicios, servidores y alertas.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-31T01:25:06.828Z",
+        "updated": "2025-07-31T01:25:06.828Z"
+      },
+      {
+        "Id_Objeto": "c9bf6034-e1a8-4906-a3ca-fb7efeab87a4",
+        "Nombre_Objeto": "Exitosos",
+        "Descripcion": "Lista de registros de errores detectados en los servicios y servidores.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-31T01:25:06.828Z",
+        "updated": "2025-07-31T01:25:06.828Z"
+      },
+      {
+        "Id_Objeto": "84ced764-39c2-4e5d-8565-b5a959505cb0",
+        "Nombre_Objeto": "Alertas",
+        "Descripcion": "Lista de registros de alertas generadas por el sistema cuando se detectan problemas o anomalías.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-31T01:25:06.828Z",
+        "updated": "2025-07-31T01:25:06.828Z"
+      },
+      {
+        "Id_Objeto": "bdd77011-8d02-4b97-84cb-9c41a255d0b0",
+        "Nombre_Objeto": "Errores",
+        "Descripcion": "Lista de registros de errores detectados en los servicios y servidores.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-31T01:25:06.829Z",
+        "updated": "2025-07-31T01:25:06.829Z"
+      },
+      {
+        "Id_Objeto": "a72ba1a4-cfb7-483b-b73f-db0b055c01bf",
+        "Nombre_Objeto": "AcercaDe",
+        "Descripcion": "Sobre nosotros el grupo de Innovasoft Dev.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-31T01:25:06.829Z",
+        "updated": "2025-07-31T01:25:06.829Z"
+      },
+      {
+        "Id_Objeto": "d51a9732-013d-4c28-8954-434da2ae5959",
+        "Nombre_Objeto": "GrupoServidores",
+        "Descripcion": "Lista de grupo de servidores cuales dan referencia acerca del país donde se encuentran.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-31T01:25:06.829Z",
+        "updated": "2025-07-31T01:25:06.829Z"
+      },
+      {
+        "Id_Objeto": "9bd040b3-6a4a-4e14-9ec4-4a2088d88b89",
+        "Nombre_Objeto": "Servicios",
+        "Descripcion": "Indica métricas como tiempo de respuesta, latencia, uso de recursos y número de peticiones procesadas.",
+        "Tipo_Objeto": "Pantalla",
+        "Estado": "active",
+        "created": "2025-07-31T01:25:06.830Z",
+        "updated": "2025-07-31T01:25:06.830Z"
+      }
+    ],
+    "Permiso": [
+      {
+        "Id_Permiso": "4ce725c5-ddb0-4e1a-beb3-af0298e5d947",
+        "Permiso_Inserta": true,
+        "Permiso_Actualiza": true,
+        "Permiso_Elimina": true,
+        "Permiso_Consulta": true,
+        "created": "2025-07-31T01:25:06.961Z",
+        "updated": "2025-07-31T01:25:06.961Z",
+        "ObjetoId": "9bd040b3-6a4a-4e14-9ec4-4a2088d88b89",
+        "TBL_USR_ROLESId": "77ec072b-80c0-491f-8d13-cefb75bd7bcd"
+      },
+      {
+        "Id_Permiso": "4cb6a9f5-aab6-4f73-8a71-65135593c96f",
+        "Permiso_Inserta": true,
+        "Permiso_Actualiza": true,
+        "Permiso_Elimina": true,
+        "Permiso_Consulta": true,
+        "created": "2025-07-31T01:25:06.961Z",
+        "updated": "2025-07-31T01:25:06.961Z",
+        "ObjetoId": "db051fb3-0a3b-4565-aeaa-7342c26ff657",
+        "TBL_USR_ROLESId": "77ec072b-80c0-491f-8d13-cefb75bd7bcd"
+      },
+      {
+        "Id_Permiso": "de566919-5c7d-4e4b-aad4-a59715213c5c",
+        "Permiso_Inserta": true,
+        "Permiso_Actualiza": true,
+        "Permiso_Elimina": true,
+        "Permiso_Consulta": true,
+        "created": "2025-07-31T01:25:06.964Z",
+        "updated": "2025-07-31T01:25:06.964Z",
+        "ObjetoId": "5732365d-2dc9-4b7c-b479-ec85cd8ecab1",
+        "TBL_USR_ROLESId": "77ec072b-80c0-491f-8d13-cefb75bd7bcd"
+      },
+      {
+        "Id_Permiso": "d98d094b-68e0-4414-a6b9-4cabc6dcea3f",
+        "Permiso_Inserta": true,
+        "Permiso_Actualiza": true,
+        "Permiso_Elimina": true,
+        "Permiso_Consulta": true,
+        "created": "2025-07-31T01:25:06.970Z",
+        "updated": "2025-07-31T01:25:06.970Z",
+        "ObjetoId": "a72ba1a4-cfb7-483b-b73f-db0b055c01bf",
+        "TBL_USR_ROLESId": "77ec072b-80c0-491f-8d13-cefb75bd7bcd"
+      },
+      {
+        "Id_Permiso": "ea836fc4-4b09-48b7-b70e-2065ed500198",
+        "Permiso_Inserta": false,
+        "Permiso_Actualiza": false,
+        "Permiso_Elimina": false,
+        "Permiso_Consulta": true,
+        "created": "2025-07-31T01:25:06.972Z",
+        "updated": "2025-07-31T01:25:06.972Z",
+        "ObjetoId": "9bd040b3-6a4a-4e14-9ec4-4a2088d88b89",
+        "TBL_USR_ROLESId": "88efdc62-bf22-4e14-9912-d426fe421929"
+      },
+      {
+        "Id_Permiso": "b5d4007d-cf30-4016-8543-d09ad2ee8e8f",
+        "Permiso_Inserta": false,
+        "Permiso_Actualiza": false,
+        "Permiso_Elimina": false,
+        "Permiso_Consulta": true,
+        "created": "2025-07-31T01:25:06.972Z",
+        "updated": "2025-07-31T01:25:06.972Z",
+        "ObjetoId": "5732365d-2dc9-4b7c-b479-ec85cd8ecab1",
+        "TBL_USR_ROLESId": "88efdc62-bf22-4e14-9912-d426fe421929"
+      },
+      {
+        "Id_Permiso": "db4c495d-9218-4fab-b273-5d5b77096535",
+        "Permiso_Inserta": false,
+        "Permiso_Actualiza": false,
+        "Permiso_Elimina": false,
+        "Permiso_Consulta": true,
+        "created": "2025-07-31T01:25:06.973Z",
+        "updated": "2025-07-31T01:25:06.973Z",
+        "ObjetoId": "db051fb3-0a3b-4565-aeaa-7342c26ff657",
+        "TBL_USR_ROLESId": "88efdc62-bf22-4e14-9912-d426fe421929"
+      },
+      {
+        "Id_Permiso": "4db43964-540b-4d7f-8656-cfb411abe276",
+        "Permiso_Inserta": false,
+        "Permiso_Actualiza": false,
+        "Permiso_Elimina": false,
+        "Permiso_Consulta": true,
+        "created": "2025-07-31T01:25:06.978Z",
+        "updated": "2025-07-31T01:25:06.978Z",
+        "ObjetoId": "a72ba1a4-cfb7-483b-b73f-db0b055c01bf",
+        "TBL_USR_ROLESId": "88efdc62-bf22-4e14-9912-d426fe421929"
+      },
+      {
+        "Id_Permiso": "018d0f49-3c82-42ea-8723-8b95b477fd7e",
+        "Permiso_Inserta": true,
+        "Permiso_Actualiza": true,
+        "Permiso_Elimina": true,
+        "Permiso_Consulta": true,
+        "created": "2025-07-31T02:59:09.736Z",
+        "updated": "2025-07-31T02:59:09.741Z",
+        "ObjetoId": "bdd77011-8d02-4b97-84cb-9c41a255d0b0",
+        "TBL_USR_ROLESId": "77ec072b-80c0-491f-8d13-cefb75bd7bcd"
+      },
+      {
+        "Id_Permiso": "562a7470-e54e-4909-9064-b6ce277364cd",
+        "Permiso_Inserta": true,
+        "Permiso_Actualiza": true,
+        "Permiso_Elimina": true,
+        "Permiso_Consulta": true,
+        "created": "2025-07-31T03:00:25.379Z",
+        "updated": "2025-07-31T03:00:25.388Z",
+        "ObjetoId": "84ced764-39c2-4e5d-8565-b5a959505cb0",
+        "TBL_USR_ROLESId": "77ec072b-80c0-491f-8d13-cefb75bd7bcd"
+      },
+      {
+        "Id_Permiso": "d507ce3c-dd2b-4876-a7c3-d885ff8e4443",
+        "Permiso_Inserta": true,
+        "Permiso_Actualiza": true,
+        "Permiso_Elimina": true,
+        "Permiso_Consulta": true,
+        "created": "2025-07-31T03:00:42.581Z",
+        "updated": "2025-07-31T03:00:42.587Z",
+        "ObjetoId": "c9bf6034-e1a8-4906-a3ca-fb7efeab87a4",
+        "TBL_USR_ROLESId": "77ec072b-80c0-491f-8d13-cefb75bd7bcd"
+      }
+    ],
+    "Grup_Servidor": [
+      {
+        "Id_Grup_Servidor": "0c804e57-a683-4b71-bf5c-5937be792b39",
+        "Nombre_Grupo_Servidores": "Servers_HN",
+        "Descripcion": "Servidores para la región de Honduras.",
+        "created": "2025-07-31T01:25:07.078Z",
+        "updated": "2025-07-31T01:25:07.078Z"
+      }
+    ],
+    "Servidor": [
+      {
+        "Id_Servidor": "2f608111-3805-43f7-aea0-99e2e53281e9",
+        "Nombre_Servidor": "ICOMMERCE_TGU",
+        "Descripcion": "Serveridor de ventas TGU.",
+        "CPU": null,
+        "Memoria": null,
+        "Tipo_Sevidor": null,
+        "Nombre_AD": null,
+        "URL": null,
+        "Estado": "active",
+        "created": "2025-07-31T01:25:07.189Z",
+        "updated": "2025-07-31T01:25:07.189Z",
+        "Grup_ServidorId": "0c804e57-a683-4b71-bf5c-5937be792b39"
+      },
+      {
+        "Id_Servidor": "b6079930-fc91-4d94-ae89-6eb87e0d71e1",
+        "Nombre_Servidor": "ICOMMERCE_SPS1-s",
+        "Descripcion": "Serveridor de ventas SPS.",
+        "CPU": null,
+        "Memoria": null,
+        "Tipo_Sevidor": null,
+        "Nombre_AD": null,
+        "URL": null,
+        "Estado": "active",
+        "created": "2025-07-31T01:25:07.189Z",
+        "updated": "2025-07-31T02:58:14.901Z",
+        "Grup_ServidorId": "0c804e57-a683-4b71-bf5c-5937be792b39"
+      },
+      {
+        "Id_Servidor": "9c005154-641d-4837-9c56-12617891f453",
+        "Nombre_Servidor": "ICOMMERCE_SPSwer-4",
+        "Descripcion": "API de ventas DC.",
+        "CPU": "",
+        "Memoria": "",
+        "Tipo_Sevidor": "",
+        "Nombre_AD": "",
+        "URL": "",
+        "Estado": "active",
+        "created": "2025-07-31T05:33:01.192Z",
+        "updated": "2025-07-31T05:33:01.200Z",
+        "Grup_ServidorId": "0c804e57-a683-4b71-bf5c-5937be792b39"
+      },
+      {
+        "Id_Servidor": "608b5882-b024-446b-a6d9-273e737cb332",
+        "Nombre_Servidor": "ICOMMERCE_SPSa2",
+        "Descripcion": "Serveridor de ventas SPS.",
+        "CPU": "",
+        "Memoria": "",
+        "Tipo_Sevidor": "",
+        "Nombre_AD": "",
+        "URL": "",
+        "Estado": "active",
+        "created": "2025-07-31T05:33:34.480Z",
+        "updated": "2025-07-31T05:33:34.483Z",
+        "Grup_ServidorId": "0c804e57-a683-4b71-bf5c-5937be792b39"
+      },
+      {
+        "Id_Servidor": "9fd2c496-4acf-4357-a3ab-e6ccf277a435",
+        "Nombre_Servidor": "ICOMMERCE_TGU1z",
+        "Descripcion": "API de ventas TGU.",
+        "CPU": "",
+        "Memoria": "",
+        "Tipo_Sevidor": "",
+        "Nombre_AD": "",
+        "URL": "",
+        "Estado": "active",
+        "created": "2025-07-31T05:34:14.257Z",
+        "updated": "2025-07-31T05:34:14.260Z",
+        "Grup_ServidorId": "0c804e57-a683-4b71-bf5c-5937be792b39"
+      },
+      {
+        "Id_Servidor": "124bee4a-ae49-485a-aabe-e8f8007a495f",
+        "Nombre_Servidor": "ICOMMERCE_TGU1zd",
+        "Descripcion": "API de ventas TGU.",
+        "CPU": "",
+        "Memoria": "",
+        "Tipo_Sevidor": "",
+        "Nombre_AD": "",
+        "URL": "",
+        "Estado": "active",
+        "created": "2025-07-31T05:34:48.892Z",
+        "updated": "2025-07-31T05:34:48.893Z",
+        "Grup_ServidorId": "0c804e57-a683-4b71-bf5c-5937be792b39"
+      },
+      {
+        "Id_Servidor": "51d3e345-5b66-4b84-9b66-f58c21e07af4",
+        "Nombre_Servidor": "ICOMMERCE_TGUs",
+        "Descripcion": "API de ventas DC.",
+        "CPU": "",
+        "Memoria": "",
+        "Tipo_Sevidor": "",
+        "Nombre_AD": "dsf",
+        "URL": "",
+        "Estado": "active",
+        "created": "2025-07-31T05:35:07.478Z",
+        "updated": "2025-07-31T05:35:07.480Z",
+        "Grup_ServidorId": "0c804e57-a683-4b71-bf5c-5937be792b39"
+      },
+      {
+        "Id_Servidor": "b4d9f48b-1df6-4485-a384-f8bd8b00ade1",
+        "Nombre_Servidor": "ICOMMERCE_SPSwer-4s",
+        "Descripcion": "Serveridor de ventas SPS.",
+        "CPU": "",
+        "Memoria": "",
+        "Tipo_Sevidor": "",
+        "Nombre_AD": "",
+        "URL": "",
+        "Estado": "active",
+        "created": "2025-07-31T05:36:58.631Z",
+        "updated": "2025-07-31T05:36:58.633Z",
+        "Grup_ServidorId": "0c804e57-a683-4b71-bf5c-5937be792b39"
+      },
+      {
+        "Id_Servidor": "a5ad473d-cce9-46e4-ac48-fe5bf4fbdb34",
+        "Nombre_Servidor": "ICOMMERCE_SPS1-ss",
+        "Descripcion": "asd",
+        "CPU": "",
+        "Memoria": "",
+        "Tipo_Sevidor": "",
+        "Nombre_AD": "",
+        "URL": "asd",
+        "Estado": "active",
+        "created": "2025-07-31T05:39:36.759Z",
+        "updated": "2025-07-31T05:39:36.761Z",
+        "Grup_ServidorId": "0c804e57-a683-4b71-bf5c-5937be792b39"
+      }
+    ],
+    "Servicio": [
+      {
+        "Id_Servicio": "4f725738-c4ea-4c24-bb43-7dfa509fd324",
+        "Nombre_Servicio": "API_ICOMMERCE_SPS",
+        "Descripcion": "API de ventas SPS.",
+        "created": "2025-07-31T01:25:07.307Z",
+        "updated": "2025-07-31T01:25:07.307Z",
+        "Estado": "inactive",
+        "ServidorId": "b6079930-fc91-4d94-ae89-6eb87e0d71e1"
+      },
+      {
+        "Id_Servicio": "7ade4dbe-d65d-43b7-a430-5b126eeb558e",
+        "Nombre_Servicio": "API_ICOMMERCE_TGU-1s",
+        "Descripcion": "API de ventas TGU.",
+        "created": "2025-07-31T01:25:07.307Z",
+        "updated": "2025-07-31T02:57:53.823Z",
+        "Estado": "active",
+        "ServidorId": "2f608111-3805-43f7-aea0-99e2e53281e9"
+      }
+    ],
+    "Error_Servidor": [],
+    "Error_Servicio": [
+      {
+        "Id_Error_Servicio": "77dd67ec-f4d1-4057-bc7f-5516a8cc1f9d",
+        "Codigo_Error": "404 Not Found",
+        "Descripcion_Error": "El servidor no pudo encontrar el contenido solicitado. Este código de respuesta es uno de los más famosos dada su alta ocurrencia en la web.",
+        "created": "2025-07-31T01:25:07.650Z",
+        "updated": "2025-07-31T01:25:07.650Z",
+        "Estado": "active",
+        "ServicioId": "7ade4dbe-d65d-43b7-a430-5b126eeb558e"
+      },
+      {
+        "Id_Error_Servicio": "2ecb8112-dac4-4b11-a2c4-ae11c17467d1",
+        "Codigo_Error": "401 Unauthorized",
+        "Descripcion_Error": "Es necesario autenticar para obtener la respuesta solicitada. Esta es similar a 403, pero en este caso, la autenticación es posible.",
+        "created": "2025-07-31T01:25:07.650Z",
+        "updated": "2025-07-31T01:25:07.650Z",
+        "Estado": "active",
+        "ServicioId": "7ade4dbe-d65d-43b7-a430-5b126eeb558e"
+      },
+      {
+        "Id_Error_Servicio": "5f3445ba-ca60-49cd-95af-7a801a9fd678",
+        "Codigo_Error": "400 Bad Request",
+        "Descripcion_Error": "Esta respuesta significa que el servidor no pudo interpretar la solicitud dada una sintaxis inválida.",
+        "created": "2025-07-31T01:25:07.650Z",
+        "updated": "2025-07-31T01:25:07.650Z",
+        "Estado": "active",
+        "ServicioId": "7ade4dbe-d65d-43b7-a430-5b126eeb558e"
+      },
+      {
+        "Id_Error_Servicio": "e04827a4-1deb-4c67-bef6-becf8403c1e2",
+        "Codigo_Error": "403 Forbidden",
+        "Descripcion_Error": "El cliente no posee los permisos necesarios para cierto contenido, por lo que el servidor está rechazando otorgar una respuesta apropiada.",
+        "created": "2025-07-31T01:25:07.650Z",
+        "updated": "2025-07-31T01:25:07.650Z",
+        "Estado": "active",
+        "ServicioId": "7ade4dbe-d65d-43b7-a430-5b126eeb558e"
+      }
+    ],
+    "Alerta_Servicio": [
+      {
+        "Id_Alerta_Servicio": "16db2cd5-67e9-4065-bef8-563e0783b211",
+        "Codigo_Alerta": "102 Processing",
+        "Descripcion_Alerta": "Este código indica que el servidor ha recibido la solicitud y aún se encuentra procesandola, por lo que no hay respuesta disponible.",
+        "created": "2025-07-31T01:25:07.524Z",
+        "updated": "2025-07-31T01:25:07.524Z",
+        "Estado": "active",
+        "ServicioId": "7ade4dbe-d65d-43b7-a430-5b126eeb558e"
+      },
+      {
+        "Id_Alerta_Servicio": "11b20572-9eae-47bb-ab20-01f7f16e7491",
+        "Codigo_Alerta": "100 Continue",
+        "Descripcion_Alerta": "Esta respuesta provisional indica que todo hasta ahora está bien y que el cliente debe continuar con la solicitud o ignorarla si ya está terminada.",
+        "created": "2025-07-31T01:25:07.524Z",
+        "updated": "2025-07-31T01:25:07.524Z",
+        "Estado": "active",
+        "ServicioId": "7ade4dbe-d65d-43b7-a430-5b126eeb558e"
+      },
+      {
+        "Id_Alerta_Servicio": "1dee55a4-4cdf-41da-a282-f14074417252",
+        "Codigo_Alerta": "101 Switching Protocol",
+        "Descripcion_Alerta": "Envía en respuesta a un encabezado de solicitud Upgrade por el cliente e indica que el servidor acepta el cambio de protocolo propuesto por el agente de usuario.",
+        "created": "2025-07-31T01:25:07.524Z",
+        "updated": "2025-07-31T01:25:07.524Z",
+        "Estado": "active",
+        "ServicioId": "7ade4dbe-d65d-43b7-a430-5b126eeb558e"
+      },
+      {
+        "Id_Alerta_Servicio": "e2228514-4974-4d07-9f21-b2745fdaf9ae",
+        "Codigo_Alerta": "103 Early Hints",
+        "Descripcion_Alerta": "Este código de estado es usado con el encabezado Link, permitiendo que el agente de usuario empiece a pre-cargar recursos mientras el servidor prepara una respuesta.",
+        "created": "2025-07-31T01:25:07.524Z",
+        "updated": "2025-07-31T01:25:07.524Z",
+        "Estado": "active",
+        "ServicioId": "7ade4dbe-d65d-43b7-a430-5b126eeb558e"
+      }
+    ],
+    "Exito_Servicio": [
+      {
+        "Id_Exito_Servicio": "25cd8777-add5-4599-850a-a805ab01f745",
+        "Codigo_Exito": "200 OK",
+        "Descripcion_Exito": "La solicitud ha tenido éxito. El significado de un éxito varía dependiendo del método HTTP.",
+        "created": "2025-07-31T01:25:07.416Z",
+        "updated": "2025-07-31T01:25:07.416Z",
+        "Estado": "active",
+        "ServicioId": "7ade4dbe-d65d-43b7-a430-5b126eeb558e"
+      },
+      {
+        "Id_Exito_Servicio": "1b2369b9-8914-48ab-9045-5bfa6ff1c651",
+        "Codigo_Exito": "201 Created",
+        "Descripcion_Exito": "La solicitud ha tenido éxito y se ha creado un nuevo recurso como resultado de ello.",
+        "created": "2025-07-31T01:25:07.416Z",
+        "updated": "2025-07-31T01:25:07.416Z",
+        "Estado": "active",
+        "ServicioId": "7ade4dbe-d65d-43b7-a430-5b126eeb558e"
+      },
+      {
+        "Id_Exito_Servicio": "0339582e-06f5-472e-9b60-bcaaf4aace6d",
+        "Codigo_Exito": "202 Accepted",
+        "Descripcion_Exito": "La solicitud se ha recibido, pero aún no se ha actuado. Es una petición (sin compromiso).",
+        "created": "2025-07-31T01:25:07.416Z",
+        "updated": "2025-07-31T01:25:07.416Z",
+        "Estado": "active",
+        "ServicioId": "7ade4dbe-d65d-43b7-a430-5b126eeb558e"
+      },
+      {
+        "Id_Exito_Servicio": "c67e13d9-2f4a-4262-8a8d-6c33077319b0",
+        "Codigo_Exito": "204 No Content",
+        "Descripcion_Exito": "La petición se ha completado con éxito, pero su contenido no se ha obtenido de la fuente originalmente solicitada, sino que se recoge de una copia local o de un tercero.",
+        "created": "2025-07-31T01:25:07.416Z",
+        "updated": "2025-07-31T01:25:07.416Z",
+        "Estado": "active",
+        "ServicioId": "7ade4dbe-d65d-43b7-a430-5b126eeb558e"
+      }
+    ],
+    "Bitacora": [
+      {
+        "id_bitacora": "ad566da7-1a11-4499-99a2-b4f5b7edb085",
+        "id_user": "88656046-ecb1-4879-aab9-f054e5562cd6",
+        "username": "admin",
+        "fechaHora": "2025-07-31T02:28:01.406Z",
+        "accion": "CREAR_USUARIO",
+        "descripcion": "Se creó el usuario darwin_san",
+        "entidad": "User"
+      },
+      {
+        "id_bitacora": "9653e8ed-9efb-4e47-adf9-3f1113280aa8",
+        "id_user": "88656046-ecb1-4879-aab9-f054e5562cd6",
+        "username": "admin",
+        "fechaHora": "2025-07-31T02:57:53.849Z",
+        "accion": "ACTUALIZAR_SERVICIO",
+        "descripcion": "Servicio \"API_ICOMMERCE_TGU-1s\" actualizado. Motivo de desactivación: ",
+        "entidad": "Servicio"
+      },
+      {
+        "id_bitacora": "5bb077b7-d340-4c65-83bb-a2f27dc26fef",
+        "id_user": "88656046-ecb1-4879-aab9-f054e5562cd6",
+        "username": "admin",
+        "fechaHora": "2025-07-31T02:58:14.905Z",
+        "accion": "ACTUALIZAR_SERVIDOR",
+        "descripcion": "Servidor \"ICOMMERCE_SPS1-s\" actualizado.",
+        "entidad": "Servidor"
+      },
+      {
+        "id_bitacora": "bbfb7ce6-6383-4018-b15e-55a57800fec6",
+        "id_user": "88656046-ecb1-4879-aab9-f054e5562cd6",
+        "username": "admin",
+        "fechaHora": "2025-07-31T05:33:01.244Z",
+        "accion": "CREAR_SERVIDOR",
+        "descripcion": "Servidor \"ICOMMERCE_SPSwer-4\" creado.",
+        "entidad": "Servidor"
+      },
+      {
+        "id_bitacora": "345d66cf-bcc0-4290-a074-8535be1ce877",
+        "id_user": "88656046-ecb1-4879-aab9-f054e5562cd6",
+        "username": "admin",
+        "fechaHora": "2025-07-31T05:33:34.486Z",
+        "accion": "CREAR_SERVIDOR",
+        "descripcion": "Servidor \"ICOMMERCE_SPSa2\" creado.",
+        "entidad": "Servidor"
+      },
+      {
+        "id_bitacora": "e14f8934-ddf9-4827-b6cd-5480af75d134",
+        "id_user": "88656046-ecb1-4879-aab9-f054e5562cd6",
+        "username": "admin",
+        "fechaHora": "2025-07-31T05:34:14.261Z",
+        "accion": "CREAR_SERVIDOR",
+        "descripcion": "Servidor \"ICOMMERCE_TGU1z\" creado.",
+        "entidad": "Servidor"
+      },
+      {
+        "id_bitacora": "5ccc8858-a588-4e7f-ae94-693c4c1da15d",
+        "id_user": "88656046-ecb1-4879-aab9-f054e5562cd6",
+        "username": "admin",
+        "fechaHora": "2025-07-31T05:34:48.895Z",
+        "accion": "CREAR_SERVIDOR",
+        "descripcion": "Servidor \"ICOMMERCE_TGU1zd\" creado.",
+        "entidad": "Servidor"
+      },
+      {
+        "id_bitacora": "9f68fbcc-2787-47d7-add2-6bcea9b8a4ec",
+        "id_user": "88656046-ecb1-4879-aab9-f054e5562cd6",
+        "username": "admin",
+        "fechaHora": "2025-07-31T05:35:07.482Z",
+        "accion": "CREAR_SERVIDOR",
+        "descripcion": "Servidor \"ICOMMERCE_TGUs\" creado.",
+        "entidad": "Servidor"
+      },
+      {
+        "id_bitacora": "faeddc6a-d978-4803-8c6f-2340afe77620",
+        "id_user": "88656046-ecb1-4879-aab9-f054e5562cd6",
+        "username": "admin",
+        "fechaHora": "2025-07-31T05:36:58.818Z",
+        "accion": "CREAR_SERVIDOR",
+        "descripcion": "Servidor \"ICOMMERCE_SPSwer-4s\" creado.",
+        "entidad": "Servidor"
+      },
+      {
+        "id_bitacora": "212cbb6a-1fdd-493f-8dc0-b954ef3dde80",
+        "id_user": "88656046-ecb1-4879-aab9-f054e5562cd6",
+        "username": "admin",
+        "fechaHora": "2025-07-31T05:39:36.769Z",
+        "accion": "CREAR_SERVIDOR",
+        "descripcion": "Servidor \"ICOMMERCE_SPS1-ss\" creado.",
+        "entidad": "Servidor"
+      },
+      {
+        "id_bitacora": "9994430d-4c2a-4c27-b052-72e995068a24",
+        "id_user": "479cb499-457c-4e69-a916-c1b6dbff3bbc",
+        "username": "admin",
+        "fechaHora": "2025-07-31T19:18:35.209Z",
+        "accion": "CREAR_USUARIO",
+        "descripcion": "Se creó el usuario AlejandroSanchez",
+        "entidad": "User"
+      },
+      {
+        "id_bitacora": "52356410-1926-43fe-abb1-f8d10590e367",
+        "id_user": "system",
+        "username": "system",
+        "fechaHora": "2025-08-01T00:14:48.432Z",
+        "accion": "RESTAURAR_BACKUP",
+        "descripcion": "Backup restaurado: backup_simos_2025-07-31T23-55-13-494Z.json",
+        "entidad": "Sistema"
+      }
+    ]
+  }
+}

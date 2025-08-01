@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   AlertDialog, 
   AlertDialogAction, 
@@ -304,7 +305,9 @@ export default function CopiaSeguridad() {
   };
 
   return (
+    <ScrollArea className="w-full h-screen overflow-auto">
     <div className="container mx-auto p-6">
+      
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Sistema de Copias de Seguridad</h1>
         <p className="text-gray-600 dark:text-gray-400">
@@ -662,6 +665,8 @@ export default function CopiaSeguridad() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      
     </div>
+    </ScrollArea>
   );
 }
